@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrew Sapp — androux.org</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #0a0a0a;
+      color: #e8e8e8;
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.6;
+    }
+
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* Hero - Layer 0 */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 3rem;
+      background: linear-gradient(
+        to top,
+        rgba(10, 10, 10, 0.95) 0%,
+        rgba(10, 10, 10, 0.7) 20%,
+        rgba(10, 10, 10, 0) 50%
+      );
+    }
+
+    .name {
+      font-size: clamp(2.5rem, 10vw, 6rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .subtitle {
+      font-size: clamp(0.875rem, 2vw, 1.125rem);
+      color: #666;
+      margin-top: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .positioning {
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      color: #888;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact {
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    }
+
+    .contact a {
+      color: #e8e8e8;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+      transition: border-color 0.2s;
+    }
+
+    .contact a:hover { border-color: #e8e8e8; }
+
+
+    /* Content sections */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 3rem;
+      background: linear-gradient(
+        to bottom,
+        rgba(10, 10, 10, 0.97) 0%,
+        rgba(10, 10, 10, 0.99) 100%
+      );
+    }
+
+    section:last-child {
+      padding-bottom: 8rem;
+    }
+
+    .section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #555;
+      margin-bottom: 3rem;
+    }
+
+    /* Capabilities grid - Layer 1 */
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+    }
+
+    .capability {
+      border-left: 1px solid #333;
+      padding-left: 1.5rem;
+    }
+
+    .capability h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .capability .years {
+      font-size: 0.7rem;
+      color: #666;
+      margin-bottom: 0.75rem;
+    }
+
+    .capability p {
+      font-size: 0.8rem;
+      color: #999;
+      line-height: 1.7;
+    }
+
+    /* Experience timeline - Layer 2 */
+    .experience-list {
+      max-width: 800px;
+    }
+
+    .job {
+      margin-bottom: 4rem;
+      padding-left: 1.5rem;
+      border-left: 1px solid #333;
+    }
+
+    .job:last-child { margin-bottom: 0; }
+
+    .job-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .job h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .job .company {
+      font-size: 0.875rem;
+      color: #888;
+    }
+
+    .job .dates {
+      font-size: 0.75rem;
+      color: #555;
+    }
+
+    .job-description {
+      font-size: 0.8rem;
+      color: #777;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .job ul {
+      list-style: none;
+    }
+
+    .job li {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-bottom: 0.75rem;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .job li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: #444;
+    }
+
+    /* Projects - Layer 3 */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      max-width: 1000px;
+    }
+
+    .project {
+      border-left: 1px solid #333;
+      padding-left: 1.5rem;
+    }
+
+    .project h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .project .tech {
+      font-size: 0.7rem;
+      color: #555;
+      margin-bottom: 0.75rem;
+    }
+
+    .project p {
+      font-size: 0.8rem;
+      color: #999;
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 3rem;
+      background: rgba(10, 10, 10, 0.99);
+      border-top: 1px solid #1a1a1a;
+      font-size: 0.75rem;
+      color: #444;
+    }
+
+    footer a {
+      color: #666;
+      text-decoration: none;
+      border-bottom: 1px solid #333;
+    }
+
+    footer a:hover { color: #888; }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .hero, section { padding: 2rem; }
+      section { padding-top: 4rem; padding-bottom: 4rem; }
+
+      .job-header { flex-direction: column; gap: 0.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <!-- Layer 0: Hero -->
+  <header class="hero">
+    <h1 class="name">Andrew Sapp</h1>
+    <p class="subtitle">Forward Deployed Engineering · Applied AI · Cloud Security</p>
+    <p class="positioning">Ships MCP tooling & enterprise AI applications · 12 years customer-facing · SASE/SD-WAN expert</p>
+    <p class="contact">
+      <a href="mailto:andrewsapp@gmail.com">andrewsapp@gmail.com</a> ·
+      <a href="https://github.com/bealmot" target="_blank">github.com/bealmot</a> ·
+      <a href="https://www.linkedin.com/in/andrew-s-775733174/" target="_blank">linkedin</a>
+    </p>
+  </header>
+
+  <!-- Experience -->
+  <section>
+    <h2 class="section-title">Experience</h2>
+    <div class="experience-list">
+      <div class="job">
+        <div class="job-header">
+          <h3>Tier 3 Support Engineer</h3>
+          <span class="company">Cato Networks</span>
+          <span class="dates">2019 – Present · 6 years</span>
+        </div>
+        <p class="job-description">Senior escalation engineer for the Gartner Magic Quadrant Leader in Single-Vendor SASE.</p>
+        <ul>
+          <li>Own million-dollar Proof of Value engagements where technical success determines contract closure. Customers request me by name.</li>
+          <li>QB'd a regional PoP outage affecting 5–6 VIP customers while the management team was in QBR — coordinated NetOps, briefed management, responded to customers, and engineered a BGP workaround to restore traffic, all simultaneously.</li>
+          <li>Primary escalation point for blocked engineers. Maintained team continuity through multiple management transitions.</li>
+          <li>Built internal tooling adopted team-wide: shared script repository, log parsing plugins, multi-format analyzers.</li>
+          <li>Onboarded every new team member with comprehensive shadowing program covering architecture, methodology, and customer skills.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-header">
+          <h3>Product Support Engineer</h3>
+          <span class="company">NimbeLink</span>
+          <span class="dates">2017 – 2019 · 2 years</span>
+        </div>
+        <p class="job-description">Technical support for hardware engineers integrating Skywire cellular modems into embedded products.</p>
+        <ul>
+          <li>Supported diverse IoT scenarios: industrial sensors, fleet tracking, medical devices, smart city infrastructure.</li>
+          <li>Built AWS IoT and Azure IoT Hub test environments to replicate connectivity issues and validate end-to-end paths.</li>
+          <li>Performed failure analysis, RMA processing, and post-failure design consultations on antenna and power issues.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-header">
+          <h3>Technical Support Engineer</h3>
+          <span class="company">Ecessa</span>
+          <span class="dates">2014 – 2017 · 3 years</span>
+        </div>
+        <p class="job-description">Enterprise SD-WAN deployments with multi-WAN aggregation, failover, and VoIP optimization.</p>
+        <ul>
+          <li>Configured environments with up to 25 WAN links combining MPLS, broadband, LTE, and satellite.</li>
+          <li>Specialized in VoIP troubleshooting using real-time jitter/latency monitoring and SIP proxy configuration.</li>
+          <li>Collaborated directly with Engineering on bug reports, QA testing, and firmware validation in lab environment.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities -->
+  <section>
+    <h2 class="section-title">Capabilities</h2>
+    <div class="capabilities-grid">
+      <div class="capability">
+        <h3>SASE & Cloud Security</h3>
+        <p class="years">6 years</p>
+        <p>Full Cato SASE stack: SD-WAN, ZTNA, CASB, SWG, FWaaS, DLP, IPS. Zero Trust policy design. Global backbone routing and PoP architecture.</p>
+      </div>
+      <div class="capability">
+        <h3>SD-WAN & Network</h3>
+        <p class="years">9 years</p>
+        <p>Multi-WAN aggregation, failover, traffic shaping. IPSec/SSL VPN. Packet-level troubleshooting with Wireshark. VoIP optimization.</p>
+      </div>
+      <div class="capability">
+        <h3>IoT & Embedded</h3>
+        <p class="years">2 years</p>
+        <p>Cellular protocols (LTE-M, NB-IoT). Embedded modem integration. AWS IoT Core, Azure IoT Hub. MQTT, AT commands, RF troubleshooting.</p>
+      </div>
+      <div class="capability">
+        <h3>Infrastructure</h3>
+        <p class="years">Ongoing</p>
+        <p>Proxmox VE, Linux administration. Prometheus/Loki/Grafana observability. OPNsense, CrowdSec, Suricata IDS. Network segmentation.</p>
+      </div>
+      <div class="capability">
+        <h3>Applied AI & LLM Tooling</h3>
+        <p class="years">Active</p>
+        <p>MCP server development (40+ tools in production). Local inference pipelines with Ollama/llama.cpp. Prompt engineering, agent systems, multi-LLM fallback architectures. Claude Code CLI workflows.</p>
+      </div>
+      <div class="capability">
+        <h3>Development</h3>
+        <p class="years">Active</p>
+        <p>Python (FastAPI, SQLAlchemy, Click, async). TypeScript/React/Node.js. Internal tooling: log parsers, automation, data pipelines. AI-assisted development workflows.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+      <div class="project">
+        <h3>Homelab Infrastructure</h3>
+        <p class="tech">OPNsense · Proxmox · OpenWrt · Home Assistant · Prometheus</p>
+        <p>Custom-built router and WiFi 6 mesh with OpenWrt firmware. 20+ containers across VLAN-segmented Proxmox clusters with Prometheus/Loki/Grafana observability. Home Assistant automations with local voice control via Whisper.cpp on GPU. Self-hosted alternatives to all major cloud services.</p>
+      </div>
+      <div class="project">
+        <h3>fincli</h3>
+        <p class="tech">Python · MCP · FastAPI · Multi-LLM</p>
+        <p>Production MCP server exposing 40+ tools to AI agents. YNAB/SimpleFIN integration, debt analysis, budget forecasting. Multi-LLM fallback with automatic provider failover. The same pattern Anthropic's FDEs ship for enterprise customers — built for personal use first.</p>
+      </div>
+      <div class="project">
+        <h3>duluth-digest</h3>
+        <p class="tech">TypeScript · React · Node.js</p>
+        <p>Civic data platform aggregating 21 sources (APIs, RSS, scraping) with rate limiting, caching, health monitoring, and graceful degradation patterns.</p>
+      </div>
+      <div class="project">
+        <h3>Argus</h3>
+        <p class="tech">Python · FastMCP · Kismet · IsolationForest · D3.js</p>
+        <p>Portable defensive WiFi monitoring platform. 9 threat detectors (deauth, rogue AP, KARMA, PMKID, ML anomaly), real-time Watchtower web dashboard with D3 radar and force-directed topology, MCP server for AI-assisted analysis. Dual-adapter Kali VM deployment, 231 tests.</p>
+      </div>
+      <div class="project">
+        <h3>Clarus</h3>
+        <p class="tech">Python · TUI · Multi-format</p>
+        <p>Unified log analysis tool combining Wireshark, Windows Event Viewer, and HAR analyzer functionality. Parses evtx, pcap, har, json, and text logs in a single interface for support escalations.</p>
+      </div>
+      <div class="project">
+        <h3>Zendesk Toolkit</h3>
+        <p class="tech">Python · Automation</p>
+        <p>Workflow automation for support: automatic download renaming with ticket metadata extraction, data sanitization for customer escalations, and Sublime Text log parsing plugins.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section>
+    <h2 class="section-title">Education</h2>
+    <div class="experience-list">
+      <div class="job">
+        <div class="job-header">
+          <h3>A.A.S. Network Administration & Computer Support</h3>
+          <span class="company">Minneapolis Technical College</span>
+        </div>
+        <ul>
+          <li>Cyber Defense Competition participant</li>
+          <li>Cybersecurity Bootcamp</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      <a href="mailto:andrewsapp@gmail.com">andrewsapp@gmail.com</a> ·
+      <a href="https://github.com/bealmot" target="_blank">github.com/bealmot</a> ·
+      <a href="https://www.linkedin.com/in/andrew-s-775733174/" target="_blank">LinkedIn</a>
+    </p>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const bayer = [
+      [ 0, 32,  8, 40,  2, 34, 10, 42],
+      [48, 16, 56, 24, 50, 18, 58, 26],
+      [12, 44,  4, 36, 14, 46,  6, 38],
+      [60, 28, 52, 20, 62, 30, 54, 22],
+      [ 3, 35, 11, 43,  1, 33,  9, 41],
+      [51, 19, 59, 27, 49, 17, 57, 25],
+      [15, 47,  7, 39, 13, 45,  5, 37],
+      [63, 31, 55, 23, 61, 29, 53, 21]
+    ];
+
+    let width, height;
+    const pixelSize = 3;
+
+    function resize() {
+      width = Math.floor(window.innerWidth / pixelSize);
+      height = Math.floor(window.innerHeight / pixelSize);
+      canvas.width = width;
+      canvas.height = height;
+      canvas.style.imageRendering = 'pixelated';
+      canvas.style.imageRendering = 'crisp-edges';
+    }
+
+    function noise3d(x, y, z) {
+      const n = Math.sin(x * 1.2 + z) * Math.cos(y * 1.1 + z * 0.7) +
+                Math.sin(x * 2.3 - z * 1.1) * Math.cos(y * 1.8 + z * 0.5) * 0.5 +
+                Math.sin(x * 4.1 + z * 0.9) * Math.cos(y * 3.7 - z * 0.3) * 0.25;
+      return n / 1.75;
+    }
+
+    let animationId = null;
+    let isVisible = true;
+
+    function checkVisibility() {
+      const shouldAnimate = window.scrollY < window.innerHeight * 0.8;
+      if (shouldAnimate && !isVisible) {
+        isVisible = true;
+        animationId = requestAnimationFrame(render);
+      } else if (!shouldAnimate && isVisible) {
+        isVisible = false;
+        if (animationId) cancelAnimationFrame(animationId);
+      }
+    }
+
+    function render(time) {
+      if (!isVisible) return;
+
+      const t = time * 0.0003;
+      const imageData = ctx.createImageData(width, height);
+      const data = imageData.data;
+
+      const centerX = width * 0.55;
+      const centerY = height * 0.45;
+      const radius = Math.min(width, height) * 0.35;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const dx = x - centerX;
+          const dy = y - centerY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          let brightness = 0;
+
+          if (dist < radius * 1.3) {
+            const nx = dx / radius;
+            const ny = dy / radius;
+            const nz2 = 1 - nx * nx - ny * ny;
+
+            if (nz2 > 0) {
+              const nz = Math.sqrt(nz2);
+              const cosT = Math.cos(t);
+              const sinT = Math.sin(t);
+              const rnx = nx * cosT - nz * sinT;
+              const rnz = nx * sinT + nz * cosT;
+
+              const noiseVal = noise3d(rnx * 3, ny * 3, rnz * 3 + t * 2);
+
+              const lightX = 0.5, lightY = -0.5, lightZ = 0.7;
+              const lightLen = Math.sqrt(lightX*lightX + lightY*lightY + lightZ*lightZ);
+              let dot = (rnx * lightX + ny * lightY + rnz * lightZ) / lightLen;
+              dot = Math.max(0, dot);
+
+              brightness = dot * 0.7 + noiseVal * 0.25 + 0.15;
+              const edge = 1 - nz;
+              brightness += edge * edge * 0.3;
+            } else {
+              const atmoDist = (dist - radius) / (radius * 0.3);
+              if (atmoDist > 0 && atmoDist < 1) {
+                brightness = (1 - atmoDist) * 0.15;
+              }
+            }
+          }
+
+          const bgNoise = noise3d(x * 0.02, y * 0.02, t * 0.5) * 0.03 + 0.02;
+          brightness = Math.max(brightness, bgNoise);
+          brightness = Math.max(0, Math.min(1, brightness));
+
+          const threshold = bayer[y % 8][x % 8] / 64;
+          const pixel = brightness > threshold ? 1 : 0;
+
+          const i = (y * width + x) * 4;
+          const color = pixel * 232;
+          data[i] = color;
+          data[i + 1] = color;
+          data[i + 2] = color;
+          data[i + 3] = 255;
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      animationId = requestAnimationFrame(render);
+    }
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    resize();
+    animationId = requestAnimationFrame(render);
+  </script>
+</body>
+</html>
