@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chester Bowl — Duluth's Neighborhood Shred Hill &amp; Summer Camp</title>
   <meta name="description" content="Chester Bowl is Duluth's punky little nonprofit ski hill + summer day camp in Chester Park. Terrain park &amp; Freestyle Fridays, learn-to-ride, the cheapest lift ticket in the country, season passes &amp; rentals, summer camp, and Fall Fest. Money never keeps a kid off the hill.">
-  <meta name="theme-color" content="#258651" id="themeColor">
+  <meta name="theme-color" content="#e60012" id="themeColor">
   <link rel="icon" type="image/svg+xml" href="assets/chester/logo-clean.svg">
 
   <!-- Open Graph -->
@@ -16,36 +16,47 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bungee&family=Nunito:wght@400;600;700;800;900&family=Shantell+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Nunito:wght@400;600;700;800;900&family=Shantell+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ============================================================
-       CHESTER BOWL — punk snowboard-zine photo-collage
-       Ink + paper base, blaze/gold punk pop, season-flex accent.
-       Contrast verified: ink/paper 16:1 · ink/blaze 5.8:1 · ink/cyan 9.4:1
-       · ink/gold 10.6:1 · paper/ink-blue 13:1 · white/pine-deep 7.9:1
+       CHESTER BOWL — PERSONA 5 BATTLE-UI restyle
+       Red + black + white armature (P5 iconic). No flat horizontal or
+       vertical lines in the chrome — every edge is angled, sheared, jagged.
+       Chester cyan / blaze / gold / pine survive as secondary accent pops.
+       Contrast verified: ink/paper 18.4:1 · white/red-deep 8.1:1
+       · white/red 4.8:1 · black/cyan 9.6:1 · white/pine-deep 7.9:1
+       · black/gold 10.9:1 · black/blaze 6.0:1
        ============================================================ */
     :root {
-      --ink:        #0f171f;   /* oklch(.20 .02 250) — body, line art, the logo */
-      --paper:      #f4f2ea;   /* oklch(.96 .01 95)  — warm paper ground */
-      --surface:    #fdfcf8;   /* oklch(.99 .005 95) — lifted panels */
-      --cyan:       #22cde5;   /* oklch(.78 .13 210) — winter ribbon */
-      --blaze:      #f76400;   /* oklch(.68 .20 45)  — CTA / badge FILLS (ink text on it, 5.8:1) */
-      --blaze-ink:  #c93a00;   /* deeper blaze for TEXT on light grounds (paper 4.6:1, surface 5:1) */
-      --pine:       #258651;   /* oklch(.55 .12 155) — summer accent */
-      --pine-deep:  #005e31;   /* summer dark band (white text 7.9:1) */
-      --ink-blue:   #072a4a;   /* winter dark band  (paper text 13:1) */
-      --gold:       #edc23e;   /* oklch(.83 .15 90)  — highlight blocks */
+      --ink:        #141414;   /* near-black chrome — neutral, all line art + logo */
+      --ink-soft:   #232323;   /* lifted black panels */
+      --paper:      #ffffff;   /* white content ground (NOT cream) */
+      --panel:      #f4f4f5;   /* cool neutral lifted surface */
+      --panel-2:    #ededee;   /* second neutral step */
 
-      /* live season axis */
+      /* P5 armature */
+      --red:        #e60012;   /* hot crimson — shards, slashes (white or LARGE-black text) */
+      --red-deep:   #a5000d;   /* deep crimson — text panels, white text 8:1 */
+
+      /* secondary accent pops */
+      --cyan:       #22cde5;   /* winter ribbon */
+      --blaze:      #f76400;   /* blaze pop */
+      --pine:       #1f7a4d;   /* summer green */
+      --pine-deep:  #005e31;   /* summer dark, white text 7.9:1 */
+      --gold:       #edc23e;   /* powder gold pop */
+
+      /* live season axis — armature stays red/black/white, this only tints the pop */
       --accent:      var(--pine);
       --accent-deep: var(--pine-deep);
 
       --wrap: 1180px;
-      --shadow: 6px 6px 0 var(--ink);
-      --shadow-lg: 10px 10px 0 var(--ink);
+
+      /* the leaning-parallelogram shard shape, reused for panels + their shadows */
+      --shard: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
+      --shard-r: polygon(0 0, 96% 0, 100% 100%, 4% 100%);
     }
-    [data-season="winter"] { --accent: var(--cyan); --accent-deep: var(--ink-blue); }
+    [data-season="winter"] { --accent: var(--cyan); --accent-deep: #06304f; }
     [data-season="summer"] { --accent: var(--pine); --accent-deep: var(--pine-deep); }
 
     /* season show/hide — both sets live in the DOM */
@@ -53,13 +64,13 @@
     [data-season="summer"] .only-winter { display: none !important; }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 92px; overflow-x: hidden; }
 
     body {
       font-family: "Nunito", system-ui, -apple-system, sans-serif;
       color: var(--ink);
       background: var(--paper);
-      line-height: 1.62;
+      line-height: 1.6;
       font-size: 17px;
       font-weight: 600;
       overflow-x: hidden;
@@ -75,288 +86,428 @@
     a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
     h1, h2, h3, .display {
-      font-family: "Bagel Fat One", system-ui, sans-serif;
-      font-weight: 400; line-height: .98; letter-spacing: -.03em;
-      text-wrap: balance; color: var(--ink);
+      font-family: "Anton", system-ui, sans-serif;
+      font-weight: 400; line-height: .94; letter-spacing: .004em;
+      text-transform: uppercase; text-wrap: balance; color: var(--ink);
     }
-    h2 { font-size: clamp(2.1rem, 6.4vw, 4rem); }
-    h3 { font-size: clamp(1.35rem, 3.4vw, 1.85rem); line-height: 1.02; }
+    h1 { font-size: clamp(2.7rem, 11vw, 5.2rem); }
+    h2 { font-size: clamp(2.15rem, 6.6vw, 3.9rem); }
+    h3 { font-size: clamp(1.45rem, 3.6vw, 2rem); line-height: 1; }
 
-    .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 20px; }
+    .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 21px; }
 
-    /* ---------- sticker labels / patches ---------- */
+    /* ---------------------------------------------------------
+       SHARD SYSTEM — parallelogram panels with a hard offset
+       shadow, upright text (clip-path, so no horizontal bleed
+       and no counter-skew math needed). Used for every card /
+       board / info-bar so nothing is ever a plain rectangle.
+       --------------------------------------------------------- */
+    .shard {
+      position: relative; z-index: 0;
+      background: var(--paper); color: var(--ink);
+      clip-path: var(--shard);
+      padding: 25px 30px 24px;
+    }
+    .shard::before {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background: var(--ink); clip-path: var(--shard);
+      transform: translate(9px, 11px);
+    }
+    .shard.rt { clip-path: var(--shard-r); }
+    .shard.rt::before { clip-path: var(--shard-r); }
+    .shard.panel { background: var(--panel); }
+    .shard.ink   { background: var(--ink-soft); color: var(--paper); }
+    .shard.ink::before { background: var(--red); }
+    .shard.red   { background: var(--red-deep); color: var(--paper); }
+    .shard.red::before { background: var(--ink); }
+    .shard.gold  { background: var(--gold); color: var(--ink); }
+    .shard.accent{ background: var(--accent-deep); color: var(--paper); }
+    .shard.ink h3, .shard.red h3, .shard.accent h3 { color: var(--paper); }
+
+    /* ---------------------------------------------------------
+       ANGLED SECTION EDGES — every band top+bottom is a slanted
+       polygon; slant direction/depth varies so boundaries zig-zag
+       down the page. Content lives inside generous padding.
+       --------------------------------------------------------- */
+    section { padding: clamp(52px, 8vw, 94px) 0; position: relative; }
+
+    .band {
+      color: var(--ink);
+      margin-top: -22px; padding-top: clamp(74px, 9vw, 118px);
+      padding-bottom: clamp(66px, 8vw, 104px);
+    }
+    .band.first { margin-top: 0; }
+    .cut-a { clip-path: polygon(0 0, 100% 22px, 100% 100%, 0 calc(100% - 30px)); }
+    .cut-b { clip-path: polygon(0 26px, 100% 0, 100% calc(100% - 28px), 0 100%); }
+    .cut-c { clip-path: polygon(0 0, 100% 30px, 100% calc(100% - 22px), 0 100%); }
+    .cut-d { clip-path: polygon(0 30px, 100% 0, 100% 100%, 0 calc(100% - 24px)); }
+
+    .band.ink   { background: var(--ink); color: var(--paper); }
+    .band.red   { background: var(--red); color: var(--paper); }
+    .band.accent{ background: var(--accent-deep); color: var(--paper); }
+    [data-season="winter"] .band.accent { background: #06304f; }
+    .band.panel { background: var(--panel); }
+    .band.ink h1, .band.ink h2, .band.ink h3,
+    .band.red h1, .band.red h2, .band.red h3,
+    .band.accent h1, .band.accent h2, .band.accent h3 { color: var(--paper); }
+
+    /* winter cyan pop for the identity band — cyan is light, so ink text */
+    [data-season="winter"] .band.pop { background: var(--cyan); color: var(--ink); }
+    [data-season="winter"] .band.pop h1, [data-season="winter"] .band.pop h2, [data-season="winter"] .band.pop h3 { color: var(--ink); }
+    [data-season="summer"] .band.pop { background: var(--pine-deep); color: var(--paper); }
+    [data-season="summer"] .band.pop h1, [data-season="summer"] .band.pop h2, [data-season="summer"] .band.pop h3 { color: var(--paper); }
+
+    /* ---------- kicker sticker labels / patches (chevron shards) ---------- */
+    .kicker { display: flex; align-items: center; gap: 13px; margin-bottom: 17px; flex-wrap: wrap; }
     .sticker {
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex; align-items: center; gap: 7px;
       font-family: "Bungee", sans-serif; font-size: .72rem; letter-spacing: .01em;
       background: var(--gold); color: var(--ink);
-      padding: 7px 13px; border: 3px solid var(--ink);
-      box-shadow: 4px 4px 0 var(--ink); transform: rotate(-2.4deg);
-      line-height: 1;
+      padding: 8px 15px 8px 17px; line-height: 1;
+      clip-path: polygon(9% 0, 100% 0, 91% 100%, 0 100%);
+      transform: skewX(-5deg) rotate(-2deg);
     }
-    .sticker.cyan  { background: var(--accent); }
-    .sticker.blaze { background: var(--blaze); }
+    .sticker > span { transform: skewX(5deg); display: inline-flex; align-items: center; gap: 7px; }
+    .sticker.red   { background: var(--red-deep); color: var(--paper); }
+    .sticker.accent{ background: var(--accent); color: var(--ink); }
+    [data-season="summer"] .sticker.accent { background: var(--accent); color: var(--paper); }
     .sticker.ink   { background: var(--ink); color: var(--paper); }
-    .sticker.r     { transform: rotate(2.6deg); }
+    .sticker.r     { transform: skewX(-5deg) rotate(2.4deg); }
 
     .hand {
       font-family: "Shantell Sans", cursive; font-weight: 600;
-      font-size: 1.08rem; line-height: 1.35; color: var(--ink);
+      font-size: 1.08rem; line-height: 1.4; color: var(--ink);
     }
 
-    /* gold marker highlight behind a word */
-    .hl { background: var(--gold); box-decoration-break: clone; -webkit-box-decoration-break: clone;
-          padding: .04em .16em; box-shadow: 0 0 0 1px var(--gold); }
-    .ul { background-image: linear-gradient(var(--blaze), var(--blaze));
-          background-position: 0 88%; background-repeat: no-repeat; background-size: 100% .28em; }
+    /* red marker slash behind a word — angled, never a flat highlight bar */
+    .hl { position: relative; color: var(--paper); white-space: nowrap; padding: 0 .12em; z-index: 0; }
+    .hl::before { content: ""; position: absolute; inset: -.02em -.05em; z-index: -1;
+      background: var(--red); clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); transform: rotate(-1.5deg); }
 
-    /* ---------- buttons ---------- */
+    /* ---------- buttons — sheared parallelogram + hard offset shadow ---------- */
     .btn {
+      position: relative; z-index: 0;
       display: inline-flex; align-items: center; justify-content: center; gap: .5em;
       font-family: "Nunito", sans-serif; font-weight: 900; font-size: 1rem;
-      text-transform: uppercase; letter-spacing: .01em; text-decoration: none;
-      background: var(--blaze); color: var(--ink);
-      padding: 15px 26px; border: 3px solid var(--ink); border-radius: 16px;
-      box-shadow: 5px 5px 0 var(--ink); cursor: pointer; min-height: 54px;
-      transition: transform .1s ease, box-shadow .1s ease, background .1s ease;
+      text-transform: uppercase; letter-spacing: .015em; text-decoration: none;
+      color: var(--paper); background: transparent;
+      padding: 16px 27px; min-height: 55px; cursor: pointer; border: 0;
+      transition: transform .11s ease, filter .11s ease;
     }
-    .btn:hover  { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--ink); }
-    .btn:active { transform: translate(3px,3px);   box-shadow: 2px 2px 0 var(--ink); }
-    .btn:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
-    .btn.ink   { background: var(--ink);  color: var(--paper); }
-    .btn.gold  { background: var(--gold); color: var(--ink); }
-    .btn.paper { background: var(--surface); color: var(--ink); }
-    .btn.sm    { padding: 11px 17px; min-height: 46px; font-size: .84rem; box-shadow: 4px 4px 0 var(--ink); }
+    .btn::before {
+      content: ""; position: absolute; inset: 0; z-index: -2;
+      background: var(--red); clip-path: polygon(7% 0, 100% 0, 93% 100%, 0 100%);
+    }
+    .btn::after {
+      content: ""; position: absolute; inset: 0; z-index: -3;
+      background: var(--ink); clip-path: polygon(7% 0, 100% 0, 93% 100%, 0 100%);
+      transform: translate(6px, 7px); transition: transform .11s ease;
+    }
+    .btn:hover  { transform: translate(-2px, -2px); }
+    .btn:hover::after { transform: translate(9px, 10px); }
+    .btn:active { transform: translate(3px, 3px); }
+    .btn:active::after { transform: translate(2px, 2px); }
+    .btn:focus-visible { outline: 4px solid var(--ink); outline-offset: 4px; }
+    .btn.ink::before   { background: var(--ink); }
+    .btn.ink { color: var(--paper); }
+    .btn.ink::after    { background: var(--red); }
+    .btn.gold::before  { background: var(--gold); }
+    .btn.gold { color: var(--ink); }
+    .btn.paper::before { background: var(--paper); }
+    .btn.paper { color: var(--ink); }
+    .btn.paper::after  { background: var(--red); }
+    .btn.sm { padding: 12px 18px; min-height: 46px; font-size: .82rem; }
+    .btn.sm::after { transform: translate(5px, 5px); }
+    .btn.sm:hover::after { transform: translate(7px, 7px); }
     .btn.block { width: 100%; }
 
+    /* text arrow link — red angled slash instead of a flat underline */
     .arrow {
-      display: inline-flex; align-items: center; gap: 8px;
+      position: relative;
+      display: inline-flex; align-items: center; gap: 9px;
       font-weight: 900; text-transform: uppercase; letter-spacing: .02em; font-size: .84rem;
-      color: var(--ink); text-decoration: none;
-      border-bottom: 3px solid var(--accent); padding-bottom: 3px;
+      color: var(--ink); text-decoration: none; padding-bottom: 7px;
     }
+    .arrow::before { content: ""; position: absolute; left: 0; right: 14%; bottom: 0; height: 5px;
+      background: var(--red); clip-path: polygon(0 0, 100% 40%, 100% 100%, 0 100%); }
     .arrow::after { content: "\2192"; transition: transform .12s ease; }
-    .arrow:hover::after { transform: translateX(5px); }
+    .arrow:hover::after { transform: translateX(6px); }
+    .band.ink .arrow, .band.red .arrow, .band.accent .arrow { color: var(--paper); }
 
-    .skip { position: absolute; left: -999px; top: 0; z-index: 2000; background: var(--ink); color: var(--paper); padding: 12px 18px; font-weight: 900; }
+    .skip { position: absolute; left: -999px; top: 0; z-index: 2000; background: var(--red-deep); color: var(--paper); padding: 12px 18px; font-weight: 900; }
     .skip:focus { left: 8px; top: 8px; }
 
-    /* ---------- header ---------- */
-    header.site { position: sticky; top: 0; z-index: 500; background: var(--paper); border-bottom: 4px solid var(--ink); }
-    .nav { display: flex; align-items: center; gap: 12px; height: 76px; }
+    /* ---------- header — angled bottom edge, red slash, no flat rule ---------- */
+    header.site {
+      position: sticky; top: 0; z-index: 500; background: var(--paper);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 15px));
+      padding-bottom: 13px;
+    }
+    header.site::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 9px;
+      background: var(--red);
+      clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    }
+    .nav { display: flex; align-items: center; gap: 12px; height: 78px; }
     .brand { display: flex; align-items: center; text-decoration: none; margin-right: auto; }
-    .brand img { height: 50px; width: auto; }
+    .brand img { height: 52px; width: auto; }
     .nav-links { display: none; }
-    .nav-links a { text-decoration: none; color: var(--ink); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: .82rem; padding: 6px 0; border-bottom: 3px solid transparent; white-space: nowrap; }
-    .nav-links a:hover { border-bottom-color: var(--blaze); }
+    .nav-links a { position: relative; text-decoration: none; color: var(--ink); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: .82rem; padding: 8px 0 10px; white-space: nowrap; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 2px; height: 5px; background: var(--red); clip-path: polygon(0 0, 100% 45%, 100% 100%, 0 100%); transition: right .16s ease; }
+    .nav-links a:hover::after { right: 6%; }
 
-    /* season toggle — a real physical switch */
-    .toggle { display: inline-flex; border: 3px solid var(--ink); border-radius: 999px; background: var(--surface); box-shadow: 3px 3px 0 var(--ink); overflow: hidden; }
+    /* season toggle — a sheared physical switch */
+    .toggle { display: inline-flex; background: var(--ink); padding: 3px; transform: skewX(-8deg); }
     .toggle button {
-      font-family: "Bungee", sans-serif; font-size: .68rem; letter-spacing: .02em;
-      border: none; background: transparent; color: var(--ink); cursor: pointer;
-      padding: 9px 12px; display: inline-flex; align-items: center; gap: 6px; line-height: 1;
+      font-family: "Bungee", sans-serif; font-size: .66rem; letter-spacing: .02em;
+      border: none; background: transparent; color: var(--paper); cursor: pointer;
+      padding: 10px 13px; display: inline-flex; align-items: center; gap: 6px; line-height: 1;
       transition: background .15s ease, color .15s ease;
     }
-    .toggle button[aria-pressed="true"] { background: var(--accent); }
-    [data-season="summer"] .toggle button.t-summer[aria-pressed="true"] { background: var(--pine-deep); color: var(--paper); }
+    .toggle button > span { transform: skewX(8deg); display: inline-flex; align-items: center; gap: 6px; }
+    .toggle button[aria-pressed="true"] { background: var(--red); color: var(--paper); }
+    [data-season="summer"] .toggle button.t-summer[aria-pressed="true"] { background: var(--red); color: var(--paper); }
     [data-season="winter"] .toggle button.t-winter[aria-pressed="true"] { background: var(--cyan); color: var(--ink); }
-    .toggle button:focus-visible { outline: 3px solid var(--blaze); outline-offset: -3px; }
+    .toggle button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
 
-    .hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 50px; height: 50px; border: 3px solid var(--ink); background: var(--surface); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; padding: 0 12px; border-radius: 12px; }
-    .hamburger span { height: 3px; background: var(--ink); border-radius: 2px; transition: .2s; }
+    .hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 52px; height: 50px; border: 0; background: var(--ink); cursor: pointer; padding: 0 13px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); }
+    .hamburger span { height: 3px; background: var(--paper); transition: .2s; }
+    .hamburger span:nth-child(2) { background: var(--red); }
     .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
     .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-    .mobile-menu { display: none; background: var(--paper); border-bottom: 4px solid var(--ink); padding: 8px 20px 20px; }
+    .mobile-menu { display: none; background: var(--ink); color: var(--paper); padding: 10px 21px 22px; }
     .mobile-menu.open { display: block; }
-    .mobile-menu a { display: block; padding: 15px 4px; text-decoration: none; color: var(--ink); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: 1rem; border-bottom: 2px solid rgba(15,23,31,.14); }
-    .mobile-menu a.btn { display: flex; margin-top: 16px; border: 3px solid var(--ink); }
+    .mobile-menu a { display: block; padding: 15px 6px; text-decoration: none; color: var(--paper); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: 1rem; position: relative; }
+    .mobile-menu a + a::before { content: ""; position: absolute; left: 6px; right: 30%; top: 0; height: 3px; background: var(--red);
+      clip-path: polygon(0 0, 100% 60%, 96% 100%, 0 100%); }
+    .mobile-menu a.btn { color: var(--paper); }
+    .mobile-menu a.btn::before { top: auto; right: auto; left: 0; height: auto; }
+    .mobile-menu a.btn { display: flex; margin-top: 18px; }
 
-    /* ---------- generic section rhythm ---------- */
-    section { padding: clamp(54px, 8vw, 96px) 0; position: relative; }
-    .kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-    .lead { font-size: clamp(1.05rem, 2.3vw, 1.22rem); max-width: 60ch; color: var(--ink); font-weight: 700; }
+    /* ---------- generic rhythm ---------- */
+    .lead { font-size: clamp(1.06rem, 2.3vw, 1.22rem); max-width: 60ch; font-weight: 700; line-height: 1.5; }
     .measure { max-width: 62ch; }
 
     /* ---------- HERO ---------- */
-    .hero { padding: 30px 0 44px; overflow: hidden; }
+    .hero { padding: 34px 0 40px; }
     .hero .wrap { position: relative; }
-    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 30px; align-items: center; }
-    .hero-copy h1 { font-size: clamp(2.6rem, 12vw, 5.4rem); margin: 14px 0 18px; }
-    .hero-copy .lead { margin-bottom: 24px; }
-    .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
-    .hero-note { margin-top: 22px; max-width: 42ch; }
-    .hero-note .pin { color: var(--blaze-ink); font-weight: 700; }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
+    .hero-copy h1 { margin: 15px 0 19px; }
+    .hero-copy h1 .l2 { display: inline-block; transform: rotate(-3deg); }
+    .hero-copy .lead { margin-bottom: 25px; }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+    .hero-note { margin-top: 23px; max-width: 42ch; }
+    .hero-note .pin { color: var(--red-deep); font-weight: 800; }
 
-    /* the collage: B&W photo + accent ribbon slicing behind + slapped stickers */
-    .collage { position: relative; margin: 8px auto 0; width: min(430px, 88vw); }
-    .collage .ribbon { position: absolute; z-index: 1; left: -22%; right: -22%; top: 34%; height: 40%;
-      background: var(--accent); border: 3px solid var(--ink); transform: rotate(-13deg); }
-    .collage .ribbon.two { top: 60%; height: 16%; background: var(--blaze); transform: rotate(-13deg); }
-    .snap { position: relative; z-index: 2; border: 5px solid var(--ink); box-shadow: var(--shadow-lg);
-      background: var(--surface); transform: rotate(-2deg); }
-    .snap img { width: 100%; display: block; }
-    .snap.bw img { filter: grayscale(1) contrast(1.14) brightness(1.03); }
+    /* the collage: B&W photo shard + red/accent ribbons + comic burst + slap badge */
+    .collage { position: relative; margin: 6px auto 8px; width: min(430px, 86vw); }
+    .burst { position: absolute; z-index: 0; left: 50%; top: 46%; width: 150%; aspect-ratio: 1; transform: translate(-50%, -50%);
+      background: conic-gradient(from 6deg, var(--red) 0 7deg, transparent 7deg 22deg, var(--red) 22deg 29deg, transparent 29deg 46deg, var(--red) 46deg 53deg, transparent 53deg 70deg, var(--red) 70deg 77deg, transparent 77deg 96deg, var(--red) 96deg 103deg, transparent 103deg 122deg, var(--red) 122deg 129deg, transparent 129deg 150deg, var(--red) 150deg 157deg, transparent 157deg 180deg, var(--red) 180deg 187deg, transparent 187deg 210deg, var(--red) 210deg 217deg, transparent 217deg 240deg, var(--red) 240deg 247deg, transparent 247deg 270deg, var(--red) 270deg 277deg, transparent 277deg 300deg, var(--red) 300deg 307deg, transparent 307deg 330deg, var(--red) 330deg 337deg, transparent 337deg 360deg);
+      opacity: .14; pointer-events: none; }
+    .collage .ribbon { position: absolute; z-index: 1; left: -24%; right: -24%; top: 33%; height: 34%;
+      background: var(--red); clip-path: polygon(0 22%, 100% 0, 100% 78%, 0 100%); transform: rotate(-13deg); }
+    .collage .ribbon.two { top: 60%; height: 15%; background: var(--accent); clip-path: polygon(0 0, 100% 26%, 100% 100%, 0 74%); transform: rotate(-13deg); }
+    [data-season="summer"] .collage .ribbon.two { background: var(--pine); }
+    .snap { position: relative; z-index: 2; background: var(--paper); padding: 9px;
+      clip-path: polygon(2% 3%, 100% 0, 98% 97%, 0 100%); transform: rotate(-2.5deg); }
+    .snap::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
+      clip-path: polygon(2% 3%, 100% 0, 98% 97%, 0 100%); transform: translate(10px, 12px); }
+    .snap img { width: 100%; display: block; clip-path: polygon(2% 3%, 100% 0, 98% 97%, 0 100%); }
+    .snap.bw img { filter: grayscale(1) contrast(1.15) brightness(1.03); }
     /* halftone print grit over B&W focal photos */
     .halftone { position: relative; }
-    .halftone::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .34;
-      background-image: radial-gradient(var(--ink) 1px, transparent 1.5px); background-size: 5px 5px; }
-    .collage .slap-badge { position: absolute; z-index: 3; bottom: -20px; right: -14px;
-      width: 108px; height: 108px; border-radius: 50%; background: var(--blaze); color: var(--ink);
-      border: 4px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); display: grid; place-items: center;
-      text-align: center; transform: rotate(8deg); }
-    .collage .slap-badge b { font-family: "Bungee", sans-serif; font-size: .82rem; line-height: 1.05; }
-    .collage .tape { position: absolute; z-index: 4; top: -16px; left: -12px; width: 96px; transform: rotate(-9deg);
-      border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); background: var(--surface); }
+    .halftone::after { content: ""; position: absolute; inset: 9px; pointer-events: none; mix-blend-mode: multiply; opacity: .32;
+      background-image: radial-gradient(var(--ink) 1px, transparent 1.5px); background-size: 5px 5px;
+      clip-path: polygon(2% 3%, 100% 0, 98% 97%, 0 100%); }
+    .collage .slap-badge { position: absolute; z-index: 3; bottom: -18px; right: -12px;
+      width: 112px; height: 112px; background: var(--red); color: var(--paper);
+      clip-path: polygon(50% 0, 62% 20%, 85% 15%, 80% 38%, 100% 50%, 80% 62%, 85% 85%, 62% 80%, 50% 100%, 38% 80%, 15% 85%, 20% 62%, 0 50%, 20% 38%, 15% 15%, 38% 20%);
+      display: grid; place-items: center; text-align: center; transform: rotate(9deg); }
+    .collage .slap-badge b { font-family: "Bungee", sans-serif; font-size: .8rem; line-height: 1.05; }
 
-    /* ---------- quick action strip ---------- */
-    .strip { background: var(--accent-deep); color: var(--paper); border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink); }
-    .strip .wrap { display: grid; grid-template-columns: 1fr; gap: 0; }
-    .strip .cell { padding: 20px 4px; display: flex; gap: 14px; align-items: flex-start; border-bottom: 2px dashed rgba(244,242,234,.34); }
-    .strip .cell:last-child { border-bottom: none; }
-    .strip .ic { font-size: 1.5rem; line-height: 1; }
-    .strip .lb { font-family: "Bungee", sans-serif; font-size: .64rem; letter-spacing: .04em; color: var(--accent); margin-bottom: 4px; }
-    [data-season="winter"] .strip .lb { color: var(--cyan); }
-    [data-season="summer"] .strip .lb { color: #bfe6cf; }
-    .strip .vl { font-weight: 800; font-size: 1.02rem; line-height: 1.35; }
-    .strip .vl small { display: block; font-weight: 600; opacity: .85; font-size: .82rem; margin-top: 2px; }
+    /* ---------- quick action strip — sheared info-bars ---------- */
+    .strip { background: var(--ink); color: var(--paper); margin-top: -20px;
+      padding-top: 42px; padding-bottom: 34px;
+      clip-path: polygon(0 0, 100% 20px, 100% 100%, 0 calc(100% - 26px)); }
+    .strip .wrap { display: grid; grid-template-columns: 1fr; gap: 15px; }
+    .facts .cell {
+      position: relative; z-index: 0; display: flex; gap: 15px; align-items: flex-start;
+      background: var(--ink-soft); padding: 18px 22px 18px 20px;
+      clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%);
+    }
+    .facts .cell::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; z-index: -1;
+      background: var(--red); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    .facts .ic { font-size: 1.5rem; line-height: 1; }
+    .facts .lb { font-family: "Bungee", sans-serif; font-size: .62rem; letter-spacing: .03em; color: var(--red); margin-bottom: 5px; }
+    [data-season="winter"] .facts .lb { color: var(--cyan); }
+    .facts .vl { font-weight: 800; font-size: 1.02rem; line-height: 1.3; }
+    .facts .vl small { display: block; font-weight: 600; color: #d6d6d6; font-size: .82rem; margin-top: 3px; }
     .strip a { color: var(--paper); }
 
-    /* ---------- program bands ---------- */
-    /* winter: cyan is light -> ink text (9.4:1). summer: pine is dark -> deep-green + paper text (7:1). */
-    .band-cyan { background: var(--accent); color: var(--ink); border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink); }
-    [data-season="summer"] .band-cyan { background: var(--pine-deep); color: var(--paper); }
-    [data-season="summer"] .band-cyan h1, [data-season="summer"] .band-cyan h2, [data-season="summer"] .band-cyan h3 { color: var(--paper); }
-    .band-paper2 { background: linear-gradient(0deg, var(--surface), var(--surface)); }
-    .band-ink { background: var(--ink); color: var(--paper); border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink); }
-    .band-ink h1, .band-ink h2, .band-ink h3 { color: var(--paper); }
-
-    /* feature block: big terrain-park lead */
-    .feature { display: grid; grid-template-columns: 1fr; gap: 26px; align-items: center; }
+    /* ---------- feature block ---------- */
+    .feature { display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; }
     .feature .body .lead { color: inherit; }
     .feature .pics { position: relative; }
     .feature .pics .snap { transform: rotate(-2.5deg); }
-    /* mobile: the second photo stacks under the first, nudged + tilted like a slapped-on print */
-    .feature .pics .snap.mini { width: 66%; margin: -14px 0 0 auto; transform: rotate(4deg); border-width: 4px; }
+    .feature .pics .snap.mini { width: 64%; margin: -18px 0 0 auto; transform: rotate(4deg); }
     @media (min-width: 900px) {
-      /* desktop: small capped overlay that breaks the frame, never oversized */
-      .feature .pics .snap.mini { position: absolute; width: 46%; max-width: 232px; right: -10px; bottom: -22px;
+      .feature .pics .snap.mini { position: absolute; width: 47%; max-width: 236px; right: -12px; bottom: -26px;
         margin: 0; z-index: 5; transform: rotate(5deg); }
     }
 
-    /* program list — varied editorial rows, NOT a uniform card grid */
-    .progs { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 8px; }
-    .prog { background: var(--surface); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow);
-      padding: 22px 20px 20px; position: relative; display: grid; grid-template-columns: 1fr; gap: 6px; }
-    .prog .patch { position: absolute; top: -20px; right: 16px; width: 74px; height: 74px; border-radius: 50%;
-      background: var(--gold); color: var(--ink); border: 4px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
-      display: grid; place-items: center; text-align: center; transform: rotate(-6deg);
-      font-family: "Bungee", sans-serif; font-size: .52rem; line-height: 1.06; padding: 6px; }
-    .prog .patch.cyan { background: var(--accent); }
-    .prog .patch.blaze { background: var(--blaze); }
+    /* ---------- program list — varied editorial shards, NOT a uniform grid ---------- */
+    .progs { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 12px; }
+    .prog { display: grid; grid-template-columns: 1fr; gap: 7px; padding-top: 30px; }
+    .prog .patch {
+      justify-self: start; margin-bottom: 3px;
+      font-family: "Bungee", sans-serif; font-size: .58rem; line-height: 1.1; letter-spacing: .02em;
+      background: var(--gold); color: var(--ink); padding: 8px 14px;
+      clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); transform: skewX(-6deg) rotate(-2deg);
+    }
+    .prog .patch > span { display: inline-block; transform: skewX(6deg); }
+    .prog .patch.accent { background: var(--accent); color: var(--ink); }
+    [data-season="summer"] .prog .patch.accent { color: var(--paper); }
+    .prog .patch.red { background: var(--red-deep); color: var(--paper); }
     .prog .patch.ink { background: var(--ink); color: var(--paper); }
-    .prog h3 { margin: 4px 0 2px; padding-right: 64px; }
-    .prog p { color: var(--ink); font-weight: 600; }
-    .prog .meta { font-weight: 800; font-size: .9rem; margin: 4px 0 8px; }
-    .prog .meta b { color: var(--blaze-ink); }
-    .prog.wide { grid-column: 1 / -1; }
+    .prog h3 { margin: 3px 0 2px; }
+    .prog p { font-weight: 600; }
+    .prog .meta { font-weight: 800; font-size: .9rem; margin: 5px 0 9px; }
+    .prog .meta b { color: var(--red-deep); }
+    .band.ink .prog .meta b, .band.red .prog .meta b, .band.accent .prog .meta b { color: var(--gold); }
+    .band.ink .prog p, .band.red .prog p, .band.accent .prog p,
+    .band.ink .prog .meta, .band.red .prog .meta, .band.accent .prog .meta { color: var(--paper); }
+    .band.pop .prog .meta b { color: var(--red-deep); }
 
-    /* passes / prices */
-    .boards { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 26px; }
-    .board { background: var(--surface); color: var(--ink); border: 4px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow-lg); overflow: hidden; }
-    .board .bh { background: var(--accent-deep); color: var(--paper); padding: 18px 20px; border-bottom: 4px solid var(--ink); }
+    /* ---------- passes / prices ---------- */
+    .boards { display: grid; grid-template-columns: 1fr; gap: 26px; margin-top: 28px; }
+    .board { position: relative; z-index: 0; background: var(--paper); color: var(--ink);
+      clip-path: var(--shard); }
+    .board::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
+      clip-path: var(--shard); transform: translate(10px, 12px); }
+    .board .bh { background: var(--red-deep); color: var(--paper); padding: 19px 26px 22px;
+      clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 88%); }
     .board .bh h3 { color: var(--paper); }
-    .board .bh p { font-size: .88rem; opacity: .9; font-weight: 700; margin-top: 3px; }
-    .board .bb { padding: 8px 20px 22px; }
-    .prow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 2px dotted rgba(15,23,31,.28); }
-    .prow:last-of-type { border-bottom: none; }
-    .prow .amt { font-family: "Bungee", sans-serif; font-size: 1.05rem; white-space: nowrap; }
+    .board .bh p { font-size: .88rem; color: #ffe3e3; font-weight: 700; margin-top: 4px; }
+    .board .bb { padding: 12px 28px 26px; }
+    .prow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0 12px 22px; position: relative; }
+    .prow::before { content: "\25B8"; position: absolute; left: 0; top: 12px; color: var(--red); }
+    .prow .amt { font-family: "Bungee", sans-serif; font-size: 1.02rem; white-space: nowrap; }
     .rlist { list-style: none; }
-    .rlist li { padding: 11px 0 11px 30px; position: relative; border-bottom: 2px dotted rgba(15,23,31,.24); font-weight: 700; }
-    .rlist li:last-child { border-bottom: none; }
-    .rlist li::before { content: "\2726"; position: absolute; left: 2px; top: 11px; color: var(--blaze); }
-    .note { background: var(--gold); border: 3px solid var(--ink); border-radius: 12px; padding: 13px 15px; font-size: .9rem; font-weight: 700; margin: 12px 0 18px; }
+    .rlist li { padding: 11px 0 11px 30px; position: relative; font-weight: 700; }
+    .rlist li::before { content: ""; position: absolute; left: 2px; top: 16px; width: 15px; height: 9px;
+      background: var(--red); clip-path: polygon(0 0, 100% 40%, 85% 100%, 0 60%); transform: rotate(-4deg); }
+    .band.ink .rlist li, .band.pop .rlist li { color: inherit; }
+    .note { position: relative; z-index: 0; background: var(--gold); color: var(--ink); padding: 14px 17px; font-size: .9rem; font-weight: 700; margin: 14px 0 19px;
+      clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%); }
+    .note strong { font-weight: 900; }
 
-    /* big day-pass ticket */
-    .ticket { grid-column: 1 / -1; position: relative; background: var(--blaze); color: var(--ink);
-      border: 4px solid var(--ink); box-shadow: var(--shadow-lg); border-radius: 18px; padding: 30px 26px; text-align: center; }
-    .ticket::before, .ticket::after { content: ""; position: absolute; top: 50%; transform: translateY(-50%);
-      width: 30px; height: 30px; background: var(--accent); border: 4px solid var(--ink); border-radius: 50%; }
-    .ticket::before { left: -18px; } .ticket::after { right: -18px; }
-    .ticket .prices { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 34px; margin: 16px 0 12px; }
-    .ticket .big { font-family: "Bagel Fat One", sans-serif; font-size: 2.7rem; line-height: 1; }
-    .ticket .sub { font-family: "Bungee", sans-serif; font-size: .66rem; margin-top: 6px; }
+    /* big day-pass ticket — chevron-notched shard */
+    .ticket { position: relative; z-index: 0; grid-column: 1 / -1; background: var(--red); color: var(--paper);
+      padding: 32px 30px; text-align: center;
+      clip-path: polygon(0 12px, 4% 0, 96% 0, 100% 12px, 100% calc(100% - 12px), 96% 100%, 4% 100%, 0 calc(100% - 12px)); }
+    .ticket::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
+      clip-path: polygon(0 12px, 4% 0, 96% 0, 100% 12px, 100% calc(100% - 12px), 96% 100%, 4% 100%, 0 calc(100% - 12px));
+      transform: translate(10px, 11px); }
+    .ticket .sticker { transform: skewX(-5deg) rotate(-3deg); }
+    .ticket .prices { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px 36px; margin: 18px 0 12px; }
+    .ticket .big { font-family: "Anton", sans-serif; font-size: 3rem; line-height: 1; letter-spacing: .01em; }
+    .ticket .sub { font-family: "Bungee", sans-serif; font-size: .64rem; margin-top: 7px; color: #ffe3e3; }
     .ticket .tag { font-weight: 800; font-style: italic; }
-    .ticket .dash { border: none; border-top: 3px dashed rgba(15,23,31,.5); max-width: 300px; margin: 14px auto; }
+    .ticket .zz { margin: 16px auto; max-width: 300px; }
+
+    /* jagged zig-zag divider — never a 1px flat rule */
+    .zz { height: 13px; background-repeat: repeat-x; background-position: center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='13'%3E%3Cpath d='M0 12 L7 2 L14 12 L21 2 L28 12' fill='none' stroke='%23ffffff' stroke-width='3'/%3E%3C/svg%3E"); }
+    .zz.ink { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='13'%3E%3Cpath d='M0 12 L7 2 L14 12 L21 2 L28 12' fill='none' stroke='%23141414' stroke-width='3'/%3E%3C/svg%3E"); }
+    .zz.red { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='13'%3E%3Cpath d='M0 12 L7 2 L14 12 L21 2 L28 12' fill='none' stroke='%23e60012' stroke-width='3'/%3E%3C/svg%3E"); }
 
     /* ---------- about / heritage ---------- */
-    .split { display: grid; grid-template-columns: 1fr; gap: 34px; align-items: center; }
-    .prose p { margin-bottom: 14px; color: var(--ink); font-weight: 600; }
+    .split { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: center; }
+    .prose p { margin-bottom: 15px; font-weight: 600; }
     .prose p:last-child { margin-bottom: 0; }
     .prose strong { font-weight: 900; }
-    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
-    .stat { background: var(--surface); color: var(--ink); border: 3px solid var(--ink); border-radius: 14px; box-shadow: 4px 4px 0 var(--ink); padding: 16px 14px; }
-    .stat .n { font-family: "Bagel Fat One", sans-serif; font-size: clamp(1.5rem,5vw,2rem); line-height: 1; color: var(--blaze-ink); }
-    .stat .c { font-size: .8rem; font-weight: 800; margin-top: 8px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 27px; }
+    .stat { position: relative; z-index: 0; background: var(--paper); color: var(--ink); padding: 17px 16px 15px;
+      clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%); }
+    .stat::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--red);
+      clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%); transform: translate(6px, 7px); }
+    .stat .n { font-family: "Anton", sans-serif; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1; color: var(--red-deep); letter-spacing: .01em; }
+    .stat .c { font-size: .8rem; font-weight: 800; margin-top: 9px; }
+    .band.ink .stat, .band.accent .stat { background: var(--ink-soft); color: var(--paper); }
+    .band.ink .stat .n, .band.accent .stat .n { color: var(--gold); }
 
-    /* heritage jump watermark card */
-    .heritage { position: relative; background: var(--accent); border: 4px solid var(--ink); border-radius: 20px;
-      box-shadow: var(--shadow-lg); padding: 30px 26px; overflow: hidden; }
-    .heritage .ghost { position: absolute; right: -6%; bottom: -12%; width: 62%; opacity: .16; transform: rotate(6deg);
-      filter: none; pointer-events: none; mix-blend-mode: multiply; }
-    .heritage h3 { position: relative; }
-    .heritage p { position: relative; font-weight: 700; margin-top: 10px; }
-    /* summer accent (pine) is dark -> deep-green + paper text so the card body clears AA */
-    [data-season="summer"] .heritage { background: var(--pine-deep); color: var(--paper); }
-    [data-season="summer"] .heritage h3 { color: var(--paper); }
+    /* heritage / ski-jump nostalgia beat */
+    .heritage { position: relative; z-index: 0; background: var(--red); color: var(--paper); padding: 32px 28px; overflow: hidden;
+      clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); }
+    .heritage::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
+      clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); transform: translate(9px, 11px); }
+    .heritage .ghost { position: absolute; right: -6%; bottom: -12%; width: 62%; opacity: .18; transform: rotate(6deg);
+      pointer-events: none; filter: brightness(0) invert(1); }
+    .heritage h3 { position: relative; color: var(--paper); }
+    .heritage p { position: relative; font-weight: 700; margin-top: 11px; }
 
-    /* photo frame utility */
-    .frame { border: 5px solid var(--ink); box-shadow: var(--shadow-lg); background: var(--surface); transform: rotate(-1.5deg); }
-    .frame img { width: 100%; display: block; }
-    .frame.r { transform: rotate(1.8deg); }
-    figcaption { font-family: "Shantell Sans", cursive; font-weight: 600; font-size: .92rem; margin-top: 12px; text-align: center; }
+    /* photo frame utility — leaning shard */
+    .frame { position: relative; z-index: 0; background: var(--paper); padding: 9px;
+      clip-path: polygon(0 2%, 100% 0, 100% 98%, 0 100%); transform: rotate(-1.6deg); }
+    .frame::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
+      clip-path: polygon(0 2%, 100% 0, 100% 98%, 0 100%); transform: translate(9px, 11px); }
+    .frame img { width: 100%; display: block; clip-path: polygon(0 2%, 100% 0, 100% 98%, 0 100%); }
+    .frame.r { transform: rotate(1.9deg); clip-path: polygon(0 0, 100% 2%, 100% 100%, 0 98%); }
+    .frame.r::before, .frame.r img { clip-path: polygon(0 0, 100% 2%, 100% 100%, 0 98%); }
+    .frame.flat { transform: none; }
+    figcaption { font-family: "Shantell Sans", cursive; font-weight: 600; font-size: .92rem; margin-top: 13px; text-align: center; }
 
     /* ---------- get involved ---------- */
-    .ways { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 8px; }
-    .way { background: var(--surface); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow); padding: 22px 20px; }
-    .way h3 { margin-bottom: 8px; }
-    .way p { font-weight: 600; margin-bottom: 14px; }
-    .promise { background: var(--gold); border: 4px solid var(--ink); border-radius: 20px; box-shadow: var(--shadow-lg);
-      padding: 26px 24px; margin-top: 26px; }
-    .promise .big { font-family: "Bagel Fat One", sans-serif; font-size: clamp(1.5rem,5vw,2.4rem); line-height: 1.02; }
+    .ways { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 12px; }
+    .way h3 { margin-bottom: 9px; }
+    .way p { font-weight: 600; margin-bottom: 15px; }
+    .promise { position: relative; z-index: 0; background: var(--gold); color: var(--ink); padding: 28px 26px; margin-top: 28px;
+      clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%); }
+    .promise::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
+      clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%); transform: translate(10px, 12px); }
+    .promise .big { font-family: "Anton", sans-serif; font-size: clamp(1.7rem, 5.4vw, 2.6rem); line-height: 1.02; text-transform: uppercase; letter-spacing: .008em; }
 
     /* chalet */
-    .chalet-tag { display: inline-block; font-family: "Bungee", sans-serif; font-size: .7rem; background: var(--blaze); color: var(--ink); border: 3px solid var(--ink); padding: 7px 12px; box-shadow: 3px 3px 0 var(--ink); margin-bottom: 14px; transform: rotate(-1.5deg); }
+    .chalet-tag { display: inline-block; font-family: "Bungee", sans-serif; font-size: .68rem; background: var(--red-deep); color: var(--paper); padding: 8px 14px; margin-bottom: 15px;
+      clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); transform: skewX(-5deg) rotate(-1.4deg); }
+    .chalet-tag > span { display: inline-block; transform: skewX(5deg); }
 
     /* ---------- contact ---------- */
-    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
-    .card { background: var(--surface); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow); padding: 26px 22px; }
-    .staff { list-style: none; margin-top: 8px; }
-    .staff li { padding: 13px 0; border-bottom: 2px dotted rgba(15,23,31,.24); }
-    .staff li:last-child { border-bottom: none; }
-    .staff .role { font-family: "Bungee", sans-serif; font-size: .58rem; letter-spacing: .03em; color: var(--blaze-ink); }
-    .staff .who { font-weight: 900; font-size: 1.05rem; margin: 3px 0 2px; }
+    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    .staff { list-style: none; margin-top: 10px; }
+    .staff li { padding: 14px 0 14px 20px; position: relative; }
+    .staff li::before { content: ""; position: absolute; left: 0; top: 20px; width: 13px; height: 9px;
+      background: var(--red); clip-path: polygon(0 0, 100% 45%, 80% 100%, 0 55%); }
+    .staff .role { font-family: "Bungee", sans-serif; font-size: .56rem; letter-spacing: .03em; color: var(--red-deep); }
+    .staff .who { font-weight: 900; font-size: 1.05rem; margin: 4px 0 3px; }
     .staff a { font-weight: 800; }
-    .signup { background: var(--accent-deep); color: var(--paper); border: 4px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow-lg); padding: 26px 22px; }
     .signup h3 { color: var(--paper); }
-    .signup p { font-weight: 600; margin: 10px 0 18px; opacity: .92; }
+    .signup p { font-weight: 600; margin: 12px 0 19px; color: #f0f0f0; }
+    .signup .lead-p { color: var(--paper); margin: 24px 0 13px; font-weight: 700; }
 
-    /* ---------- footer ---------- */
-    footer.site { background: var(--ink); color: #c3ccd4; padding: 46px 0 30px; font-weight: 600; }
-    footer.site .f-top { display: grid; grid-template-columns: 1fr; gap: 26px; margin-bottom: 30px; }
-    footer.site .f-logo { display: inline-block; margin-bottom: 14px; }
-    footer.site .f-logo img { height: 58px; width: auto; filter: invert(1); }
-    footer.site .f-blurb { max-width: 340px; color: #aab5bd; font-weight: 600; }
-    footer.site h4 { font-family: "Bungee", sans-serif; color: var(--paper); font-size: .72rem; letter-spacing: .03em; margin-bottom: 14px; }
+    /* ---------- footer — angled top edge ---------- */
+    footer.site { position: relative; background: var(--ink); color: #c7c7c9; padding: 62px 0 34px; font-weight: 600; margin-top: -6px;
+      clip-path: polygon(0 26px, 100% 0, 100% 100%, 0 100%); }
+    footer.site::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 40px; pointer-events: none;
+      background: var(--red); clip-path: polygon(0 100%, 100% 26px, 100% 40px, 0 100%); }
+    footer.site .f-top { display: grid; grid-template-columns: 1fr; gap: 28px; margin-bottom: 32px; }
+    footer.site .f-logo { display: inline-block; margin-bottom: 15px; }
+    footer.site .f-logo img { height: 60px; width: auto; filter: brightness(0) invert(1); }
+    footer.site .f-blurb { max-width: 340px; color: #aeaeb0; font-weight: 600; }
+    footer.site h4 { font-family: "Bungee", sans-serif; color: var(--paper); font-size: .72rem; letter-spacing: .03em; margin-bottom: 16px; position: relative; padding-bottom: 11px; }
+    footer.site h4::after { content: ""; position: absolute; left: 0; width: 44px; bottom: 0; height: 6px; background: var(--red);
+      clip-path: polygon(0 0, 100% 35%, 100% 100%, 0 100%); }
     footer.site ul { list-style: none; }
-    footer.site li { margin-bottom: 9px; }
-    footer.site a { color: #cdd6dd; text-decoration: none; font-weight: 700; }
-    footer.site a:hover { color: var(--cyan); }
-    footer.site .f-bottom { border-top: 2px solid rgba(255,255,255,.14); padding-top: 22px; display: flex; flex-direction: column; gap: 8px; color: #8a95 9d; font-size: .8rem; color: #8a959d; }
+    footer.site li { margin-bottom: 10px; }
+    footer.site a { color: #d2d2d4; text-decoration: none; font-weight: 700; }
+    footer.site a:hover { color: var(--red); }
+    footer.site .f-bottom { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; color: #8f8f92; font-size: .8rem; }
+    footer.site .f-bottom .zz { margin-bottom: 18px; max-width: 220px; }
 
     /* ---------- motion (opt-in; content visible by default) ---------- */
-    .anim .slap  { opacity: 0; transform: translateY(22px) scale(.94) rotate(-1deg); transition: opacity .5s ease, transform .55s cubic-bezier(.25,1,.5,1); }
+    .anim .slap  { opacity: 0; transform: translateY(22px) scale(.95) rotate(-1deg); transition: opacity .5s ease, transform .55s cubic-bezier(.2,.9,.3,1); }
     .anim .slap.in { opacity: 1; transform: none; }
     .anim .reveal { opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; }
     .anim .reveal.in { opacity: 1; transform: none; }
@@ -364,8 +515,6 @@
     /* ---------- responsive ---------- */
     @media (min-width: 620px) {
       .strip .wrap { grid-template-columns: repeat(3, 1fr); }
-      .strip .cell { border-bottom: none; border-right: 2px dashed rgba(244,242,234,.34); padding: 24px 20px; }
-      .strip .cell:last-child { border-right: none; }
       .progs { grid-template-columns: 1fr 1fr; }
       .boards { grid-template-columns: 1fr 1fr; }
       .ways { grid-template-columns: repeat(3, 1fr); }
@@ -373,21 +522,28 @@
       .contact-grid { grid-template-columns: 1.3fr 1fr; }
     }
     @media (min-width: 900px) {
-      .nav-links { display: flex; align-items: center; gap: 22px; }
+      .nav-links { display: flex; align-items: center; gap: 24px; }
       .hamburger { display: none; }
       .mobile-menu { display: none !important; }
-      .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 44px; }
+      .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 46px; }
       .collage { margin: 0 0 0 auto; }
-      .feature { grid-template-columns: 1.05fr .95fr; gap: 44px; }
+      .feature { grid-template-columns: 1.05fr .95fr; gap: 46px; }
       .feature.rev .body { order: 2; } .feature.rev .pics { order: 1; }
-      .split { grid-template-columns: 1.05fr .95fr; gap: 52px; }
+      .split { grid-template-columns: 1.05fr .95fr; gap: 54px; }
       .split.rev .prose { order: 2; } .split.rev .art { order: 1; }
-      footer.site .f-top { grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
-    }
-    @media (min-width: 900px) {
+      footer.site .f-top { grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 42px; }
       .nav-cta { display: inline-flex; }
     }
     .nav-cta { display: none; }
+
+    /* smaller screens: soften shears/skews so nothing shoves the layout wide */
+    @media (max-width: 560px) {
+      .toggle { transform: skewX(-5deg); }
+      .sticker, .sticker.r { transform: skewX(-4deg) rotate(-1.5deg); }
+      .prog .patch, .chalet-tag { transform: skewX(-4deg) rotate(-1deg); }
+      .shard { padding-left: 24px; padding-right: 24px; }
+      h1 { letter-spacing: 0; }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -407,8 +563,8 @@
         </a>
 
         <div class="toggle" role="group" aria-label="Choose season">
-          <button type="button" class="t-summer" id="tSummer" aria-pressed="true">☀ Summer</button>
-          <button type="button" class="t-winter" id="tWinter" aria-pressed="false">❄ Winter</button>
+          <button type="button" class="t-summer" id="tSummer" aria-pressed="true"><span>☀ Summer</span></button>
+          <button type="button" class="t-winter" id="tWinter" aria-pressed="false"><span>❄ Winter</span></button>
         </div>
 
         <div class="nav-links">
@@ -442,10 +598,10 @@
         <div class="hero-grid">
           <div class="hero-copy">
             <div class="kicker">
-              <span class="sticker cyan slap">❄ Freestyle Fridays</span>
-              <span class="sticker ink r slap">Est. 1980 · Duluth</span>
+              <span class="sticker accent slap"><span>❄ Freestyle Fridays</span></span>
+              <span class="sticker ink r slap"><span>Est. 1980 · Duluth</span></span>
             </div>
-            <h1>Send it on our <span class="hl">little hill.</span></h1>
+            <h1>Send it on our <span class="l2 hl">little hill.</span></h1>
             <p class="lead">Duluth's neighborhood ski &amp; snowboard hill, right in Chester Park. A real terrain park with rails, boxes and jumps, plus <strong>the cheapest lift ticket in the country.</strong></p>
             <div class="hero-ctas">
               <a class="btn" href="https://www.chesterbowl.org/ski-and-snowboard/season-pass-purchases/" target="_blank" rel="noopener">Buy a Season Pass</a>
@@ -455,8 +611,9 @@
           </div>
 
           <div class="collage slap" aria-hidden="false">
-            <div class="ribbon"></div>
-            <div class="ribbon two"></div>
+            <div class="burst" aria-hidden="true"></div>
+            <div class="ribbon" aria-hidden="true"></div>
+            <div class="ribbon two" aria-hidden="true"></div>
             <figure class="snap bw halftone" style="margin:0;">
               <img src="assets/chester/web/w-hero-carve.jpg" alt="A young skier carving hard down the Chester Bowl slope, snow spraying off the edges" width="681" height="1024" fetchpriority="high">
             </figure>
@@ -472,10 +629,10 @@
         <div class="hero-grid">
           <div class="hero-copy">
             <div class="kicker">
-              <span class="sticker slap">☀ Summer Day Camp</span>
-              <span class="sticker ink r slap">Est. 1980 · Duluth</span>
+              <span class="sticker accent slap"><span>☀ Summer Day Camp</span></span>
+              <span class="sticker ink r slap"><span>Est. 1980 · Duluth</span></span>
             </div>
-            <h1>A whole summer <span class="hl">in the park.</span></h1>
+            <h1>A whole summer <span class="l2 hl">in the park.</span></h1>
             <p class="lead">Nature play, forts, creek splashing, crafts and camp chaos for <strong>ages 6–12</strong>, right in Chester Park, led by teen mentors and staff who love this place.</p>
             <div class="hero-ctas">
               <a class="btn" href="https://www.ultracamp.com/clientlogin.aspx?idCamp=1490&campCode=LRG" target="_blank" rel="noopener">Register for Day Camp</a>
@@ -485,8 +642,9 @@
           </div>
 
           <div class="collage slap">
-            <div class="ribbon"></div>
-            <div class="ribbon two"></div>
+            <div class="burst" aria-hidden="true"></div>
+            <div class="ribbon" aria-hidden="true"></div>
+            <div class="ribbon two" aria-hidden="true"></div>
             <figure class="snap" style="margin:0;">
               <img src="assets/chester/web/s-hero-camp.jpg" alt="Campers gathered around a table making crafts together at Chester Bowl summer day camp" width="640" height="480" fetchpriority="high">
             </figure>
@@ -497,15 +655,15 @@
     </section>
 
     <!-- ============ QUICK ACTION STRIP ============ -->
-    <section class="strip" style="padding:0;" aria-label="Quick facts">
+    <section class="strip" aria-label="Quick facts">
       <!-- winter facts -->
-      <div class="wrap only-winter">
+      <div class="wrap facts only-winter">
         <div class="cell"><span class="ic" aria-hidden="true">🎟️</span><div><div class="lb">Day pass</div><div class="vl">$15 &middot; 18 &amp; under<small>$20 &middot; 19+ &middot; cheapest lift ticket in the U.S.</small></div></div></div>
         <div class="cell"><span class="ic" aria-hidden="true">⛷️</span><div><div class="lb">Winter hours</div><div class="vl">Sat &amp; Sun 11am–4:30pm<small>Mon, Thu &amp; Fri 4:30–8:30pm · Dec–Mar</small></div></div></div>
         <div class="cell"><span class="ic" aria-hidden="true">📍</span><div><div class="lb">Find us</div><div class="vl">Chester Park, Duluth<small>1801 E. Skyline Dr., MN 55812</small></div></div></div>
       </div>
       <!-- summer facts -->
-      <div class="wrap only-summer">
+      <div class="wrap facts only-summer">
         <div class="cell"><span class="ic" aria-hidden="true">🏕️</span><div><div class="lb">Day camp</div><div class="vl">Ages 6–12 · $210/week<small>+ one-time $75 family fee · plans &amp; scholarships</small></div></div></div>
         <div class="cell"><span class="ic" aria-hidden="true">📅</span><div><div class="lb">When</div><div class="vl">Mon–Thu, Jun 8–Aug 13<small>Drop-off 8am · pick-up by 5pm</small></div></div></div>
         <div class="cell"><span class="ic" aria-hidden="true">📍</span><div><div class="lb">Find us</div><div class="vl">Chester Park, Duluth<small>1801 E. Skyline Dr., MN 55812</small></div></div></div>
@@ -519,15 +677,15 @@
     <div class="only-winter">
 
       <!-- Terrain park feature (the identity core, loudest) -->
-      <section id="terrain" class="band-cyan">
+      <section id="terrain" class="band pop cut-a">
         <div class="wrap">
           <div class="feature">
             <div class="body">
-              <div class="kicker"><span class="sticker ink slap">The whole point ↓</span></div>
+              <div class="kicker"><span class="sticker ink slap"><span>The whole point ↓</span></span></div>
               <h2 class="reveal">Terrain Park &amp; Freestyle Fridays</h2>
-              <p class="lead reveal" style="margin-top:14px;">This is where Chester's punk lives. Rails, boxes, and jumps for every level: the fun box for first-timers, bigger features when you're ready. <strong>Freestyle Fridays</strong> are low-pressure evening sessions to session the park with your crew: skiers, snowboarders and snowskaters all welcome.</p>
-              <p class="reveal" style="margin-top:12px; font-weight:800;">Select Fridays, Dec–Mar · sign up 5–6pm in the equipment garage · drops at 6:15.</p>
-              <div class="hero-ctas reveal" style="margin-top:20px;">
+              <p class="lead reveal" style="margin-top:15px;">This is where Chester's punk lives. Rails, boxes, and jumps for every level: the fun box for first-timers, bigger features when you're ready. <strong>Freestyle Fridays</strong> are low-pressure evening sessions to session the park with your crew: skiers, snowboarders and snowskaters all welcome.</p>
+              <p class="reveal" style="margin-top:13px; font-weight:800;">Select Fridays, Dec–Mar · sign up 5–6pm in the equipment garage · drops at 6:15.</p>
+              <div class="hero-ctas reveal" style="margin-top:21px;">
                 <a class="btn" href="https://www.chesterbowl.org/freestyle-fridays-2/" target="_blank" rel="noopener">Freestyle Fridays</a>
                 <a class="btn paper" href="https://www.chesterbowl.org/girls-shred/" target="_blank" rel="noopener">Girls Shred</a>
               </div>
@@ -545,15 +703,15 @@
       </section>
 
       <!-- More winter programs -->
-      <section class="band-paper2">
+      <section class="band panel cut-b">
         <div class="wrap">
-          <div class="kicker"><span class="sticker cyan slap">More on the hill</span></div>
+          <div class="kicker"><span class="sticker accent slap"><span>More on the hill</span></span></div>
           <h2 class="reveal">Learn, ride, race. Everybody's welcome</h2>
-          <p class="lead reveal" style="margin-top:12px;">Free lessons come with any pass: bunny hill to freestyle, all ages including grown-ups.</p>
+          <p class="lead reveal" style="margin-top:13px;">Free lessons come with any pass: bunny hill to freestyle, all ages including grown-ups.</p>
 
           <div class="progs">
             <article class="prog slap">
-              <div class="patch cyan">FREE<br>W/ PASS</div>
+              <div class="patch accent"><span>FREE<br>W/ PASS</span></div>
               <h3>Learn to Ride</h3>
               <p>Free ski &amp; snowboard lessons for all ages, four ability levels, friendly 45-minute sessions. First time clicking in? Start here.</p>
               <div class="meta">Everyone &middot; <b>free</b> with a pass · sign-ups each fall</div>
@@ -561,7 +719,7 @@
             </article>
 
             <article class="prog slap">
-              <div class="patch blaze">GIRLS<br>SHRED</div>
+              <div class="patch red"><span>GIRLS<br>SHRED</span></div>
               <h3>Girls Shred</h3>
               <p>A women-led, supportive way for girls, women, and non-binary riders to learn freestyle in the park. Open to anyone who's passed a Level&nbsp;2 lesson.</p>
               <div class="meta">Jan–Feb &middot; <b>free</b> with registration</div>
@@ -569,7 +727,7 @@
             </article>
 
             <article class="prog slap">
-              <div class="patch">RACE<br>DAY</div>
+              <div class="patch"><span>RACE<br>DAY</span></div>
               <h3>Alpine Race Series</h3>
               <p>A low-key, fun intro to ski &amp; snowboard racing on Sunday afternoons, with laser timing and an award for every finisher. Under-5 up to 14–16.</p>
               <div class="meta">Sundays Feb &amp; Mar &middot; from <b>$10/day</b>, $15 season</div>
@@ -577,7 +735,7 @@
             </article>
 
             <article class="prog slap">
-              <div class="patch ink">CADET+<br>7TH&nbsp;UP</div>
+              <div class="patch ink"><span>CADET+<br>7TH&nbsp;UP</span></div>
               <h3>Cadet+ Leadership</h3>
               <p>Year-round crew for teens. Mentor younger riders, take on service projects, earn CPR / First Aid, and build real job-ready leadership.</p>
               <div class="meta">Grades 7+ &middot; ~10 hrs/mo &middot; <b>$250</b> (scholarships)</div>
@@ -588,11 +746,11 @@
       </section>
 
       <!-- Passes & rentals -->
-      <section id="passes" class="band-cyan">
+      <section id="passes" class="band red cut-c">
         <div class="wrap">
-          <div class="kicker"><span class="sticker ink slap">The easy button</span></div>
+          <div class="kicker"><span class="sticker ink slap"><span>The easy button</span></span></div>
           <h2 class="reveal">Season passes &amp; rentals</h2>
-          <p class="lead reveal" style="margin-top:12px;">One pass gets the whole family unlimited chairlift, free lessons, Freestyle Fridays, and racing. Add a full-season rental and you're set October to April.</p>
+          <p class="lead reveal" style="margin-top:13px;">One pass gets the whole family unlimited chairlift, free lessons, Freestyle Fridays, and racing. Add a full-season rental and you're set October to April.</p>
 
           <div class="boards">
             <div class="board slap">
@@ -613,25 +771,25 @@
             <div class="board slap">
               <div class="bh"><h3>Season Rentals</h3><p>Gear the whole family for the entire winter</p></div>
               <div class="bb">
-                <p style="font-weight:600; margin:6px 0 12px;">Get fitted for skis or a board at fall fitting nights and keep the gear until April, then use it here or anywhere. Perfect for growing kids and first-timers.</p>
+                <p style="font-weight:600; margin:6px 0 13px;">Get fitted for skis or a board at fall fitting nights and keep the gear until April, then use it here or anywhere. Perfect for growing kids and first-timers.</p>
                 <ul class="rlist">
                   <li><strong>$110</strong> per person for the full season (plus tax)</li>
                   <li>Fittings in October &amp; November</li>
                   <li>Requires a Chester Bowl season pass</li>
                   <li>Return gear together April 7–9</li>
                 </ul>
-                <a class="btn ink block" href="https://www.chesterbowl.org/ski-and-snowboard-season-rental-program/" target="_blank" rel="noopener" style="margin-top:16px;">Season rental program</a>
+                <a class="btn ink block" href="https://www.chesterbowl.org/ski-and-snowboard-season-rental-program/" target="_blank" rel="noopener" style="margin-top:17px;">Season rental program</a>
               </div>
             </div>
 
             <div class="ticket slap">
-              <span class="sticker ink" style="transform:rotate(-3deg);">Just visiting?</span>
-              <div class="prices" style="margin-top:14px;">
+              <span class="sticker ink"><span>Just visiting?</span></span>
+              <div class="prices">
                 <div><div class="big">$15</div><div class="sub">18 &amp; UNDER</div></div>
                 <div><div class="big">$20</div><div class="sub">19 &amp; UP</div></div>
                 <div><div class="big">FREE</div><div class="sub">PARTNER PASS</div></div>
               </div>
-              <hr class="dash">
+              <div class="zz" role="presentation"></div>
               <p class="tag">The cheapest lift ticket in the country. Buy in person at the hill, no reservation needed. 12 snowskates on hand to borrow, too.</p>
             </div>
           </div>
@@ -643,20 +801,20 @@
     <div class="only-summer">
 
       <!-- Day camp feature -->
-      <section id="camp" class="band-cyan">
+      <section id="camp" class="band pop cut-a">
         <div class="wrap">
           <div class="feature">
             <div class="body">
-              <div class="kicker"><span class="sticker ink slap">Register now ↓</span></div>
+              <div class="kicker"><span class="sticker ink slap"><span>Register now ↓</span></span></div>
               <h2 class="reveal">Summer Day Camp</h2>
-              <p class="lead reveal" style="margin-top:14px;">Chester Park doesn't hibernate. Camp is all about nature play, hiking, fort building, creek splashing, arts &amp; crafts, and good old outdoor fun, guided by teen mentors and caring staff.</p>
-              <ul class="rlist reveal" style="margin-top:12px;">
+              <p class="lead reveal" style="margin-top:15px;">Chester Park doesn't hibernate. Camp is all about nature play, hiking, fort building, creek splashing, arts &amp; crafts, and good old outdoor fun, guided by teen mentors and caring staff.</p>
+              <ul class="rlist reveal" style="margin-top:13px;">
                 <li><strong>Ages 6–12</strong> (or finished kindergarten)</li>
                 <li><strong>Mon–Thu, June 8 – August 13</strong> · drop-off 8am, pick-up by 5pm</li>
                 <li><strong>$210/week</strong> per camper + one-time $75 family fee</li>
                 <li>Payment plans &amp; scholarships available</li>
               </ul>
-              <div class="hero-ctas reveal" style="margin-top:20px;">
+              <div class="hero-ctas reveal" style="margin-top:21px;">
                 <a class="btn" href="https://www.ultracamp.com/clientlogin.aspx?idCamp=1490&campCode=LRG" target="_blank" rel="noopener">Register for Camp</a>
               </div>
             </div>
@@ -673,25 +831,25 @@
       </section>
 
       <!-- Fall Fest -->
-      <section id="fallfest" class="band-ink">
+      <section id="fallfest" class="band ink cut-b">
         <div class="wrap">
-          <div class="kicker"><span class="sticker slap">A Duluth tradition since 1984</span></div>
+          <div class="kicker"><span class="sticker accent slap"><span>A Duluth tradition since 1984</span></span></div>
           <h2 class="reveal">Fall Fest</h2>
-          <p class="lead reveal" style="margin-top:12px; color:var(--paper);">Our 42nd annual Fall Fest is Chester Bowl's biggest day of the year: music, food trucks, 135 craft &amp; produce vendors, and activities for the whole city, all fueling the scholarship fund.</p>
+          <p class="lead reveal" style="margin-top:13px; color:var(--paper);">Our 42nd annual Fall Fest is Chester Bowl's biggest day of the year: music, food trucks, 135 craft &amp; produce vendors, and activities for the whole city, all fueling the scholarship fund.</p>
 
-          <figure class="frame slap" style="margin:26px 0 0; border-color:var(--paper);">
+          <figure class="frame flat slap" style="margin:28px 0 0;">
             <img src="assets/chester/web/s-fallfest.jpg" alt="A crowd gathered among the trees at Chester Bowl's annual Fall Fest" width="1260" height="238" loading="lazy">
           </figure>
 
-          <div class="stats reveal" style="margin-top:22px;">
+          <div class="stats reveal" style="margin-top:24px;">
             <div class="stat"><div class="n">135</div><div class="c">craft &amp; produce vendors</div></div>
             <div class="stat"><div class="n">15</div><div class="c">food trucks + live music</div></div>
             <div class="stat"><div class="n">$12,250</div><div class="c">raised for scholarships</div></div>
             <div class="stat"><div class="n">~100</div><div class="c">volunteers make it happen</div></div>
           </div>
 
-          <p class="display reveal" style="font-size:clamp(1.3rem,4vw,2rem); color:var(--paper); margin-top:26px;">Saturday, September 19, 2026 · 9:30am–4:30pm</p>
-          <div class="hero-ctas reveal" style="margin-top:18px;">
+          <p class="display reveal" style="font-size:clamp(1.4rem,4vw,2.1rem); color:var(--paper); margin-top:27px;">Saturday, September 19, 2026 · 9:30am–4:30pm</p>
+          <div class="hero-ctas reveal" style="margin-top:19px;">
             <a class="btn" href="https://www.chesterbowl.org/fall-fest/" target="_blank" rel="noopener">Fall Fest details</a>
             <a class="btn paper" href="https://www.chesterbowl.org/fall-fest-vendor-information/" target="_blank" rel="noopener">Become a vendor</a>
           </div>
@@ -699,12 +857,12 @@
       </section>
 
       <!-- Cadet+ (also runs in summer) -->
-      <section class="band-paper2">
+      <section class="band panel cut-c">
         <div class="wrap">
-          <div class="kicker"><span class="sticker slap">Year-round for teens</span></div>
-          <div class="progs">
-            <article class="prog wide slap" style="grid-template-columns:1fr;">
-              <div class="patch ink">CADET+<br>7TH&nbsp;UP</div>
+          <div class="kicker"><span class="sticker accent slap"><span>Year-round for teens</span></span></div>
+          <div class="progs" style="grid-template-columns:1fr;">
+            <article class="prog slap">
+              <div class="patch ink"><span>CADET+ · 7TH &amp; UP</span></div>
               <h3>Cadet+ Leadership</h3>
               <p>A year-round crew built on community, connection &amp; growth. Teens mentor younger campers, take on service projects, earn certifications like CPR / First Aid, and build real job-ready leadership skills.</p>
               <div class="meta">Grades 7+ &middot; ~10 hrs/month &middot; <b>$250</b> (scholarships available)</div>
@@ -716,13 +874,13 @@
     </div><!-- /summer programs -->
 
     <!-- ============ ABOUT (shared) ============ -->
-    <section id="about">
+    <section id="about" class="band first cut-d" style="background:var(--paper);">
       <div class="wrap">
         <div class="split">
           <div class="prose">
-            <div class="kicker"><span class="sticker slap">Who we are</span></div>
+            <div class="kicker"><span class="sticker accent slap"><span>Who we are</span></span></div>
             <h2 class="reveal">A little hill with a big heart</h2>
-            <p class="reveal" style="margin-top:16px;">The Chester Bowl Improvement Club started in 1980 and became a Minnesota 501(c)(3) nonprofit in 1982. Since 2008 we've run the park's day-to-day programs. The City of Duluth keeps the grounds; Chester Bowl brings the people, the lessons, and the fun.</p>
+            <p class="reveal" style="margin-top:17px;">The Chester Bowl Improvement Club started in 1980 and became a Minnesota 501(c)(3) nonprofit in 1982. Since 2008 we've run the park's day-to-day programs. The City of Duluth keeps the grounds; Chester Bowl brings the people, the lessons, and the fun.</p>
             <p class="reveal">Our mission is simple: <strong>healthy living through outdoor recreation, for families of every income.</strong> A welcoming place to learn to ski and snowboard, affordable rentals, generous scholarships, and year-round programs that build confidence in Duluth's kids.</p>
             <div class="stats reveal">
               <div class="stat"><div class="n">1980</div><div class="c">serving Duluth since</div></div>
@@ -737,7 +895,7 @@
               <img src="assets/chester/web/x-podium.jpg" alt="Three young ski racers celebrating on the first, second and third place podium boxes, the chalet behind them" width="1000" height="665" loading="lazy">
             </figure>
             <!-- heritage / ski-jump nostalgia beat -->
-            <div class="heritage slap" style="margin-top:22px;">
+            <div class="heritage slap" style="margin-top:24px;">
               <img class="ghost" src="assets/chester/logo-clean.svg" alt="" aria-hidden="true" width="278" height="164">
               <h3>The giant jumps live on.</h3>
               <p>Those two towers in our logo? Real ski jumps that once made Chester Bowl famous. They're gone from the hill now, but they'll always be our crest, and our heart.</p>
@@ -748,11 +906,11 @@
     </section>
 
     <!-- ============ GET INVOLVED (shared) ============ -->
-    <section id="involved" class="band-paper2">
+    <section id="involved" class="band ink cut-b">
       <div class="wrap">
-        <div class="kicker"><span class="sticker slap">Powered by this community</span></div>
+        <div class="kicker"><span class="sticker accent slap"><span>Powered by this community</span></span></div>
         <h2 class="reveal">Get involved</h2>
-        <p class="lead reveal" style="margin-top:12px;">Volunteering is the lifeblood of Chester Bowl. Time, skills, or support: there's a way to help keep the hill affordable for every Duluth family.</p>
+        <p class="lead reveal" style="margin-top:13px;">Volunteering is the lifeblood of Chester Bowl. Time, skills, or support: there's a way to help keep the hill affordable for every Duluth family.</p>
 
         <div class="ways">
           <article class="way slap">
@@ -775,24 +933,24 @@
         <!-- scholarship promise -->
         <div id="promise" class="promise slap">
           <div class="big">Money never keeps a kid off the hill.</div>
-          <p style="font-weight:700; margin-top:10px; max-width:60ch;">Chester Bowl scholarships 100+ families every year: passes, rentals, camp, and programs. If cost is in the way, just ask. No kid is turned away.</p>
-          <div class="hero-ctas" style="margin-top:16px;">
+          <p style="font-weight:700; margin-top:11px; max-width:60ch;">Chester Bowl scholarships 100+ families every year: passes, rentals, camp, and programs. If cost is in the way, just ask. No kid is turned away.</p>
+          <div class="hero-ctas" style="margin-top:18px;">
             <a class="btn" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Fund a scholarship</a>
-            <a class="btn paper" href="mailto:dave@chesterbowl.org">Ask about scholarships</a>
+            <a class="btn ink" href="mailto:dave@chesterbowl.org">Ask about scholarships</a>
           </div>
         </div>
 
         <!-- new chalet campaign -->
-        <div class="split slot" style="margin-top:36px;">
+        <div class="split rev" style="margin-top:40px;">
           <figure class="frame r slap" style="margin:0;">
             <img src="assets/chester/web/x-chalet-interior.jpg" alt="Inside the beloved Thom Storm Chalet, strung with lights and full of families at a community gathering" width="900" height="672" loading="lazy">
           </figure>
           <div class="prose">
-            <span class="chalet-tag">🏗️ Growing Up Chester · reopening 2026–27</span>
+            <span class="chalet-tag"><span>🏗️ Growing Up Chester · reopening 2026–27</span></span>
             <h3 class="reveal">A brand-new chalet is coming</h3>
-            <p class="reveal" style="margin-top:12px;">The Growing Up Chester capital campaign is expanding and renovating the historic Thom Storm Chalet: an elevator for full accessibility, bigger gathering spaces, smarter room for busy program days, preserved character, and sustainable materials.</p>
-            <div class="hero-ctas reveal" style="margin-top:16px;">
-              <a class="btn ink" href="https://growingupchester.org/" target="_blank" rel="noopener">growingupchester.org</a>
+            <p class="reveal" style="margin-top:13px;">The Growing Up Chester capital campaign is expanding and renovating the historic Thom Storm Chalet: an elevator for full accessibility, bigger gathering spaces, smarter room for busy program days, preserved character, and sustainable materials.</p>
+            <div class="hero-ctas reveal" style="margin-top:17px;">
+              <a class="btn paper" href="https://growingupchester.org/" target="_blank" rel="noopener">growingupchester.org</a>
             </div>
           </div>
         </div>
@@ -800,15 +958,15 @@
     </section>
 
     <!-- ============ CONTACT (shared) ============ -->
-    <section id="contact">
+    <section id="contact" class="band panel cut-c">
       <div class="wrap">
-        <div class="kicker"><span class="sticker slap">Say hello</span></div>
+        <div class="kicker"><span class="sticker accent slap"><span>Say hello</span></span></div>
         <h2 class="reveal">Contact &amp; stay in the loop</h2>
-        <div class="contact-grid" style="margin-top:26px;">
-          <div class="card slap">
+        <div class="contact-grid" style="margin-top:28px;">
+          <div class="shard rt slap">
             <p style="font-weight:900;">Chester Bowl Improvement Club</p>
             <p style="font-weight:700;">1801 East Skyline Dr., Duluth, MN 55812</p>
-            <p style="font-size:.9rem; font-weight:600; margin:10px 0 4px; opacity:.85;">Our main office line is out during chalet construction, so reach our team directly:</p>
+            <p style="font-size:.9rem; font-weight:600; margin:11px 0 4px; color:#4a4a4a;">Our main office line is out during chalet construction, so reach our team directly:</p>
             <ul class="staff">
               <li><div class="role">Executive Director</div><div class="who">Dave Schaeffer</div><a href="mailto:dave@chesterbowl.org">dave@chesterbowl.org</a> · <a href="tel:+12189409378">218-940-9378</a></li>
               <li><div class="role">Program &amp; Operations Director</div><div class="who">Sam Luoma</div><a href="mailto:sam@chesterbowl.org">sam@chesterbowl.org</a> · <a href="tel:+12183404678">218-340-4678</a></li>
@@ -816,12 +974,12 @@
               <li><div class="role">Operations Manager</div><div class="who">Joel Tiburzi</div><a href="mailto:joel@chesterbowl.org">joel@chesterbowl.org</a> · <a href="tel:+12182607200">218-260-7200</a></li>
             </ul>
           </div>
-          <div class="signup slap">
+          <div class="shard red signup slap">
             <h3>Join our email list</h3>
             <p>Be first to hear about lesson sign-ups, pass sales, snow days, camp, and Fall Fest. We only send what matters.</p>
             <a class="btn paper block" href="https://eepurl.com/hY4nrT" target="_blank" rel="noopener">Sign up for updates</a>
-            <p style="margin:22px 0 12px;">Prefer to help? Every gift keeps the hill affordable.</p>
-            <a class="btn block" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Donate to Chester Bowl</a>
+            <p class="lead-p">Prefer to help? Every gift keeps the hill affordable.</p>
+            <a class="btn ink block" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Donate to Chester Bowl</a>
           </div>
         </div>
       </div>
@@ -867,6 +1025,7 @@
         </div>
       </div>
       <div class="f-bottom">
+        <div class="zz red" role="presentation"></div>
         <div>© <span id="yr">2026</span> Chester Bowl Improvement Club · a Minnesota 501(c)(3) nonprofit.</div>
         <div>The Chester Bowl logo and name belong to the Chester Bowl Improvement Club.</div>
       </div>
@@ -879,7 +1038,7 @@
       var meta = document.getElementById('themeColor');
       var tS = document.getElementById('tSummer');
       var tW = document.getElementById('tWinter');
-      var THEME = { summer: '#258651', winter: '#22cde5' };
+      var THEME = { summer: '#e60012', winter: '#22cde5' };
 
       function setSeason(season, persist) {
         root.setAttribute('data-season', season);
