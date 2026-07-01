@@ -1,416 +1,420 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-season="summer">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chester Bowl — Duluth's Neighborhood Ski Hill Since 1980</title>
-  <meta name="description" content="Chester Bowl is Duluth's affordable, family-friendly neighborhood ski hill in Chester Park. Skiing & snowboarding, free lessons, season passes & rentals, summer day camp, and the 42nd annual Fall Fest. A nonprofit serving Duluth kids since 1980.">
-  <meta name="theme-color" content="#173d2c">
-  <link rel="icon" type="image/jpeg" href="assets/chester/logo.jpg">
+  <title>Chester Bowl — Duluth's Neighborhood Shred Hill &amp; Summer Camp</title>
+  <meta name="description" content="Chester Bowl is Duluth's punky little nonprofit ski hill + summer day camp in Chester Park. Terrain park &amp; Freestyle Fridays, learn-to-ride, the cheapest lift ticket in the country, season passes &amp; rentals, summer camp, and Fall Fest. Money never keeps a kid off the hill.">
+  <meta name="theme-color" content="#258651" id="themeColor">
+  <link rel="icon" type="image/svg+xml" href="assets/chester/logo-clean.svg">
 
-  <!-- Open Graph / social preview -->
-  <meta property="og:title" content="Chester Bowl — Duluth's Neighborhood Ski Hill Since 1980">
-  <meta property="og:description" content="Affordable skiing & snowboarding, free lessons, summer camp, and Fall Fest in Duluth's Chester Park. A nonprofit for the whole community.">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Chester Bowl — Duluth's Neighborhood Shred Hill &amp; Summer Camp">
+  <meta property="og:description" content="A punky little nonprofit hill: terrain park, Freestyle Fridays, learn-to-ride, summer day camp, and Fall Fest. Money never keeps a kid off the hill.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/chester/winter-opt.jpg">
+  <meta property="og:image" content="assets/chester/web/w-hero-carve.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bungee&family=Nunito:wght@400;600;700;800;900&family=Shantell+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* ============================================================
+       CHESTER BOWL — punk snowboard-zine photo-collage
+       Ink + paper base, blaze/gold punk pop, season-flex accent.
+       Contrast verified: ink/paper 16:1 · ink/blaze 5.8:1 · ink/cyan 9.4:1
+       · ink/gold 10.6:1 · paper/ink-blue 13:1 · white/pine-deep 7.9:1
+       ============================================================ */
     :root {
-      --pine:        #1f4d38;   /* primary evergreen */
-      --pine-dark:   #143026;   /* deep forest */
-      --pine-deeper: #0f251d;
-      --amber:       #e07b39;   /* warm sunset-on-snow CTA */
-      --amber-dark:  #c15f24;
-      --amber-soft:  #f4e2d1;
-      --sky:         #4a7c93;   /* winter sky accent */
-      --snow:        #f7f4ec;   /* off-white background */
-      --cream:       #fffdf8;   /* card surface */
-      --ink:         #1b2620;   /* near-black text */
-      --muted:       #5b6b62;   /* secondary text */
-      --line:        #e3ddd0;   /* hairline borders */
-      --radius:      16px;
-      --radius-sm:   10px;
-      --shadow:      0 6px 24px rgba(20, 48, 38, 0.10);
-      --shadow-lg:   0 18px 50px rgba(20, 48, 38, 0.18);
-      --wrap:        1120px;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Helvetica Neue", sans-serif;
+      --ink:        #0f171f;   /* oklch(.20 .02 250) — body, line art, the logo */
+      --paper:      #f4f2ea;   /* oklch(.96 .01 95)  — warm paper ground */
+      --surface:    #fdfcf8;   /* oklch(.99 .005 95) — lifted panels */
+      --cyan:       #22cde5;   /* oklch(.78 .13 210) — winter ribbon */
+      --blaze:      #f76400;   /* oklch(.68 .20 45)  — CTA / badge FILLS (ink text on it, 5.8:1) */
+      --blaze-ink:  #c93a00;   /* deeper blaze for TEXT on light grounds (paper 4.6:1, surface 5:1) */
+      --pine:       #258651;   /* oklch(.55 .12 155) — summer accent */
+      --pine-deep:  #005e31;   /* summer dark band (white text 7.9:1) */
+      --ink-blue:   #072a4a;   /* winter dark band  (paper text 13:1) */
+      --gold:       #edc23e;   /* oklch(.83 .15 90)  — highlight blocks */
+
+      /* live season axis */
+      --accent:      var(--pine);
+      --accent-deep: var(--pine-deep);
+
+      --wrap: 1180px;
+      --shadow: 6px 6px 0 var(--ink);
+      --shadow-lg: 10px 10px 0 var(--ink);
     }
+    [data-season="winter"] { --accent: var(--cyan); --accent-deep: var(--ink-blue); }
+    [data-season="summer"] { --accent: var(--pine); --accent-deep: var(--pine-deep); }
+
+    /* season show/hide — both sets live in the DOM */
+    [data-season="winter"] .only-summer { display: none !important; }
+    [data-season="summer"] .only-winter { display: none !important; }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
 
     body {
-      font-family: var(--font);
+      font-family: "Nunito", system-ui, -apple-system, sans-serif;
       color: var(--ink);
-      background: var(--snow);
-      line-height: 1.65;
+      background: var(--paper);
+      line-height: 1.62;
       font-size: 17px;
+      font-weight: 600;
       overflow-x: hidden;
     }
-
-    img { max-width: 100%; display: block; }
-    a { color: var(--pine); }
-
-    h1, h2, h3, h4 {
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      color: var(--pine-dark);
-      font-weight: 800;
+    /* faint photocopy grain — one unifying zine texture */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 900; pointer-events: none;
+      opacity: .05; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
     }
-    h2 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
-    h3 { font-size: 1.28rem; }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+    h1, h2, h3, .display {
+      font-family: "Bagel Fat One", system-ui, sans-serif;
+      font-weight: 400; line-height: .98; letter-spacing: -.03em;
+      text-wrap: balance; color: var(--ink);
+    }
+    h2 { font-size: clamp(2.1rem, 6.4vw, 4rem); }
+    h3 { font-size: clamp(1.35rem, 3.4vw, 1.85rem); line-height: 1.02; }
 
     .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 20px; }
 
-    /* Accessibility: skip link */
-    .skip {
-      position: absolute; left: -999px; top: 0;
-      background: var(--amber); color: #fff; padding: 12px 18px;
-      z-index: 200; border-radius: 0 0 8px 0; font-weight: 700;
+    /* ---------- sticker labels / patches ---------- */
+    .sticker {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: "Bungee", sans-serif; font-size: .72rem; letter-spacing: .01em;
+      background: var(--gold); color: var(--ink);
+      padding: 7px 13px; border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); transform: rotate(-2.4deg);
+      line-height: 1;
     }
-    .skip:focus { left: 0; }
+    .sticker.cyan  { background: var(--accent); }
+    .sticker.blaze { background: var(--blaze); }
+    .sticker.ink   { background: var(--ink); color: var(--paper); }
+    .sticker.r     { transform: rotate(2.6deg); }
 
-    /* ---------- Buttons ---------- */
+    .hand {
+      font-family: "Shantell Sans", cursive; font-weight: 600;
+      font-size: 1.08rem; line-height: 1.35; color: var(--ink);
+    }
+
+    /* gold marker highlight behind a word */
+    .hl { background: var(--gold); box-decoration-break: clone; -webkit-box-decoration-break: clone;
+          padding: .04em .16em; box-shadow: 0 0 0 1px var(--gold); }
+    .ul { background-image: linear-gradient(var(--blaze), var(--blaze));
+          background-position: 0 88%; background-repeat: no-repeat; background-size: 100% .28em; }
+
+    /* ---------- buttons ---------- */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: 8px;
-      background: var(--amber); color: #fff;
-      font-weight: 700; font-size: 1rem;
-      padding: 14px 24px; border-radius: 999px;
-      text-decoration: none; border: 2px solid var(--amber);
-      min-height: 52px; cursor: pointer;
-      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-      box-shadow: 0 4px 14px rgba(224, 123, 57, 0.32);
+      display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+      font-family: "Nunito", sans-serif; font-weight: 900; font-size: 1rem;
+      text-transform: uppercase; letter-spacing: .01em; text-decoration: none;
+      background: var(--blaze); color: var(--ink);
+      padding: 15px 26px; border: 3px solid var(--ink); border-radius: 16px;
+      box-shadow: 5px 5px 0 var(--ink); cursor: pointer; min-height: 54px;
+      transition: transform .1s ease, box-shadow .1s ease, background .1s ease;
     }
-    .btn:hover { background: var(--amber-dark); border-color: var(--amber-dark); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(224,123,57,.4); }
-    .btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+    .btn:hover  { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--ink); }
+    .btn:active { transform: translate(3px,3px);   box-shadow: 2px 2px 0 var(--ink); }
+    .btn:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
+    .btn.ink   { background: var(--ink);  color: var(--paper); }
+    .btn.gold  { background: var(--gold); color: var(--ink); }
+    .btn.paper { background: var(--surface); color: var(--ink); }
+    .btn.sm    { padding: 11px 17px; min-height: 46px; font-size: .84rem; box-shadow: 4px 4px 0 var(--ink); }
+    .btn.block { width: 100%; }
 
-    .btn.ghost {
-      background: transparent; color: var(--pine-dark);
-      border-color: var(--pine); box-shadow: none;
+    .arrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 900; text-transform: uppercase; letter-spacing: .02em; font-size: .84rem;
+      color: var(--ink); text-decoration: none;
+      border-bottom: 3px solid var(--accent); padding-bottom: 3px;
     }
-    .btn.ghost:hover { background: var(--pine); color: #fff; border-color: var(--pine); box-shadow: none; }
+    .arrow::after { content: "\2192"; transition: transform .12s ease; }
+    .arrow:hover::after { transform: translateX(5px); }
 
-    .btn.on-dark { background: #fff; color: var(--pine-dark); border-color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
-    .btn.on-dark:hover { background: var(--amber); color: #fff; border-color: var(--amber); }
+    .skip { position: absolute; left: -999px; top: 0; z-index: 2000; background: var(--ink); color: var(--paper); padding: 12px 18px; font-weight: 900; }
+    .skip:focus { left: 8px; top: 8px; }
 
-    .btn.pine { background: var(--pine); border-color: var(--pine); box-shadow: 0 4px 14px rgba(31,77,56,.3); }
-    .btn.pine:hover { background: var(--pine-dark); border-color: var(--pine-dark); }
-
-    .btn.sm { padding: 10px 18px; min-height: 44px; font-size: .95rem; }
-
-    .link-arrow {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-weight: 700; text-decoration: none; color: var(--amber-dark);
-    }
-    .link-arrow:hover { text-decoration: underline; }
-    .link-arrow::after { content: "\2192"; transition: transform .12s ease; }
-    .link-arrow:hover::after { transform: translateX(3px); }
-
-    /* ---------- Header ---------- */
-    header.site {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--cream);
-      border-bottom: 1px solid var(--line);
-      box-shadow: 0 2px 12px rgba(20,48,38,.05);
-    }
-    .nav {
-      display: flex; align-items: center; justify-content: space-between;
-      height: 72px; gap: 16px;
-    }
-    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .brand img { height: 44px; width: auto; }
-    .brand .brand-txt { display: none; }
-
+    /* ---------- header ---------- */
+    header.site { position: sticky; top: 0; z-index: 500; background: var(--paper); border-bottom: 4px solid var(--ink); }
+    .nav { display: flex; align-items: center; gap: 12px; height: 76px; }
+    .brand { display: flex; align-items: center; text-decoration: none; margin-right: auto; }
+    .brand img { height: 50px; width: auto; }
     .nav-links { display: none; }
-    .nav-links a {
-      text-decoration: none; color: var(--pine-dark); font-weight: 600;
-      font-size: .98rem; padding: 8px 10px; border-radius: 8px;
-      white-space: nowrap;
-    }
-    .nav-links a:hover { background: rgba(31,77,56,.08); }
-    .nav-cta { display: none; }
+    .nav-links a { text-decoration: none; color: var(--ink); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: .82rem; padding: 6px 0; border-bottom: 3px solid transparent; white-space: nowrap; }
+    .nav-links a:hover { border-bottom-color: var(--blaze); }
 
-    .hamburger {
-      display: inline-flex; flex-direction: column; justify-content: center; gap: 5px;
-      width: 48px; height: 48px; border: 1px solid var(--line);
-      background: var(--cream); border-radius: 10px; cursor: pointer;
-      padding: 0 12px;
+    /* season toggle — a real physical switch */
+    .toggle { display: inline-flex; border: 3px solid var(--ink); border-radius: 999px; background: var(--surface); box-shadow: 3px 3px 0 var(--ink); overflow: hidden; }
+    .toggle button {
+      font-family: "Bungee", sans-serif; font-size: .68rem; letter-spacing: .02em;
+      border: none; background: transparent; color: var(--ink); cursor: pointer;
+      padding: 9px 12px; display: inline-flex; align-items: center; gap: 6px; line-height: 1;
+      transition: background .15s ease, color .15s ease;
     }
-    .hamburger span { height: 2.5px; background: var(--pine-dark); border-radius: 2px; transition: .2s; }
-    .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .toggle button[aria-pressed="true"] { background: var(--accent); }
+    [data-season="summer"] .toggle button.t-summer[aria-pressed="true"] { background: var(--pine-deep); color: var(--paper); }
+    [data-season="winter"] .toggle button.t-winter[aria-pressed="true"] { background: var(--cyan); color: var(--ink); }
+    .toggle button:focus-visible { outline: 3px solid var(--blaze); outline-offset: -3px; }
+
+    .hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 50px; height: 50px; border: 3px solid var(--ink); background: var(--surface); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; padding: 0 12px; border-radius: 12px; }
+    .hamburger span { height: 3px; background: var(--ink); border-radius: 2px; transition: .2s; }
+    .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-    .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-    /* Mobile drawer */
-    .mobile-menu {
-      display: none;
-      background: var(--cream);
-      border-bottom: 1px solid var(--line);
-      padding: 8px 20px 20px;
-    }
+    .mobile-menu { display: none; background: var(--paper); border-bottom: 4px solid var(--ink); padding: 8px 20px 20px; }
     .mobile-menu.open { display: block; }
-    .mobile-menu a {
-      display: block; padding: 14px 8px; text-decoration: none;
-      color: var(--pine-dark); font-weight: 600; font-size: 1.1rem;
-      border-bottom: 1px solid var(--line);
-    }
-    .mobile-menu a:last-child { border-bottom: none; }
-    .mobile-menu .btn { display: flex; margin-top: 16px; width: 100%; }
+    .mobile-menu a { display: block; padding: 15px 4px; text-decoration: none; color: var(--ink); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: 1rem; border-bottom: 2px solid rgba(15,23,31,.14); }
+    .mobile-menu a.btn { display: flex; margin-top: 16px; border: 3px solid var(--ink); }
 
-    /* ---------- Hero ---------- */
-    .hero {
-      position: relative;
-      color: #fff;
-      background: linear-gradient(180deg, rgba(15,37,29,.55) 0%, rgba(15,37,29,.72) 100%),
-                  url('assets/chester/winter-opt.jpg') center 40% / cover no-repeat;
-      padding: 64px 0 72px;
-    }
-    .hero-inner { max-width: 780px; }
-    .hero-badge {
-      display: inline-block; background: var(--cream); padding: 16px 20px;
-      border-radius: 14px; box-shadow: var(--shadow-lg); margin-bottom: 26px;
-    }
-    .hero-badge img { height: 66px; width: auto; }
-    .hero .eyebrow {
-      text-transform: uppercase; letter-spacing: .14em; font-weight: 700;
-      font-size: .82rem; color: var(--amber-soft); margin-bottom: 12px;
-    }
-    .hero h1 {
-      color: #fff; font-size: clamp(2.1rem, 7vw, 3.7rem);
-      text-shadow: 0 2px 18px rgba(0,0,0,.35); margin-bottom: 16px;
-    }
-    .hero p.lead {
-      font-size: clamp(1.05rem, 2.5vw, 1.3rem); max-width: 620px;
-      color: #f2efe6; text-shadow: 0 1px 10px rgba(0,0,0,.35); margin-bottom: 30px;
-    }
-    .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+    /* ---------- generic section rhythm ---------- */
+    section { padding: clamp(54px, 8vw, 96px) 0; position: relative; }
+    .kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .lead { font-size: clamp(1.05rem, 2.3vw, 1.22rem); max-width: 60ch; color: var(--ink); font-weight: 700; }
+    .measure { max-width: 62ch; }
 
-    /* ---------- Quick info bar ---------- */
-    .quickbar { background: var(--pine-dark); color: #fff; }
-    .quickbar .grid {
-      display: grid; grid-template-columns: 1fr; gap: 0;
-    }
-    .quickbar .item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 20px 4px; border-bottom: 1px solid rgba(255,255,255,.12);
-    }
-    .quickbar .item:last-child { border-bottom: none; }
-    .quickbar .ico { font-size: 1.5rem; line-height: 1; margin-top: 2px; }
-    .quickbar .lbl {
-      text-transform: uppercase; letter-spacing: .12em; font-size: .72rem;
-      color: #a9c6b8; font-weight: 700; margin-bottom: 3px;
-    }
-    .quickbar .val { font-weight: 600; font-size: .98rem; line-height: 1.4; }
-    .quickbar .val small { display: block; font-weight: 400; color: #cfe0d7; font-size: .84rem; }
-    .quickbar a { color: #fff; }
+    /* ---------- HERO ---------- */
+    .hero { padding: 30px 0 44px; overflow: hidden; }
+    .hero .wrap { position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 30px; align-items: center; }
+    .hero-copy h1 { font-size: clamp(2.6rem, 12vw, 5.4rem); margin: 14px 0 18px; }
+    .hero-copy .lead { margin-bottom: 24px; }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .hero-note { margin-top: 22px; max-width: 42ch; }
+    .hero-note .pin { color: var(--blaze-ink); font-weight: 700; }
 
-    /* ---------- Sections ---------- */
-    section { padding: 64px 0; }
-    .section-head { max-width: 720px; margin-bottom: 40px; }
-    .section-head .eyebrow {
-      text-transform: uppercase; letter-spacing: .14em; font-weight: 700;
-      font-size: .8rem; color: var(--amber-dark); margin-bottom: 10px;
-    }
-    .section-head p { color: var(--muted); font-size: 1.1rem; margin-top: 12px; }
-    .alt { background: var(--cream); }
-    .pine-bg { background: var(--pine-dark); color: #fff; }
-    .pine-bg h2, .pine-bg h3 { color: #fff; }
-    .pine-bg .section-head p { color: #cfe0d7; }
-    .pine-bg .eyebrow { color: var(--amber-soft); }
+    /* the collage: B&W photo + accent ribbon slicing behind + slapped stickers */
+    .collage { position: relative; margin: 8px auto 0; width: min(430px, 88vw); }
+    .collage .ribbon { position: absolute; z-index: 1; left: -22%; right: -22%; top: 34%; height: 40%;
+      background: var(--accent); border: 3px solid var(--ink); transform: rotate(-13deg); }
+    .collage .ribbon.two { top: 60%; height: 16%; background: var(--blaze); transform: rotate(-13deg); }
+    .snap { position: relative; z-index: 2; border: 5px solid var(--ink); box-shadow: var(--shadow-lg);
+      background: var(--surface); transform: rotate(-2deg); }
+    .snap img { width: 100%; display: block; }
+    .snap.bw img { filter: grayscale(1) contrast(1.14) brightness(1.03); }
+    /* halftone print grit over B&W focal photos */
+    .halftone { position: relative; }
+    .halftone::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .34;
+      background-image: radial-gradient(var(--ink) 1px, transparent 1.5px); background-size: 5px 5px; }
+    .collage .slap-badge { position: absolute; z-index: 3; bottom: -20px; right: -14px;
+      width: 108px; height: 108px; border-radius: 50%; background: var(--blaze); color: var(--ink);
+      border: 4px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); display: grid; place-items: center;
+      text-align: center; transform: rotate(8deg); }
+    .collage .slap-badge b { font-family: "Bungee", sans-serif; font-size: .82rem; line-height: 1.05; }
+    .collage .tape { position: absolute; z-index: 4; top: -16px; left: -12px; width: 96px; transform: rotate(-9deg);
+      border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); background: var(--surface); }
 
-    /* About */
-    .about-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
-    .about-copy p { margin-bottom: 16px; color: #37453d; }
-    .about-copy p:last-child { margin-bottom: 0; }
-    .about-media img { border-radius: var(--radius); box-shadow: var(--shadow); width: 100%; }
-    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
-    .stat {
-      background: var(--snow); border: 1px solid var(--line); border-radius: var(--radius-sm);
-      padding: 18px; text-align: center;
-    }
-    .stat .num { font-size: 1.7rem; font-weight: 800; color: var(--amber-dark); line-height: 1; }
-    .stat .cap { font-size: .82rem; color: var(--muted); margin-top: 6px; font-weight: 600; }
+    /* ---------- quick action strip ---------- */
+    .strip { background: var(--accent-deep); color: var(--paper); border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink); }
+    .strip .wrap { display: grid; grid-template-columns: 1fr; gap: 0; }
+    .strip .cell { padding: 20px 4px; display: flex; gap: 14px; align-items: flex-start; border-bottom: 2px dashed rgba(244,242,234,.34); }
+    .strip .cell:last-child { border-bottom: none; }
+    .strip .ic { font-size: 1.5rem; line-height: 1; }
+    .strip .lb { font-family: "Bungee", sans-serif; font-size: .64rem; letter-spacing: .04em; color: var(--accent); margin-bottom: 4px; }
+    [data-season="winter"] .strip .lb { color: var(--cyan); }
+    [data-season="summer"] .strip .lb { color: #bfe6cf; }
+    .strip .vl { font-weight: 800; font-size: 1.02rem; line-height: 1.35; }
+    .strip .vl small { display: block; font-weight: 600; opacity: .85; font-size: .82rem; margin-top: 2px; }
+    .strip a { color: var(--paper); }
 
-    /* Card grids */
-    .cards { display: grid; grid-template-columns: 1fr; gap: 20px; }
-    .card {
-      background: var(--cream); border: 1px solid var(--line);
-      border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow);
-      display: flex; flex-direction: column; overflow: hidden;
-    }
-    /* Full-bleed real-photo banner at the top of a program card */
-    .card-img {
-      display: block; width: calc(100% + 52px); height: 190px;
-      object-fit: cover; object-position: center;
-      margin: -26px -26px 20px -26px; background: var(--line);
-    }
-    .card .tag {
-      display: inline-block; align-self: flex-start;
-      background: var(--amber-soft); color: var(--amber-dark);
-      font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
-      padding: 5px 11px; border-radius: 999px; margin-bottom: 14px;
-    }
-    .card h3 { margin-bottom: 8px; }
-    .card p { color: #43514a; font-size: .98rem; margin-bottom: 14px; flex-grow: 1; }
-    .card .meta { font-size: .88rem; color: var(--muted); margin-bottom: 16px; }
-    .card .meta strong { color: var(--ink); }
-    .card .card-cta { margin-top: auto; }
+    /* ---------- program bands ---------- */
+    /* winter: cyan is light -> ink text (9.4:1). summer: pine is dark -> deep-green + paper text (7:1). */
+    .band-cyan { background: var(--accent); color: var(--ink); border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink); }
+    [data-season="summer"] .band-cyan { background: var(--pine-deep); color: var(--paper); }
+    [data-season="summer"] .band-cyan h1, [data-season="summer"] .band-cyan h2, [data-season="summer"] .band-cyan h3 { color: var(--paper); }
+    .band-paper2 { background: linear-gradient(0deg, var(--surface), var(--surface)); }
+    .band-ink { background: var(--ink); color: var(--paper); border-top: 4px solid var(--ink); border-bottom: 4px solid var(--ink); }
+    .band-ink h1, .band-ink h2, .band-ink h3 { color: var(--paper); }
 
-    /* Rentals / passes highlight */
-    .passes-wrap { display: grid; grid-template-columns: 1fr; gap: 26px; }
-    .price-card {
-      background: var(--cream); border-radius: var(--radius);
-      box-shadow: var(--shadow-lg); overflow: hidden; border: 1px solid var(--line);
-    }
-    .price-card .ph {
-      background: var(--pine); color: #fff; padding: 22px 24px;
-    }
-    .price-card .ph h3 { color: #fff; margin-bottom: 4px; }
-    .price-card .ph p { color: #d5e5dc; font-size: .92rem; }
-    .price-card .pb { padding: 8px 24px 24px; }
-    .price-row {
-      display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-      padding: 14px 0; border-bottom: 1px solid var(--line);
-    }
-    .price-row:last-of-type { border-bottom: none; }
-    .price-row .name { font-weight: 600; }
-    .price-row .name small { display: block; color: var(--muted); font-weight: 400; font-size: .82rem; }
-    .price-row .amt { font-weight: 800; color: var(--pine-dark); font-size: 1.15rem; white-space: nowrap; }
-    .price-note {
-      background: var(--snow); border-radius: var(--radius-sm); padding: 14px 16px;
-      font-size: .86rem; color: var(--muted); margin: 4px 0 20px;
-    }
-    .price-note strong { color: var(--ink); }
-
-    .daypass-banner {
-      background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
-      color: #fff; border-radius: var(--radius); padding: 28px;
-      box-shadow: var(--shadow-lg); text-align: center;
-    }
-    .daypass-banner h3 { color: #fff; font-size: 1.4rem; }
-    .daypass-prices { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin: 18px 0 10px; }
-    .daypass-prices .p { }
-    .daypass-prices .big { font-size: 2.4rem; font-weight: 800; line-height: 1; }
-    .daypass-prices .sub { font-size: .85rem; opacity: .92; margin-top: 4px; }
-    .daypass-banner .tagline { font-weight: 700; margin-top: 8px; font-size: 1.02rem; }
-
-    .info-list { list-style: none; }
-    .info-list li { padding: 12px 0; border-bottom: 1px solid var(--line); display: flex; gap: 12px; }
-    .info-list li:last-child { border-bottom: none; }
-    .info-list .ico { color: var(--amber-dark); font-weight: 800; flex-shrink: 0; }
-
-    /* New chalet */
-    .chalet-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
-    .chalet-media img { border-radius: var(--radius); box-shadow: var(--shadow-lg); width: 100%; }
-    .chalet-media figcaption { font-size: .82rem; color: var(--muted); margin-top: 10px; text-align: center; font-style: italic; }
-    .chalet-copy ul { list-style: none; margin: 18px 0 26px; }
-    .chalet-copy ul li { padding: 8px 0 8px 30px; position: relative; color: #37453d; }
-    .chalet-copy ul li::before {
-      content: "\2713"; position: absolute; left: 0; top: 8px;
-      color: var(--amber-dark); font-weight: 800;
-    }
-    .reopen-pill {
-      display: inline-block; background: var(--amber-soft); color: var(--amber-dark);
-      font-weight: 800; padding: 8px 16px; border-radius: 999px; font-size: .9rem;
-      margin-bottom: 18px;
+    /* feature block: big terrain-park lead */
+    .feature { display: grid; grid-template-columns: 1fr; gap: 26px; align-items: center; }
+    .feature .body .lead { color: inherit; }
+    .feature .pics { position: relative; }
+    .feature .pics .snap { transform: rotate(-2.5deg); }
+    /* mobile: the second photo stacks under the first, nudged + tilted like a slapped-on print */
+    .feature .pics .snap.mini { width: 66%; margin: -14px 0 0 auto; transform: rotate(4deg); border-width: 4px; }
+    @media (min-width: 900px) {
+      /* desktop: small capped overlay that breaks the frame, never oversized */
+      .feature .pics .snap.mini { position: absolute; width: 46%; max-width: 232px; right: -10px; bottom: -22px;
+        margin: 0; z-index: 5; transform: rotate(5deg); }
     }
 
-    /* Get involved */
-    .involve { display: grid; grid-template-columns: 1fr; gap: 20px; }
-    .involve .card { text-align: left; }
-    .involve .card .emoji { font-size: 2rem; margin-bottom: 10px; }
+    /* program list — varied editorial rows, NOT a uniform card grid */
+    .progs { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 8px; }
+    .prog { background: var(--surface); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow);
+      padding: 22px 20px 20px; position: relative; display: grid; grid-template-columns: 1fr; gap: 6px; }
+    .prog .patch { position: absolute; top: -20px; right: 16px; width: 74px; height: 74px; border-radius: 50%;
+      background: var(--gold); color: var(--ink); border: 4px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+      display: grid; place-items: center; text-align: center; transform: rotate(-6deg);
+      font-family: "Bungee", sans-serif; font-size: .52rem; line-height: 1.06; padding: 6px; }
+    .prog .patch.cyan { background: var(--accent); }
+    .prog .patch.blaze { background: var(--blaze); }
+    .prog .patch.ink { background: var(--ink); color: var(--paper); }
+    .prog h3 { margin: 4px 0 2px; padding-right: 64px; }
+    .prog p { color: var(--ink); font-weight: 600; }
+    .prog .meta { font-weight: 800; font-size: .9rem; margin: 4px 0 8px; }
+    .prog .meta b { color: var(--blaze-ink); }
+    .prog.wide { grid-column: 1 / -1; }
 
-    /* Contact + signup */
-    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
-    .contact-card {
-      background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 28px; box-shadow: var(--shadow);
-    }
+    /* passes / prices */
+    .boards { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 26px; }
+    .board { background: var(--surface); color: var(--ink); border: 4px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow-lg); overflow: hidden; }
+    .board .bh { background: var(--accent-deep); color: var(--paper); padding: 18px 20px; border-bottom: 4px solid var(--ink); }
+    .board .bh h3 { color: var(--paper); }
+    .board .bh p { font-size: .88rem; opacity: .9; font-weight: 700; margin-top: 3px; }
+    .board .bb { padding: 8px 20px 22px; }
+    .prow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 2px dotted rgba(15,23,31,.28); }
+    .prow:last-of-type { border-bottom: none; }
+    .prow .amt { font-family: "Bungee", sans-serif; font-size: 1.05rem; white-space: nowrap; }
+    .rlist { list-style: none; }
+    .rlist li { padding: 11px 0 11px 30px; position: relative; border-bottom: 2px dotted rgba(15,23,31,.24); font-weight: 700; }
+    .rlist li:last-child { border-bottom: none; }
+    .rlist li::before { content: "\2726"; position: absolute; left: 2px; top: 11px; color: var(--blaze); }
+    .note { background: var(--gold); border: 3px solid var(--ink); border-radius: 12px; padding: 13px 15px; font-size: .9rem; font-weight: 700; margin: 12px 0 18px; }
+
+    /* big day-pass ticket */
+    .ticket { grid-column: 1 / -1; position: relative; background: var(--blaze); color: var(--ink);
+      border: 4px solid var(--ink); box-shadow: var(--shadow-lg); border-radius: 18px; padding: 30px 26px; text-align: center; }
+    .ticket::before, .ticket::after { content: ""; position: absolute; top: 50%; transform: translateY(-50%);
+      width: 30px; height: 30px; background: var(--accent); border: 4px solid var(--ink); border-radius: 50%; }
+    .ticket::before { left: -18px; } .ticket::after { right: -18px; }
+    .ticket .prices { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 34px; margin: 16px 0 12px; }
+    .ticket .big { font-family: "Bagel Fat One", sans-serif; font-size: 2.7rem; line-height: 1; }
+    .ticket .sub { font-family: "Bungee", sans-serif; font-size: .66rem; margin-top: 6px; }
+    .ticket .tag { font-weight: 800; font-style: italic; }
+    .ticket .dash { border: none; border-top: 3px dashed rgba(15,23,31,.5); max-width: 300px; margin: 14px auto; }
+
+    /* ---------- about / heritage ---------- */
+    .split { display: grid; grid-template-columns: 1fr; gap: 34px; align-items: center; }
+    .prose p { margin-bottom: 14px; color: var(--ink); font-weight: 600; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { font-weight: 900; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
+    .stat { background: var(--surface); color: var(--ink); border: 3px solid var(--ink); border-radius: 14px; box-shadow: 4px 4px 0 var(--ink); padding: 16px 14px; }
+    .stat .n { font-family: "Bagel Fat One", sans-serif; font-size: clamp(1.5rem,5vw,2rem); line-height: 1; color: var(--blaze-ink); }
+    .stat .c { font-size: .8rem; font-weight: 800; margin-top: 8px; }
+
+    /* heritage jump watermark card */
+    .heritage { position: relative; background: var(--accent); border: 4px solid var(--ink); border-radius: 20px;
+      box-shadow: var(--shadow-lg); padding: 30px 26px; overflow: hidden; }
+    .heritage .ghost { position: absolute; right: -6%; bottom: -12%; width: 62%; opacity: .16; transform: rotate(6deg);
+      filter: none; pointer-events: none; mix-blend-mode: multiply; }
+    .heritage h3 { position: relative; }
+    .heritage p { position: relative; font-weight: 700; margin-top: 10px; }
+    /* summer accent (pine) is dark -> deep-green + paper text so the card body clears AA */
+    [data-season="summer"] .heritage { background: var(--pine-deep); color: var(--paper); }
+    [data-season="summer"] .heritage h3 { color: var(--paper); }
+
+    /* photo frame utility */
+    .frame { border: 5px solid var(--ink); box-shadow: var(--shadow-lg); background: var(--surface); transform: rotate(-1.5deg); }
+    .frame img { width: 100%; display: block; }
+    .frame.r { transform: rotate(1.8deg); }
+    figcaption { font-family: "Shantell Sans", cursive; font-weight: 600; font-size: .92rem; margin-top: 12px; text-align: center; }
+
+    /* ---------- get involved ---------- */
+    .ways { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 8px; }
+    .way { background: var(--surface); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow); padding: 22px 20px; }
+    .way h3 { margin-bottom: 8px; }
+    .way p { font-weight: 600; margin-bottom: 14px; }
+    .promise { background: var(--gold); border: 4px solid var(--ink); border-radius: 20px; box-shadow: var(--shadow-lg);
+      padding: 26px 24px; margin-top: 26px; }
+    .promise .big { font-family: "Bagel Fat One", sans-serif; font-size: clamp(1.5rem,5vw,2.4rem); line-height: 1.02; }
+
+    /* chalet */
+    .chalet-tag { display: inline-block; font-family: "Bungee", sans-serif; font-size: .7rem; background: var(--blaze); color: var(--ink); border: 3px solid var(--ink); padding: 7px 12px; box-shadow: 3px 3px 0 var(--ink); margin-bottom: 14px; transform: rotate(-1.5deg); }
+
+    /* ---------- contact ---------- */
+    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
+    .card { background: var(--surface); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow); padding: 26px 22px; }
     .staff { list-style: none; margin-top: 8px; }
-    .staff li { padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .staff li { padding: 13px 0; border-bottom: 2px dotted rgba(15,23,31,.24); }
     .staff li:last-child { border-bottom: none; }
-    .staff .role { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
-    .staff .who { font-weight: 700; }
-    .staff a { text-decoration: none; }
-    .staff a:hover { text-decoration: underline; }
+    .staff .role { font-family: "Bungee", sans-serif; font-size: .58rem; letter-spacing: .03em; color: var(--blaze-ink); }
+    .staff .who { font-weight: 900; font-size: 1.05rem; margin: 3px 0 2px; }
+    .staff a { font-weight: 800; }
+    .signup { background: var(--accent-deep); color: var(--paper); border: 4px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow-lg); padding: 26px 22px; }
+    .signup h3 { color: var(--paper); }
+    .signup p { font-weight: 600; margin: 10px 0 18px; opacity: .92; }
 
-    .signup-card {
-      background: var(--pine); color: #fff; border-radius: var(--radius);
-      padding: 30px; box-shadow: var(--shadow-lg);
-    }
-    .signup-card h3 { color: #fff; }
-    .signup-card p { color: #d5e5dc; margin: 10px 0 22px; }
-    .addr-line { display: flex; gap: 12px; margin-bottom: 8px; }
-    .addr-line .ico { color: var(--amber-dark); font-weight: 800; }
-
-    /* Footer */
-    footer.site {
-      background: var(--pine-deeper); color: #b9cdc2; padding: 44px 0 30px;
-      font-size: .92rem;
-    }
+    /* ---------- footer ---------- */
+    footer.site { background: var(--ink); color: #c3ccd4; padding: 46px 0 30px; font-weight: 600; }
     footer.site .f-top { display: grid; grid-template-columns: 1fr; gap: 26px; margin-bottom: 30px; }
-    footer.site img.f-logo { height: 54px; width: auto; background: var(--cream); padding: 8px 12px; border-radius: 10px; }
-    footer.site h4 { color: #fff; font-size: .85rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px; }
-    footer.site a { color: #cfe0d7; text-decoration: none; }
-    footer.site a:hover { color: #fff; text-decoration: underline; }
+    footer.site .f-logo { display: inline-block; margin-bottom: 14px; }
+    footer.site .f-logo img { height: 58px; width: auto; filter: invert(1); }
+    footer.site .f-blurb { max-width: 340px; color: #aab5bd; font-weight: 600; }
+    footer.site h4 { font-family: "Bungee", sans-serif; color: var(--paper); font-size: .72rem; letter-spacing: .03em; margin-bottom: 14px; }
     footer.site ul { list-style: none; }
-    footer.site ul li { margin-bottom: 8px; }
-    footer.site .f-bottom {
-      border-top: 1px solid rgba(255,255,255,.12); padding-top: 22px;
-      display: flex; flex-direction: column; gap: 8px; color: #8ba99b; font-size: .82rem;
-    }
-    footer.site .f-bottom a { color: #a9c6b8; }
+    footer.site li { margin-bottom: 9px; }
+    footer.site a { color: #cdd6dd; text-decoration: none; font-weight: 700; }
+    footer.site a:hover { color: var(--cyan); }
+    footer.site .f-bottom { border-top: 2px solid rgba(255,255,255,.14); padding-top: 22px; display: flex; flex-direction: column; gap: 8px; color: #8a95 9d; font-size: .8rem; color: #8a959d; }
 
-    /* ---------- Responsive ---------- */
+    /* ---------- motion (opt-in; content visible by default) ---------- */
+    .anim .slap  { opacity: 0; transform: translateY(22px) scale(.94) rotate(-1deg); transition: opacity .5s ease, transform .55s cubic-bezier(.25,1,.5,1); }
+    .anim .slap.in { opacity: 1; transform: none; }
+    .anim .reveal { opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; }
+    .anim .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- responsive ---------- */
     @media (min-width: 620px) {
-      .quickbar .grid { grid-template-columns: repeat(3, 1fr); }
-      .quickbar .item { border-bottom: none; border-right: 1px solid rgba(255,255,255,.12); padding: 24px 20px; }
-      .quickbar .item:last-child { border-right: none; }
-      .cards { grid-template-columns: repeat(2, 1fr); }
-      .involve { grid-template-columns: repeat(3, 1fr); }
-      .passes-wrap { grid-template-columns: 1fr 1fr; }
-      .daypass-banner, .rental-info-card { grid-column: 1 / -1; }
+      .strip .wrap { grid-template-columns: repeat(3, 1fr); }
+      .strip .cell { border-bottom: none; border-right: 2px dashed rgba(244,242,234,.34); padding: 24px 20px; }
+      .strip .cell:last-child { border-right: none; }
+      .progs { grid-template-columns: 1fr 1fr; }
+      .boards { grid-template-columns: 1fr 1fr; }
+      .ways { grid-template-columns: repeat(3, 1fr); }
+      .stats { grid-template-columns: repeat(4, 1fr); }
+      .contact-grid { grid-template-columns: 1.3fr 1fr; }
     }
     @media (min-width: 900px) {
-      .nav-links { display: flex; align-items: center; gap: 2px; }
-      .nav-cta { display: inline-flex; }
+      .nav-links { display: flex; align-items: center; gap: 22px; }
       .hamburger { display: none; }
       .mobile-menu { display: none !important; }
-      .brand img { height: 48px; }
-      .cards { grid-template-columns: repeat(3, 1fr); }
-      .about-grid { grid-template-columns: 1.1fr 1fr; }
-      .chalet-grid { grid-template-columns: 1.15fr 1fr; }
-      .contact-grid { grid-template-columns: 1.2fr 1fr; }
-      .hero { padding: 96px 0 104px; }
-      footer.site .f-top { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+      .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 44px; }
+      .collage { margin: 0 0 0 auto; }
+      .feature { grid-template-columns: 1.05fr .95fr; gap: 44px; }
+      .feature.rev .body { order: 2; } .feature.rev .pics { order: 1; }
+      .split { grid-template-columns: 1.05fr .95fr; gap: 52px; }
+      .split.rev .prose { order: 2; } .split.rev .art { order: 1; }
+      footer.site .f-top { grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
     }
+    @media (min-width: 900px) {
+      .nav-cta { display: inline-flex; }
+    }
+    .nav-cta { display: none; }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      * { transition: none !important; }
+      * { transition: none !important; animation: none !important; }
     }
   </style>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to main content</a>
+  <a class="skip" href="#main">Skip to content</a>
 
   <!-- ============ HEADER ============ -->
   <header class="site">
     <div class="wrap">
       <nav class="nav" aria-label="Primary">
-        <a class="brand" href="#top" aria-label="Chester Bowl home">
-          <img src="assets/chester/logo.jpg" alt="Chester Bowl logo" width="280" height="165">
-          <span class="brand-txt">Chester Bowl</span>
+        <a class="brand" href="#top" aria-label="Chester Bowl — home">
+          <img src="assets/chester/logo-clean.svg" alt="Chester Bowl — the black woodcut logo of the two historic giant ski jumps over pines and Lake Superior" width="278" height="164">
         </a>
+
+        <div class="toggle" role="group" aria-label="Choose season">
+          <button type="button" class="t-summer" id="tSummer" aria-pressed="true">☀ Summer</button>
+          <button type="button" class="t-winter" id="tWinter" aria-pressed="false">❄ Winter</button>
+        </div>
+
         <div class="nav-links">
+          <a href="#whats-on">What's&nbsp;On</a>
           <a href="#about">About</a>
-          <a href="#programs">Ski &amp; Ride</a>
-          <a href="#passes">Passes &amp; Rentals</a>
-          <a href="#camp">Summer Camp</a>
-          <a href="#fallfest">Fall Fest</a>
-          <a href="#chalet">New Chalet</a>
-          <a href="#involved">Get Involved</a>
+          <a href="#involved">Get&nbsp;Involved</a>
           <a href="#contact">Contact</a>
         </div>
         <a class="btn sm nav-cta" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Donate</a>
@@ -420,13 +424,9 @@
       </nav>
     </div>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="#about">About</a>
-      <a href="#programs">Ski &amp; Snowboard</a>
-      <a href="#passes">Passes &amp; Rentals</a>
-      <a href="#camp">Summer Day Camp</a>
-      <a href="#fallfest">Fall Fest</a>
-      <a href="#chalet">The New Chalet</a>
-      <a href="#involved">Get Involved</a>
+      <a href="#whats-on">What's On</a>
+      <a href="#about">About the hill</a>
+      <a href="#involved">Get involved</a>
       <a href="#contact">Contact</a>
       <a class="btn" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Donate to Chester Bowl</a>
     </div>
@@ -436,381 +436,393 @@
   <main id="main">
 
     <!-- ============ HERO ============ -->
-    <section class="hero" aria-label="Welcome">
+    <!-- WINTER hero -->
+    <section class="hero only-winter" aria-label="Winter at Chester Bowl">
       <div class="wrap">
-        <div class="hero-inner">
-          <div class="hero-badge">
-            <img src="assets/chester/logo.jpg" alt="Chester Bowl" width="280" height="165">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="kicker">
+              <span class="sticker cyan slap">❄ Freestyle Fridays</span>
+              <span class="sticker ink r slap">Est. 1980 · Duluth</span>
+            </div>
+            <h1>Send it on our <span class="hl">little hill.</span></h1>
+            <p class="lead">Duluth's neighborhood ski &amp; snowboard hill, right in Chester Park. A real terrain park with rails, boxes and jumps, plus <strong>the cheapest lift ticket in the country.</strong></p>
+            <div class="hero-ctas">
+              <a class="btn" href="https://www.chesterbowl.org/ski-and-snowboard/season-pass-purchases/" target="_blank" rel="noopener">Buy a Season Pass</a>
+              <a class="btn ink" href="#terrain">Hit the Park →</a>
+            </div>
+            <p class="hero-note hand"><span class="pin">psst —</span> money never keeps a kid off the hill. <a href="#promise">Scholarships</a> for anyone who needs one.</p>
           </div>
-          <p class="eyebrow">Duluth, Minnesota &middot; A community nonprofit</p>
-          <h1>Duluth's neighborhood ski hill since 1980</h1>
-          <p class="lead">Affordable skiing &amp; snowboarding, free lessons, summer camp, and one unforgettable Fall Fest &mdash; right in the heart of Chester Park. Outdoor fun for every family, no matter the budget.</p>
-          <div class="hero-ctas">
-            <a class="btn on-dark" href="#passes">Season Passes &amp; Rentals</a>
-            <a class="btn" href="#programs">Ski &amp; Snowboard</a>
-            <a class="btn ghost on-dark" href="https://growingupchester.org/donate/" target="_blank" rel="noopener" style="background:transparent;color:#fff;border-color:#fff;">Donate</a>
+
+          <div class="collage slap" aria-hidden="false">
+            <div class="ribbon"></div>
+            <div class="ribbon two"></div>
+            <figure class="snap bw halftone" style="margin:0;">
+              <img src="assets/chester/web/w-hero-carve.jpg" alt="A young skier carving hard down the Chester Bowl slope, snow spraying off the edges" width="681" height="1024" fetchpriority="high">
+            </figure>
+            <div class="slap-badge"><b>SHRED<br>CHESTER</b></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ QUICK INFO BAR ============ -->
-    <section class="quickbar" aria-label="Quick facts" style="padding:0;">
+    <!-- SUMMER hero -->
+    <section class="hero only-summer" aria-label="Summer at Chester Bowl">
       <div class="wrap">
-        <div class="grid">
-          <div class="item">
-            <span class="ico" aria-hidden="true">&#128205;</span>
-            <div>
-              <div class="lbl">Find us</div>
-              <div class="val">Chester Park
-                <small>1801 E. Skyline Dr., Duluth, MN 55812</small>
-              </div>
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="kicker">
+              <span class="sticker slap">☀ Summer Day Camp</span>
+              <span class="sticker ink r slap">Est. 1980 · Duluth</span>
             </div>
+            <h1>A whole summer <span class="hl">in the park.</span></h1>
+            <p class="lead">Nature play, forts, creek splashing, crafts and camp chaos for <strong>ages 6–12</strong>, right in Chester Park, led by teen mentors and staff who love this place.</p>
+            <div class="hero-ctas">
+              <a class="btn" href="https://www.ultracamp.com/clientlogin.aspx?idCamp=1490&campCode=LRG" target="_blank" rel="noopener">Register for Day Camp</a>
+              <a class="btn ink" href="#camp">Camp Details →</a>
+            </div>
+            <p class="hero-note hand"><span class="pin">psst —</span> money never keeps a kid out of camp. <a href="#promise">Scholarships &amp; payment plans</a> for anyone who needs one.</p>
           </div>
-          <div class="item">
-            <span class="ico" aria-hidden="true">&#9975;</span>
-            <div>
-              <div class="lbl">Winter hours</div>
-              <div class="val">Sat &amp; Sun 11am&ndash;4:30pm
-                <small>Mon, Thu &amp; Fri 4:30&ndash;8:30pm &middot; season runs Dec&ndash;Mar</small>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <span class="ico" aria-hidden="true">&#127903;</span>
-            <div>
-              <div class="lbl">Day pass</div>
-              <div class="val">$15 &middot; 18 &amp; under &nbsp;|&nbsp; $20 &middot; 19+
-                <small>The most affordable lift ticket in the country</small>
-              </div>
-            </div>
+
+          <div class="collage slap">
+            <div class="ribbon"></div>
+            <div class="ribbon two"></div>
+            <figure class="snap" style="margin:0;">
+              <img src="assets/chester/web/s-hero-camp.jpg" alt="Campers gathered around a table making crafts together at Chester Bowl summer day camp" width="640" height="480" fetchpriority="high">
+            </figure>
+            <div class="slap-badge"><b>CAMP<br>CHESTER</b></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ ABOUT ============ -->
+    <!-- ============ QUICK ACTION STRIP ============ -->
+    <section class="strip" style="padding:0;" aria-label="Quick facts">
+      <!-- winter facts -->
+      <div class="wrap only-winter">
+        <div class="cell"><span class="ic" aria-hidden="true">🎟️</span><div><div class="lb">Day pass</div><div class="vl">$15 &middot; 18 &amp; under<small>$20 &middot; 19+ &middot; cheapest lift ticket in the U.S.</small></div></div></div>
+        <div class="cell"><span class="ic" aria-hidden="true">⛷️</span><div><div class="lb">Winter hours</div><div class="vl">Sat &amp; Sun 11am–4:30pm<small>Mon, Thu &amp; Fri 4:30–8:30pm · Dec–Mar</small></div></div></div>
+        <div class="cell"><span class="ic" aria-hidden="true">📍</span><div><div class="lb">Find us</div><div class="vl">Chester Park, Duluth<small>1801 E. Skyline Dr., MN 55812</small></div></div></div>
+      </div>
+      <!-- summer facts -->
+      <div class="wrap only-summer">
+        <div class="cell"><span class="ic" aria-hidden="true">🏕️</span><div><div class="lb">Day camp</div><div class="vl">Ages 6–12 · $210/week<small>+ one-time $75 family fee · plans &amp; scholarships</small></div></div></div>
+        <div class="cell"><span class="ic" aria-hidden="true">📅</span><div><div class="lb">When</div><div class="vl">Mon–Thu, Jun 8–Aug 13<small>Drop-off 8am · pick-up by 5pm</small></div></div></div>
+        <div class="cell"><span class="ic" aria-hidden="true">📍</span><div><div class="lb">Find us</div><div class="vl">Chester Park, Duluth<small>1801 E. Skyline Dr., MN 55812</small></div></div></div>
+      </div>
+    </section>
+
+    <!-- ============ WHAT'S ON (season programs) ============ -->
+    <div id="whats-on"></div>
+
+    <!-- ===== WINTER PROGRAMS ===== -->
+    <div class="only-winter">
+
+      <!-- Terrain park feature (the identity core, loudest) -->
+      <section id="terrain" class="band-cyan">
+        <div class="wrap">
+          <div class="feature">
+            <div class="body">
+              <div class="kicker"><span class="sticker ink slap">The whole point ↓</span></div>
+              <h2 class="reveal">Terrain Park &amp; Freestyle Fridays</h2>
+              <p class="lead reveal" style="margin-top:14px;">This is where Chester's punk lives. Rails, boxes, and jumps for every level: the fun box for first-timers, bigger features when you're ready. <strong>Freestyle Fridays</strong> are low-pressure evening sessions to session the park with your crew: skiers, snowboarders and snowskaters all welcome.</p>
+              <p class="reveal" style="margin-top:12px; font-weight:800;">Select Fridays, Dec–Mar · sign up 5–6pm in the equipment garage · drops at 6:15.</p>
+              <div class="hero-ctas reveal" style="margin-top:20px;">
+                <a class="btn" href="https://www.chesterbowl.org/freestyle-fridays-2/" target="_blank" rel="noopener">Freestyle Fridays</a>
+                <a class="btn paper" href="https://www.chesterbowl.org/girls-shred/" target="_blank" rel="noopener">Girls Shred</a>
+              </div>
+            </div>
+            <div class="pics slap">
+              <figure class="snap bw halftone" style="margin:0;">
+                <img src="assets/chester/web/w-park-rail.jpg" alt="Two kids sliding a box rail feature in the Chester Bowl terrain park" width="640" height="480" loading="lazy">
+              </figure>
+              <figure class="snap mini">
+                <img src="assets/chester/web/w-helmet-stickers.jpg" alt="A rider's helmet covered in stickers — a peace-flower and a hand-drawn Girls Shred sticker" width="640" height="480" loading="lazy">
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- More winter programs -->
+      <section class="band-paper2">
+        <div class="wrap">
+          <div class="kicker"><span class="sticker cyan slap">More on the hill</span></div>
+          <h2 class="reveal">Learn, ride, race. Everybody's welcome</h2>
+          <p class="lead reveal" style="margin-top:12px;">Free lessons come with any pass: bunny hill to freestyle, all ages including grown-ups.</p>
+
+          <div class="progs">
+            <article class="prog slap">
+              <div class="patch cyan">FREE<br>W/ PASS</div>
+              <h3>Learn to Ride</h3>
+              <p>Free ski &amp; snowboard lessons for all ages, four ability levels, friendly 45-minute sessions. First time clicking in? Start here.</p>
+              <div class="meta">Everyone &middot; <b>free</b> with a pass · sign-ups each fall</div>
+              <a class="arrow" href="https://www.chesterbowl.org/lessons-and-ski-and-snowboard-camp/" target="_blank" rel="noopener">Lesson details</a>
+            </article>
+
+            <article class="prog slap">
+              <div class="patch blaze">GIRLS<br>SHRED</div>
+              <h3>Girls Shred</h3>
+              <p>A women-led, supportive way for girls, women, and non-binary riders to learn freestyle in the park. Open to anyone who's passed a Level&nbsp;2 lesson.</p>
+              <div class="meta">Jan–Feb &middot; <b>free</b> with registration</div>
+              <a class="arrow" href="https://www.chesterbowl.org/girls-shred/" target="_blank" rel="noopener">Girls Shred info</a>
+            </article>
+
+            <article class="prog slap">
+              <div class="patch">RACE<br>DAY</div>
+              <h3>Alpine Race Series</h3>
+              <p>A low-key, fun intro to ski &amp; snowboard racing on Sunday afternoons, with laser timing and an award for every finisher. Under-5 up to 14–16.</p>
+              <div class="meta">Sundays Feb &amp; Mar &middot; from <b>$10/day</b>, $15 season</div>
+              <a class="arrow" href="https://www.chesterbowl.org/ski-snowboard-races/" target="_blank" rel="noopener">Race series</a>
+            </article>
+
+            <article class="prog slap">
+              <div class="patch ink">CADET+<br>7TH&nbsp;UP</div>
+              <h3>Cadet+ Leadership</h3>
+              <p>Year-round crew for teens. Mentor younger riders, take on service projects, earn CPR / First Aid, and build real job-ready leadership.</p>
+              <div class="meta">Grades 7+ &middot; ~10 hrs/mo &middot; <b>$250</b> (scholarships)</div>
+              <a class="arrow" href="https://www.chesterbowl.org/cadet/" target="_blank" rel="noopener">About Cadet+</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Passes & rentals -->
+      <section id="passes" class="band-cyan">
+        <div class="wrap">
+          <div class="kicker"><span class="sticker ink slap">The easy button</span></div>
+          <h2 class="reveal">Season passes &amp; rentals</h2>
+          <p class="lead reveal" style="margin-top:12px;">One pass gets the whole family unlimited chairlift, free lessons, Freestyle Fridays, and racing. Add a full-season rental and you're set October to April.</p>
+
+          <div class="boards">
+            <div class="board slap">
+              <div class="bh"><h3>Season Passes</h3><p>Unlimited chairlift all winter · free lessons included</p></div>
+              <div class="bb">
+                <div class="prow"><span>Individual</span><span class="amt">$99</span></div>
+                <div class="prow"><span>Family of 2</span><span class="amt">$199</span></div>
+                <div class="prow"><span>Family of 3</span><span class="amt">$269</span></div>
+                <div class="prow"><span>Family of 4</span><span class="amt">$299</span></div>
+                <div class="prow"><span>Family of 5</span><span class="amt">$329</span></div>
+                <div class="prow"><span>Family of 6</span><span class="amt">$359</span></div>
+                <div class="prow"><span>Each additional</span><span class="amt">+$30</span></div>
+                <div class="note">Plus a <strong>refundable $100 volunteer deposit</strong> &amp; tax. It comes back once your family finishes its volunteer hours (6–12) and returns rental gear on time. <strong>Scholarships available, and no one is turned away for cost.</strong></div>
+                <a class="btn ink block" href="https://www.chesterbowl.org/ski-and-snowboard/season-pass-purchases/" target="_blank" rel="noopener">How to buy a pass</a>
+              </div>
+            </div>
+
+            <div class="board slap">
+              <div class="bh"><h3>Season Rentals</h3><p>Gear the whole family for the entire winter</p></div>
+              <div class="bb">
+                <p style="font-weight:600; margin:6px 0 12px;">Get fitted for skis or a board at fall fitting nights and keep the gear until April, then use it here or anywhere. Perfect for growing kids and first-timers.</p>
+                <ul class="rlist">
+                  <li><strong>$110</strong> per person for the full season (plus tax)</li>
+                  <li>Fittings in October &amp; November</li>
+                  <li>Requires a Chester Bowl season pass</li>
+                  <li>Return gear together April 7–9</li>
+                </ul>
+                <a class="btn ink block" href="https://www.chesterbowl.org/ski-and-snowboard-season-rental-program/" target="_blank" rel="noopener" style="margin-top:16px;">Season rental program</a>
+              </div>
+            </div>
+
+            <div class="ticket slap">
+              <span class="sticker ink" style="transform:rotate(-3deg);">Just visiting?</span>
+              <div class="prices" style="margin-top:14px;">
+                <div><div class="big">$15</div><div class="sub">18 &amp; UNDER</div></div>
+                <div><div class="big">$20</div><div class="sub">19 &amp; UP</div></div>
+                <div><div class="big">FREE</div><div class="sub">PARTNER PASS</div></div>
+              </div>
+              <hr class="dash">
+              <p class="tag">The cheapest lift ticket in the country. Buy in person at the hill, no reservation needed. 12 snowskates on hand to borrow, too.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div><!-- /winter programs -->
+
+    <!-- ===== SUMMER PROGRAMS ===== -->
+    <div class="only-summer">
+
+      <!-- Day camp feature -->
+      <section id="camp" class="band-cyan">
+        <div class="wrap">
+          <div class="feature">
+            <div class="body">
+              <div class="kicker"><span class="sticker ink slap">Register now ↓</span></div>
+              <h2 class="reveal">Summer Day Camp</h2>
+              <p class="lead reveal" style="margin-top:14px;">Chester Park doesn't hibernate. Camp is all about nature play, hiking, fort building, creek splashing, arts &amp; crafts, and good old outdoor fun, guided by teen mentors and caring staff.</p>
+              <ul class="rlist reveal" style="margin-top:12px;">
+                <li><strong>Ages 6–12</strong> (or finished kindergarten)</li>
+                <li><strong>Mon–Thu, June 8 – August 13</strong> · drop-off 8am, pick-up by 5pm</li>
+                <li><strong>$210/week</strong> per camper + one-time $75 family fee</li>
+                <li>Payment plans &amp; scholarships available</li>
+              </ul>
+              <div class="hero-ctas reveal" style="margin-top:20px;">
+                <a class="btn" href="https://www.ultracamp.com/clientlogin.aspx?idCamp=1490&campCode=LRG" target="_blank" rel="noopener">Register for Camp</a>
+              </div>
+            </div>
+            <div class="pics slap">
+              <figure class="snap" style="margin:0;">
+                <img src="assets/chester/web/s-camp-fire.jpg" alt="Teen campers roasting marshmallows around a fire pit at Chester Bowl" width="640" height="480" loading="lazy">
+              </figure>
+              <figure class="snap mini">
+                <img src="assets/chester/web/s-chalet-summer.jpg" alt="The Chester Bowl chalet on a green summer day with balloons out front" width="1050" height="788" loading="lazy">
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Fall Fest -->
+      <section id="fallfest" class="band-ink">
+        <div class="wrap">
+          <div class="kicker"><span class="sticker slap">A Duluth tradition since 1984</span></div>
+          <h2 class="reveal">Fall Fest</h2>
+          <p class="lead reveal" style="margin-top:12px; color:var(--paper);">Our 42nd annual Fall Fest is Chester Bowl's biggest day of the year: music, food trucks, 135 craft &amp; produce vendors, and activities for the whole city, all fueling the scholarship fund.</p>
+
+          <figure class="frame slap" style="margin:26px 0 0; border-color:var(--paper);">
+            <img src="assets/chester/web/s-fallfest.jpg" alt="A crowd gathered among the trees at Chester Bowl's annual Fall Fest" width="1260" height="238" loading="lazy">
+          </figure>
+
+          <div class="stats reveal" style="margin-top:22px;">
+            <div class="stat"><div class="n">135</div><div class="c">craft &amp; produce vendors</div></div>
+            <div class="stat"><div class="n">15</div><div class="c">food trucks + live music</div></div>
+            <div class="stat"><div class="n">$12,250</div><div class="c">raised for scholarships</div></div>
+            <div class="stat"><div class="n">~100</div><div class="c">volunteers make it happen</div></div>
+          </div>
+
+          <p class="display reveal" style="font-size:clamp(1.3rem,4vw,2rem); color:var(--paper); margin-top:26px;">Saturday, September 19, 2026 · 9:30am–4:30pm</p>
+          <div class="hero-ctas reveal" style="margin-top:18px;">
+            <a class="btn" href="https://www.chesterbowl.org/fall-fest/" target="_blank" rel="noopener">Fall Fest details</a>
+            <a class="btn paper" href="https://www.chesterbowl.org/fall-fest-vendor-information/" target="_blank" rel="noopener">Become a vendor</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cadet+ (also runs in summer) -->
+      <section class="band-paper2">
+        <div class="wrap">
+          <div class="kicker"><span class="sticker slap">Year-round for teens</span></div>
+          <div class="progs">
+            <article class="prog wide slap" style="grid-template-columns:1fr;">
+              <div class="patch ink">CADET+<br>7TH&nbsp;UP</div>
+              <h3>Cadet+ Leadership</h3>
+              <p>A year-round crew built on community, connection &amp; growth. Teens mentor younger campers, take on service projects, earn certifications like CPR / First Aid, and build real job-ready leadership skills.</p>
+              <div class="meta">Grades 7+ &middot; ~10 hrs/month &middot; <b>$250</b> (scholarships available)</div>
+              <a class="arrow" href="https://www.chesterbowl.org/cadet/" target="_blank" rel="noopener">About Cadet+</a>
+            </article>
+          </div>
+        </div>
+      </section>
+    </div><!-- /summer programs -->
+
+    <!-- ============ ABOUT (shared) ============ -->
     <section id="about">
       <div class="wrap">
-        <div class="about-grid">
-          <div class="about-copy">
-            <div class="section-head" style="margin-bottom:20px;">
-              <div class="eyebrow">Who we are</div>
-              <h2>A little hill with a big heart</h2>
-            </div>
-            <p>The Chester Bowl Improvement Club began in 1980 and became a Minnesota nonprofit 501(c)(3) in 1982, created to bring quality programming to everyone who loves Chester Park. Since 2008 we've run the park's day-to-day programs &mdash; the City of Duluth maintains the grounds, and Chester Bowl provides the people, the lessons, and the fun.</p>
-            <p>Our mission is simple: <strong>healthy living through outdoor recreation, accessible to families of every income.</strong> That means a welcoming, safe place to learn to ski and snowboard, affordable equipment rentals, generous scholarships for anyone who needs them, and year-round activities that build confidence in Duluth's kids and teens.</p>
-            <div class="stats">
-              <div class="stat"><div class="num">1980</div><div class="cap">Serving Duluth since</div></div>
-              <div class="stat"><div class="num">$22,882</div><div class="cap">In winter scholarships last year</div></div>
-              <div class="stat"><div class="num">11,000</div><div class="cap">Fall Fest visitors in 2025</div></div>
-              <div class="stat"><div class="num">100+</div><div class="cap">Families supported yearly</div></div>
-            </div>
-          </div>
-          <figure class="about-media">
-            <img src="assets/chester/community-opt.jpg" alt="Young ski racers celebrating on the awards podium at Chester Bowl, with the hill and chalet behind them" width="1200" height="798" loading="lazy">
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ PROGRAMS ============ -->
-    <section id="programs" class="alt">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="eyebrow">Winter at Chester Bowl</div>
-          <h2>Ski &amp; snowboard programs</h2>
-          <p>A friendly, positive hill right in town &mdash; with surprising variety and challenge. Whether you're clicking in for the first time or chasing the terrain park, there's a place for you here.</p>
-        </div>
-        <div class="cards">
-
-          <article class="card">
-            <img class="card-img" src="assets/chester/prog-alpine.jpg" alt="Chester Bowl's ski hill lit up on a winter evening" width="760" height="505" loading="lazy">
-            <span class="tag">The Hill</span>
-            <h3>Alpine skiing &amp; snowboarding</h3>
-            <p>A family-friendly hill with affordable prices and a chairlift right in the middle of Duluth. Surprisingly varied terrain for a neighborhood bowl &mdash; and the cheapest lift ticket in the country.</p>
-            <div class="meta"><strong>Season:</strong> mid-Dec through mid-March<br><strong>Day pass:</strong> $15 (18 &amp; under) &middot; $20 (19+)</div>
-            <div class="card-cta"><a class="link-arrow" href="#passes">Passes &amp; hours</a></div>
-          </article>
-
-          <article class="card">
-            <img class="card-img" src="assets/chester/prog-lessons.jpg" alt="An instructor helping a young skier learn to turn at Chester Bowl" width="760" height="507" loading="lazy">
-            <span class="tag">Free with a pass</span>
-            <h3>Group lessons</h3>
-            <p>Free ski &amp; snowboard lessons for <strong>all ages, including adults</strong>, with any season or day pass. Four ability levels from the bunny hill through freestyle, in friendly 45-minute sessions.</p>
-            <div class="meta"><strong>Ages:</strong> everyone &middot; <strong>Cost:</strong> free with a pass<br>Sign-ups open each fall for the winter season.</div>
-            <div class="card-cta"><a class="link-arrow" href="https://www.chesterbowl.org/lessons-and-ski-and-snowboard-camp/" target="_blank" rel="noopener">Lesson details</a></div>
-          </article>
-
-          <article class="card">
-            <img class="card-img" src="assets/chester/prog-cadet.jpg" alt="A Chester Bowl staff member mentoring a young participant at the hill" width="760" height="505" loading="lazy">
-            <span class="tag">Teens &middot; Grades 7+</span>
-            <h3>Cadet+ leadership</h3>
-            <p>A year-round program built on <em>community, connection &amp; growth</em>. Teens mentor younger campers, take on service projects, earn certifications like CPR/First Aid, and build real job-ready leadership skills.</p>
-            <div class="meta"><strong>Ages:</strong> entering 7th grade &amp; up &middot; ~10 hrs/month<br><strong>Cost:</strong> $250 (scholarships available)</div>
-            <div class="card-cta"><a class="link-arrow" href="https://www.chesterbowl.org/cadet/" target="_blank" rel="noopener">Learn about Cadet+</a></div>
-          </article>
-
-          <article class="card">
-            <img class="card-img" src="assets/chester/prog-girlsshred.jpg" alt="A young skier gearing up by the chalet at Chester Bowl" width="760" height="505" loading="lazy">
-            <span class="tag">Terrain park</span>
-            <h3>Girls Shred</h3>
-            <p>A fun, supportive, women-led way for girls, women, and non-binary riders to learn freestyle (terrain park) skiing and snowboarding. Open to anyone who's passed a Level 2 lesson.</p>
-            <div class="meta"><strong>Cost:</strong> free with registration<br>Lesson &amp; event dates run January&ndash;February.</div>
-            <div class="card-cta"><a class="link-arrow" href="https://www.chesterbowl.org/girls-shred/" target="_blank" rel="noopener">Girls Shred info</a></div>
-          </article>
-
-          <article class="card">
-            <img class="card-img" src="assets/chester/prog-freestyle.jpg" alt="A skier coming down the slope in action at Chester Bowl" width="520" height="782" loading="lazy" style="object-position:center 25%;">
-            <span class="tag">Fridays</span>
-            <h3>Freestyle Fridays</h3>
-            <p>Low-pressure Friday evening sessions to work on terrain-park skills in a supportive crew &mdash; open to skiers, snowboarders, and snowskaters alike. Registration opens 5&ndash;6pm in the equipment garage; things kick off at 6:15.</p>
-            <div class="meta">Select Fridays, December through March.</div>
-            <div class="card-cta"><a class="link-arrow" href="https://www.chesterbowl.org/freestyle-fridays-2/" target="_blank" rel="noopener">Freestyle Fridays</a></div>
-          </article>
-
-          <article class="card">
-            <img class="card-img" src="assets/chester/prog-race.jpg" alt="A young ski racer in a bib at Chester Bowl's Alpine Race Series" width="520" height="782" loading="lazy" style="object-position:center 20%;">
-            <span class="tag">Racing</span>
-            <h3>Alpine Race Series</h3>
-            <p>A low-pressure, fun intro to ski &amp; snowboard racing on Sunday afternoons, with laser timing and an award for every finisher. Age groups from Under-5 to 14&ndash;16; complete one Level 2 lesson to join.</p>
-            <div class="meta"><strong>When:</strong> Sundays in Feb &amp; Mar<br><strong>Cost:</strong> from $10/day &middot; $15 for the season</div>
-            <div class="card-cta"><a class="link-arrow" href="https://www.chesterbowl.org/ski-snowboard-races/" target="_blank" rel="noopener">Race series details</a></div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ PASSES & RENTALS (priority) ============ -->
-    <section id="passes">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="eyebrow">The easiest way to a great winter</div>
-          <h2>Season passes &amp; rentals</h2>
-          <p>One affordable season pass gets your whole family unlimited chairlift access, free lessons, Freestyle Fridays, and the race program. Add a full-season equipment rental and you're set from October to April.</p>
-        </div>
-
-        <div class="passes-wrap">
-
-          <!-- Season pass pricing -->
-          <div class="price-card">
-            <div class="ph">
-              <h3>Season passes</h3>
-              <p>Unlimited chairlift access all winter &middot; free lessons included</p>
-            </div>
-            <div class="pb">
-              <div class="price-row"><span class="name">Individual</span><span class="amt">$99</span></div>
-              <div class="price-row"><span class="name">Family of 2</span><span class="amt">$199</span></div>
-              <div class="price-row"><span class="name">Family of 3</span><span class="amt">$269</span></div>
-              <div class="price-row"><span class="name">Family of 4</span><span class="amt">$299</span></div>
-              <div class="price-row"><span class="name">Family of 5</span><span class="amt">$329</span></div>
-              <div class="price-row"><span class="name">Family of 6</span><span class="amt">$359</span></div>
-              <div class="price-row"><span class="name">Each additional pass</span><span class="amt">+$30</span></div>
-              <div class="price-note">Plus a <strong>refundable $100 volunteer deposit</strong> &amp; tax. The deposit comes back when your family completes its volunteer hours (6&ndash;12 hrs) and returns any rental gear on time. <strong>Scholarships are available &mdash; no one is turned away for cost.</strong></div>
-              <a class="btn pine" href="https://www.chesterbowl.org/ski-and-snowboard/season-pass-purchases/" target="_blank" rel="noopener" style="width:100%;">How to buy a season pass</a>
+        <div class="split">
+          <div class="prose">
+            <div class="kicker"><span class="sticker slap">Who we are</span></div>
+            <h2 class="reveal">A little hill with a big heart</h2>
+            <p class="reveal" style="margin-top:16px;">The Chester Bowl Improvement Club started in 1980 and became a Minnesota 501(c)(3) nonprofit in 1982. Since 2008 we've run the park's day-to-day programs. The City of Duluth keeps the grounds; Chester Bowl brings the people, the lessons, and the fun.</p>
+            <p class="reveal">Our mission is simple: <strong>healthy living through outdoor recreation, for families of every income.</strong> A welcoming place to learn to ski and snowboard, affordable rentals, generous scholarships, and year-round programs that build confidence in Duluth's kids.</p>
+            <div class="stats reveal">
+              <div class="stat"><div class="n">1980</div><div class="c">serving Duluth since</div></div>
+              <div class="stat"><div class="n">$22,882</div><div class="c">winter scholarships last year</div></div>
+              <div class="stat"><div class="n">11,000</div><div class="c">Fall Fest visitors in 2025</div></div>
+              <div class="stat"><div class="n">100+</div><div class="c">families supported yearly</div></div>
             </div>
           </div>
 
-          <!-- Season rental -->
-          <div class="price-card">
-            <div class="ph">
-              <h3>Season equipment rental</h3>
-              <p>Gear the whole family for the entire winter</p>
-            </div>
-            <div class="pb">
-              <p style="color:#43514a; margin: 6px 0 16px; font-size:.97rem;">Get fitted for skis or a snowboard at fall fitting nights and keep the gear until early April &mdash; use it at Chester Bowl or any other hill. Perfect for growing kids and first-timers who aren't ready to buy.</p>
-              <ul class="info-list">
-                <li><span class="ico">&#43;</span><div><strong>$110</strong> per person for the full season (plus tax)</div></li>
-                <li><span class="ico">&#10003;</span><div>Fittings held in October &amp; November</div></li>
-                <li><span class="ico">&#10003;</span><div>Requires a Chester Bowl season pass</div></li>
-                <li><span class="ico">&#10003;</span><div>Return gear together April 7&ndash;9</div></li>
-              </ul>
-              <a class="btn pine" href="https://www.chesterbowl.org/ski-and-snowboard-season-rental-program/" target="_blank" rel="noopener" style="width:100%; margin-top:16px;">Season rental program</a>
-            </div>
-          </div>
-
-          <!-- Day pass banner (full width) -->
-          <div class="daypass-banner">
-            <h3>Just visiting? Grab a day pass.</h3>
-            <div class="daypass-prices">
-              <div class="p"><div class="big">$15</div><div class="sub">Ages 18 &amp; under</div></div>
-              <div class="p"><div class="big">$20</div><div class="sub">Ages 19 &amp; up</div></div>
-              <div class="p"><div class="big">FREE</div><div class="sub">Partner-pass holders</div></div>
-            </div>
-            <p class="tagline">The cheapest lift ticket in the country. Buy in person at the hill &mdash; no reservation needed.</p>
-          </div>
-
-          <!-- Daily rentals info (full width) -->
-          <div class="price-card rental-info-card">
-            <div class="pb" style="padding-top:24px;">
-              <h3 style="margin-bottom:8px;">Daily snowskate rentals</h3>
-              <p style="color:#43514a; font-size:.97rem;">New to snow? Chester Bowl keeps <strong>12 snowskates</strong> on hand to borrow whenever the hill is open. Grab a lift ticket, ask at the concession stand, and our staff will get you set up with gear and a quick intro in the equipment garage. (Chester Bowl does not offer daily ski/snowboard rentals &mdash; those are part of the season rental program above.)</p>
-              <div class="card-cta" style="margin-top:14px;"><a class="link-arrow" href="https://www.chesterbowl.org/daily-snowskate-rentals/" target="_blank" rel="noopener">More on snowskating</a></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ SUMMER DAY CAMP ============ -->
-    <section id="camp" class="alt">
-      <div class="wrap">
-        <div class="about-grid">
-          <figure class="about-media">
-            <img src="assets/chester/slopes-opt.jpg" alt="The green, wooded slopes and trails of Chester Park in the warmer months" width="1024" height="737" loading="lazy">
-          </figure>
-          <div class="about-copy">
-            <div class="section-head" style="margin-bottom:20px;">
-              <div class="eyebrow">When the snow melts</div>
-              <h2>Summer Day Camp</h2>
-            </div>
-            <p>Chester Park doesn't hibernate. Our beloved summer day camp is all about nature play, hiking, fort building, creek splashing, arts &amp; crafts, and good old-fashioned outdoor fun &mdash; guided by teen mentors and caring adult staff.</p>
-            <ul class="info-list">
-              <li><span class="ico">&#128118;</span><div><strong>Ages 6&ndash;12</strong> (or completed kindergarten)</div></li>
-              <li><span class="ico">&#128197;</span><div><strong>Mon&ndash;Thu, June 8 &ndash; August 13</strong>, drop-off 8am, pick-up by 5pm</div></li>
-              <li><span class="ico">&#128176;</span><div><strong>$210 / week</strong> per camper + one-time $75 family fee &middot; payment plans &amp; scholarships available</div></li>
-            </ul>
-            <div style="margin-top:24px;">
-              <a class="btn" href="https://www.ultracamp.com/clientlogin.aspx?idCamp=1490&campCode=LRG" target="_blank" rel="noopener">Register for summer camp</a>
+          <div class="art">
+            <figure class="frame slap" style="margin:0;">
+              <img src="assets/chester/web/x-podium.jpg" alt="Three young ski racers celebrating on the first, second and third place podium boxes, the chalet behind them" width="1000" height="665" loading="lazy">
+            </figure>
+            <!-- heritage / ski-jump nostalgia beat -->
+            <div class="heritage slap" style="margin-top:22px;">
+              <img class="ghost" src="assets/chester/logo-clean.svg" alt="" aria-hidden="true" width="278" height="164">
+              <h3>The giant jumps live on.</h3>
+              <p>Those two towers in our logo? Real ski jumps that once made Chester Bowl famous. They're gone from the hill now, but they'll always be our crest, and our heart.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ FALL FEST ============ -->
-    <section id="fallfest" class="pine-bg">
+    <!-- ============ GET INVOLVED (shared) ============ -->
+    <section id="involved" class="band-paper2">
       <div class="wrap">
-        <div class="section-head" style="max-width:820px;">
-          <div class="eyebrow">A Duluth tradition since 1984</div>
-          <h2>Fall Fest</h2>
-          <p>Our 42nd annual Fall Fest is Chester Bowl's biggest day of the year &mdash; and a beloved fall tradition for the whole city. It's all about building community with friends and neighbors in the park.</p>
-        </div>
-        <figure class="about-media" style="margin-bottom:28px;">
-          <img src="assets/chester/fallfest.jpg" alt="A panoramic crowd gathered among the trees at Chester Bowl's annual Fall Fest" width="1260" height="238" loading="lazy" style="border-radius:16px;">
-        </figure>
-        <div class="cards" style="margin-bottom:34px;">
-          <div class="card" style="text-align:center;"><h3 style="font-size:2rem; color:var(--amber-dark);">135</h3><p style="text-align:center; flex-grow:0;">local craft &amp; produce vendors</p></div>
-          <div class="card" style="text-align:center;"><h3 style="font-size:2rem; color:var(--amber-dark);">15</h3><p style="text-align:center; flex-grow:0;">food trucks + live music all day</p></div>
-          <div class="card" style="text-align:center;"><h3 style="font-size:2rem; color:var(--amber-dark);">$12,250</h3><p style="text-align:center; flex-grow:0;">raised for the scholarship fund</p></div>
-        </div>
-        <div style="text-align:center;">
-          <p style="color:#d5e5dc; max-width:640px; margin:0 auto 22px;">Music, food, crafts, fresh local produce, and activities for kids and families &mdash; all supporting scholarships that keep Chester Bowl affordable for everyone. It takes about 100 volunteers to pull it off.</p>
-          <p style="font-weight:800; font-size:1.25rem; color:#fff; margin-bottom:22px;">Saturday, September 19, 2026 &middot; 9:30am&ndash;4:30pm</p>
-          <a class="btn on-dark" href="https://www.chesterbowl.org/fall-fest/" target="_blank" rel="noopener">Fall Fest details</a>
-          <a class="btn ghost on-dark" href="https://www.chesterbowl.org/fall-fest-vendor-information/" target="_blank" rel="noopener" style="background:transparent;color:#fff;border-color:#fff;">Become a vendor</a>
-        </div>
-      </div>
-    </section>
+        <div class="kicker"><span class="sticker slap">Powered by this community</span></div>
+        <h2 class="reveal">Get involved</h2>
+        <p class="lead reveal" style="margin-top:12px;">Volunteering is the lifeblood of Chester Bowl. Time, skills, or support: there's a way to help keep the hill affordable for every Duluth family.</p>
 
-    <!-- ============ NEW CHALET ============ -->
-    <section id="chalet">
-      <div class="wrap">
-        <div class="chalet-grid">
-          <figure class="chalet-media">
-            <img src="assets/chester/chalet-interior.jpg" alt="The Chester Bowl chalet interior, strung with lights and full of families at a community gathering" width="900" height="672" loading="lazy">
-            <figcaption>Inside the beloved chalet &mdash; the community warmth the new building will preserve.</figcaption>
-          </figure>
-          <div class="chalet-copy">
-            <div class="section-head" style="margin-bottom:16px;">
-              <div class="eyebrow">Growing Up Chester</div>
-              <h2>A brand-new chalet is coming</h2>
-            </div>
-            <span class="reopen-pill">&#127959;&#65039; Reopening for the 2026&ndash;27 ski season</span>
-            <p>The Growing Up Chester capital campaign is raising the funds to expand and completely renovate the historic Thom Storm Chalet &mdash; preserving Chester's magic for generations to come. The new building will feature:</p>
-            <ul>
-              <li>An elevator for full accessibility</li>
-              <li>Expanded gathering spaces for more summer programming</li>
-              <li>Smarter space for busy winter program days</li>
-              <li>Preserved historical character</li>
-              <li>Energy-saving, sustainable materials</li>
-            </ul>
-            <div style="display:flex; flex-wrap:wrap; gap:12px;">
-              <a class="btn" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Support the campaign</a>
-              <a class="btn ghost" href="https://growingupchester.org/" target="_blank" rel="noopener">growingupchester.org</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ GET INVOLVED ============ -->
-    <section id="involved" class="alt">
-      <div class="wrap">
-        <div class="section-head">
-          <div class="eyebrow">Powered by this community</div>
-          <h2>Get involved</h2>
-          <p>Volunteering is the lifeblood of Chester Bowl. Whatever you have to give &mdash; time, skills, or support &mdash; there's a way to help keep the hill affordable for every Duluth family.</p>
-        </div>
-        <div class="involve">
-          <article class="card">
-            <div class="emoji" aria-hidden="true">&#129309;</div>
+        <div class="ways">
+          <article class="way slap">
             <h3>Volunteer</h3>
-            <p>From Fall Fest to fitting nights to our board committees &mdash; marketing, programming, development, finance and more &mdash; volunteers make everything here possible.</p>
-            <div class="card-cta"><a class="link-arrow" href="https://www.chesterbowl.org/about/volunteer-opportunities/" target="_blank" rel="noopener">Ways to help</a></div>
+            <p>Fall Fest, fitting nights, board committees like marketing, programming, development, and finance. Volunteers make everything here run.</p>
+            <a class="arrow" href="https://www.chesterbowl.org/about/volunteer-opportunities/" target="_blank" rel="noopener">Ways to help</a>
           </article>
-          <article class="card">
-            <div class="emoji" aria-hidden="true">&#10084;&#65039;</div>
+          <article class="way slap">
             <h3>Donate</h3>
-            <p>Your gift funds scholarships and the new chalet, keeping outdoor recreation within reach for kids of every income. Last year donors funded $22,882 in winter scholarships alone.</p>
-            <div class="card-cta"><a class="link-arrow" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Make a donation</a></div>
+            <p>Your gift funds scholarships and the new chalet, keeping outdoor recreation in reach for kids of every income. Donors funded $22,882 in winter scholarships last year alone.</p>
+            <a class="arrow" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Make a donation</a>
           </article>
-          <article class="card">
-            <div class="emoji" aria-hidden="true">&#127958;&#65039;</div>
+          <article class="way slap">
             <h3>Rent the space</h3>
-            <p>Host a party, meeting, or even a private hill rental at Chester Bowl. <em>Chalet rentals return in 2027</em> once renovations wrap &mdash; reach out to plan ahead.</p>
-            <div class="card-cta"><a class="link-arrow" href="https://www.chesterbowl.org/chalet-rental/" target="_blank" rel="noopener">Chalet rental info</a></div>
+            <p>Host a party, meeting, or private hill rental at Chester Bowl. Chalet rentals return in 2027 once renovations wrap, so reach out to plan ahead.</p>
+            <a class="arrow" href="https://www.chesterbowl.org/chalet-rental/" target="_blank" rel="noopener">Rental info</a>
           </article>
+        </div>
+
+        <!-- scholarship promise -->
+        <div id="promise" class="promise slap">
+          <div class="big">Money never keeps a kid off the hill.</div>
+          <p style="font-weight:700; margin-top:10px; max-width:60ch;">Chester Bowl scholarships 100+ families every year: passes, rentals, camp, and programs. If cost is in the way, just ask. No kid is turned away.</p>
+          <div class="hero-ctas" style="margin-top:16px;">
+            <a class="btn" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Fund a scholarship</a>
+            <a class="btn paper" href="mailto:dave@chesterbowl.org">Ask about scholarships</a>
+          </div>
+        </div>
+
+        <!-- new chalet campaign -->
+        <div class="split slot" style="margin-top:36px;">
+          <figure class="frame r slap" style="margin:0;">
+            <img src="assets/chester/web/x-chalet-interior.jpg" alt="Inside the beloved Thom Storm Chalet, strung with lights and full of families at a community gathering" width="900" height="672" loading="lazy">
+          </figure>
+          <div class="prose">
+            <span class="chalet-tag">🏗️ Growing Up Chester · reopening 2026–27</span>
+            <h3 class="reveal">A brand-new chalet is coming</h3>
+            <p class="reveal" style="margin-top:12px;">The Growing Up Chester capital campaign is expanding and renovating the historic Thom Storm Chalet: an elevator for full accessibility, bigger gathering spaces, smarter room for busy program days, preserved character, and sustainable materials.</p>
+            <div class="hero-ctas reveal" style="margin-top:16px;">
+              <a class="btn ink" href="https://growingupchester.org/" target="_blank" rel="noopener">growingupchester.org</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ CONTACT + SIGNUP ============ -->
+    <!-- ============ CONTACT (shared) ============ -->
     <section id="contact">
       <div class="wrap">
-        <div class="section-head">
-          <div class="eyebrow">Say hello</div>
-          <h2>Contact &amp; stay in the loop</h2>
-        </div>
-        <div class="contact-grid">
-
-          <div class="contact-card">
-            <div class="addr-line"><span class="ico" aria-hidden="true">&#128205;</span><div><strong>Chester Bowl Improvement Club</strong><br>1801 East Skyline Dr., Duluth, MN 55812</div></div>
-            <p style="font-size:.9rem; color:var(--muted); margin: 6px 0 4px;">Our main office line is temporarily out during chalet construction &mdash; please reach our team directly:</p>
+        <div class="kicker"><span class="sticker slap">Say hello</span></div>
+        <h2 class="reveal">Contact &amp; stay in the loop</h2>
+        <div class="contact-grid" style="margin-top:26px;">
+          <div class="card slap">
+            <p style="font-weight:900;">Chester Bowl Improvement Club</p>
+            <p style="font-weight:700;">1801 East Skyline Dr., Duluth, MN 55812</p>
+            <p style="font-size:.9rem; font-weight:600; margin:10px 0 4px; opacity:.85;">Our main office line is out during chalet construction, so reach our team directly:</p>
             <ul class="staff">
-              <li>
-                <div class="role">Executive Director</div>
-                <div class="who">Dave Schaeffer</div>
-                <a href="mailto:dave@chesterbowl.org">dave@chesterbowl.org</a> &middot; <a href="tel:+12189409378">218-940-9378</a>
-              </li>
-              <li>
-                <div class="role">Program &amp; Operations Director</div>
-                <div class="who">Sam Luoma</div>
-                <a href="mailto:sam@chesterbowl.org">sam@chesterbowl.org</a> &middot; <a href="tel:+12183404678">218-340-4678</a>
-              </li>
-              <li>
-                <div class="role">Program Manager</div>
-                <div class="who">Delaney Kreager</div>
-                <a href="mailto:delaney@chesterbowl.org">delaney@chesterbowl.org</a> &middot; <a href="tel:+12182608992">218-260-8992</a>
-              </li>
-              <li>
-                <div class="role">Operations Manager</div>
-                <div class="who">Joel Tiburzi</div>
-                <a href="mailto:joel@chesterbowl.org">joel@chesterbowl.org</a> &middot; <a href="tel:+12182607200">218-260-7200</a>
-              </li>
+              <li><div class="role">Executive Director</div><div class="who">Dave Schaeffer</div><a href="mailto:dave@chesterbowl.org">dave@chesterbowl.org</a> · <a href="tel:+12189409378">218-940-9378</a></li>
+              <li><div class="role">Program &amp; Operations Director</div><div class="who">Sam Luoma</div><a href="mailto:sam@chesterbowl.org">sam@chesterbowl.org</a> · <a href="tel:+12183404678">218-340-4678</a></li>
+              <li><div class="role">Program Manager</div><div class="who">Delaney Kreager</div><a href="mailto:delaney@chesterbowl.org">delaney@chesterbowl.org</a> · <a href="tel:+12182608992">218-260-8992</a></li>
+              <li><div class="role">Operations Manager</div><div class="who">Joel Tiburzi</div><a href="mailto:joel@chesterbowl.org">joel@chesterbowl.org</a> · <a href="tel:+12182607200">218-260-7200</a></li>
             </ul>
           </div>
-
-          <div class="signup-card">
+          <div class="signup slap">
             <h3>Join our email list</h3>
-            <p>Be first to hear about lesson sign-ups, pass sales, snow days, and Fall Fest. We only send what matters.</p>
-            <a class="btn on-dark" href="https://eepurl.com/hY4nrT" target="_blank" rel="noopener" style="width:100%;">Sign up for email updates</a>
-            <p style="margin-top:24px; margin-bottom:0;">Prefer to help? Every gift keeps the hill affordable.</p>
-            <a class="btn" href="https://growingupchester.org/donate/" target="_blank" rel="noopener" style="width:100%; margin-top:12px;">Donate to Chester Bowl</a>
+            <p>Be first to hear about lesson sign-ups, pass sales, snow days, camp, and Fall Fest. We only send what matters.</p>
+            <a class="btn paper block" href="https://eepurl.com/hY4nrT" target="_blank" rel="noopener">Sign up for updates</a>
+            <p style="margin:22px 0 12px;">Prefer to help? Every gift keeps the hill affordable.</p>
+            <a class="btn block" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Donate to Chester Bowl</a>
           </div>
-
         </div>
       </div>
     </section>
@@ -822,27 +834,26 @@
     <div class="wrap">
       <div class="f-top">
         <div>
-          <img class="f-logo" src="assets/chester/logo.jpg" alt="Chester Bowl" width="280" height="165">
-          <p style="margin-top:16px; max-width:320px;">Duluth's neighborhood ski hill since 1980. Affordable outdoor recreation for every family, run by the nonprofit Chester Bowl Improvement Club.</p>
+          <span class="f-logo"><img src="assets/chester/logo-clean.svg" alt="Chester Bowl" width="278" height="164"></span>
+          <p class="f-blurb">Duluth's neighborhood shred hill &amp; summer camp since 1980. Affordable outdoor recreation for every family, run by the nonprofit Chester Bowl Improvement Club.</p>
         </div>
         <div>
           <h4>Winter</h4>
           <ul>
-            <li><a href="#programs">Ski &amp; snowboard</a></li>
-            <li><a href="#passes">Season passes</a></li>
-            <li><a href="#passes">Rentals</a></li>
-            <li><a href="https://www.chesterbowl.org/cadet/" target="_blank" rel="noopener">Cadet+</a></li>
+            <li><a href="https://www.chesterbowl.org/freestyle-fridays-2/" target="_blank" rel="noopener">Freestyle Fridays</a></li>
+            <li><a href="https://www.chesterbowl.org/ski-and-snowboard/season-pass-purchases/" target="_blank" rel="noopener">Season passes</a></li>
+            <li><a href="https://www.chesterbowl.org/ski-and-snowboard-season-rental-program/" target="_blank" rel="noopener">Rentals</a></li>
             <li><a href="https://www.chesterbowl.org/girls-shred/" target="_blank" rel="noopener">Girls Shred</a></li>
+            <li><a href="https://www.chesterbowl.org/cadet/" target="_blank" rel="noopener">Cadet+</a></li>
           </ul>
         </div>
         <div>
-          <h4>More</h4>
+          <h4>Summer</h4>
           <ul>
-            <li><a href="#camp">Summer camp</a></li>
-            <li><a href="#fallfest">Fall Fest</a></li>
-            <li><a href="#chalet">The new chalet</a></li>
+            <li><a href="https://www.ultracamp.com/clientlogin.aspx?idCamp=1490&campCode=LRG" target="_blank" rel="noopener">Register for camp</a></li>
+            <li><a href="https://www.chesterbowl.org/fall-fest/" target="_blank" rel="noopener">Fall Fest</a></li>
+            <li><a href="https://growingupchester.org/" target="_blank" rel="noopener">New chalet</a></li>
             <li><a href="https://www.chesterbowl.org/chalet-rental/" target="_blank" rel="noopener">Chalet rental</a></li>
-            <li><a href="#involved">Volunteer</a></li>
           </ul>
         </div>
         <div>
@@ -856,35 +867,85 @@
         </div>
       </div>
       <div class="f-bottom">
-        <div>&copy; <span id="yr">2026</span> Chester Bowl Improvement Club &middot; A Minnesota 501(c)(3) nonprofit.</div>
+        <div>© <span id="yr">2026</span> Chester Bowl Improvement Club · a Minnesota 501(c)(3) nonprofit.</div>
         <div>The Chester Bowl logo and name belong to the Chester Bowl Improvement Club.</div>
       </div>
     </div>
   </footer>
 
   <script>
-    // Mobile nav toggle
     (function () {
-      var btn = document.getElementById('hamburger');
-      var menu = document.getElementById('mobileMenu');
-      if (btn && menu) {
-        btn.addEventListener('click', function () {
-          var open = menu.classList.toggle('open');
-          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-          btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-        });
-        // Close the menu after tapping a link
-        menu.querySelectorAll('a').forEach(function (a) {
-          a.addEventListener('click', function () {
-            menu.classList.remove('open');
-            btn.setAttribute('aria-expanded', 'false');
-            btn.setAttribute('aria-label', 'Open menu');
-          });
-        });
+      var root = document.documentElement;
+      var meta = document.getElementById('themeColor');
+      var tS = document.getElementById('tSummer');
+      var tW = document.getElementById('tWinter');
+      var THEME = { summer: '#258651', winter: '#22cde5' };
+
+      function setSeason(season, persist) {
+        root.setAttribute('data-season', season);
+        var winter = season === 'winter';
+        tW.setAttribute('aria-pressed', winter ? 'true' : 'false');
+        tS.setAttribute('aria-pressed', winter ? 'false' : 'true');
+        if (meta) meta.setAttribute('content', THEME[season]);
+        if (persist) { try { localStorage.setItem('cb-season', season); } catch (e) {} }
+        // newly-shown season content must never be stuck hidden by a motion class
+        document.querySelectorAll('.slap, .reveal').forEach(function (el) { el.classList.add('in'); });
       }
-      // Current year
-      var yr = document.getElementById('yr');
-      if (yr) { yr.textContent = new Date().getFullYear(); }
+
+      // initial season: saved choice, else current month (May–Oct = summer)
+      var saved = null;
+      try { saved = localStorage.getItem('cb-season'); } catch (e) {}
+      var m = new Date().getMonth(); // 0=Jan
+      var auto = (m >= 4 && m <= 9) ? 'summer' : 'winter';
+      setSeason(saved || auto, false);
+
+      tS.addEventListener('click', function () { setSeason('summer', true); });
+      tW.addEventListener('click', function () { setSeason('winter', true); });
+
+      // mobile menu
+      var burger = document.getElementById('hamburger');
+      var menu = document.getElementById('mobileMenu');
+      burger.addEventListener('click', function () {
+        var open = menu.classList.toggle('open');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      });
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          menu.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      document.getElementById('yr').textContent = new Date().getFullYear();
+
+      // motion — opt in only when allowed; content is visible by default
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce && 'IntersectionObserver' in window) {
+        root.classList.add('anim');
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+        document.querySelectorAll('.slap, .reveal').forEach(function (el) { io.observe(el); });
+
+        // gentle ribbon parallax
+        var ribbons = [].slice.call(document.querySelectorAll('.collage .ribbon'));
+        if (ribbons.length) {
+          var ticking = false;
+          window.addEventListener('scroll', function () {
+            if (ticking) return; ticking = true;
+            requestAnimationFrame(function () {
+              var y = window.scrollY * 0.06;
+              ribbons.forEach(function (r, i) {
+                r.style.transform = 'rotate(-13deg) translateY(' + (i % 2 ? -y : y) + 'px)';
+              });
+              ticking = false;
+            });
+          }, { passive: true });
+        }
+      }
     })();
   </script>
 </body>
