@@ -1,7 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" data-season="summer">
+<html lang="en" data-season="summer" data-scheme="a">
 <head>
   <meta charset="UTF-8">
+  <script>
+    /* set saved season + color-scheme before first paint (avoids a flash) */
+    (function () { try {
+      var r = document.documentElement, s = window.localStorage;
+      var sc = s.getItem('chester-scheme'); if (sc === 'a' || sc === 'b') r.setAttribute('data-scheme', sc);
+      var se = s.getItem('cb-season'); if (se === 'summer' || se === 'winter') r.setAttribute('data-season', se);
+    } catch (e) {} })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chester Bowl — Duluth's Neighborhood Shred Hill &amp; Summer Camp</title>
   <meta name="description" content="Chester Bowl is Duluth's punky little nonprofit ski hill + summer day camp in Chester Park. Terrain park &amp; Freestyle Fridays, learn-to-ride, the cheapest lift ticket in the country, season passes &amp; rentals, summer camp, and Fall Fest. Money never keeps a kid off the hill.">
@@ -16,47 +24,93 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Nunito:wght@400;600;700;800;900&family=Shantell+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Bungee&family=Nunito:wght@400;600;700;800;900&family=Shantell+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ============================================================
-       CHESTER BOWL — PERSONA 5 BATTLE-UI restyle
-       Red + black + white armature (P5 iconic). No flat horizontal or
-       vertical lines in the chrome — every edge is angled, sheared, jagged.
-       Chester cyan / blaze / gold / pine survive as secondary accent pops.
-       Contrast verified: ink/paper 18.4:1 · white/red-deep 8.1:1
-       · white/red 4.8:1 · black/cyan 9.6:1 · white/pine-deep 7.9:1
-       · black/gold 10.9:1 · black/blaze 6.0:1
+       CHESTER BOWL — PERSONA 5 BATTLE-UI, dual-scheme
+       One structure/geometry. Every palette-dependent color + the
+       display font is a semantic ROLE var; each color scheme fills the
+       roles under html[data-scheme]. Two independent axes:
+         · SEASON  (data-season)  → summer/winter — swaps the live accent
+         · SCHEME  (data-scheme)  → a "Bold" / b "Classic" — swaps palette+font
+       ROLES: --ink (near-black chrome/logo/lineart) · --paper (ground)
+              --panel/-2 (lifted surfaces) · --hot (bright structural hot:
+              shards, ribbons, burst, slashes, buttons) · --hot-deep (deep
+              hot: white-text panels) · --hot-band (full-bleed hot section+
+              ticket carrying white body copy) · --cyan (winter, shared)
+              --pine/-deep (summer) · --gold (pop, shared) · --on-hot (text
+              on the primary hot button) · --hl-fill/-text (hero marker)
+              · --press (toggle pressed) · --display / --display-ls (font)
+       Scheme A = live red/black/white P5 armature + Anton.
+       Scheme B = warm Chester punk palette (paper/ink-navy/blaze/rust/
+                  pine/cyan/gold) + Bebas Neue — pulled from chester-b.html.
        ============================================================ */
     :root {
-      --ink:        #141414;   /* near-black chrome — neutral, all line art + logo */
-      --ink-soft:   #232323;   /* lifted black panels */
-      --paper:      #ffffff;   /* white content ground (NOT cream) */
-      --panel:      #f4f4f5;   /* cool neutral lifted surface */
-      --panel-2:    #ededee;   /* second neutral step */
-
-      /* P5 armature */
-      --red:        #e60012;   /* hot crimson — shards, slashes (white or LARGE-black text) */
-      --red-deep:   #a5000d;   /* deep crimson — text panels, white text 8:1 */
-
-      /* secondary accent pops */
-      --cyan:       #22cde5;   /* winter ribbon */
-      --blaze:      #f76400;   /* blaze pop */
-      --pine:       #1f7a4d;   /* summer green */
-      --pine-deep:  #005e31;   /* summer dark, white text 7.9:1 */
-      --gold:       #edc23e;   /* powder gold pop */
-
-      /* live season axis — armature stays red/black/white, this only tints the pop */
-      --accent:      var(--pine);
-      --accent-deep: var(--pine-deep);
-
       --wrap: 1180px;
-
       /* the leaning-parallelogram shard shape, reused for panels + their shadows */
       --shard: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
       --shard-r: polygon(0 0, 96% 0, 100% 100%, 4% 100%);
     }
-    [data-season="winter"] { --accent: var(--cyan); --accent-deep: #06304f; }
+
+    /* ---- SCHEME A · "Bold": P5 red/black/white armature + Anton (current live look) ---- */
+    html[data-scheme="a"] {
+      --ink:        #141414;   /* near-black chrome — line art + logo */
+      --ink-soft:   #232323;   /* lifted black panels */
+      --paper:      #ffffff;   /* white content ground */
+      --panel:      #f4f4f5;   /* cool neutral lifted surface */
+      --panel-2:    #ededee;
+
+      --hot:        #e60012;   /* bright structural hot — shards, ribbons, burst, slashes, buttons */
+      --hot-deep:   #a5000d;   /* deep hot — white-text panels (white 8:1) */
+      --hot-band:   var(--hot);/* full-bleed hot band + ticket, white body (white 4.8:1) */
+
+      --cyan:       #22cde5;   /* winter accent / ribbon (shared) */
+      --blaze:      #f76400;   /* blaze pop (shared) */
+      --pine:       #1f7a4d;   /* summer accent */
+      --pine-deep:  #005e31;   /* summer dark (white 7.9:1) */
+      --gold:       #edc23e;   /* powder-gold pop (shared) */
+      --cool-winter-deep: #06304f; /* winter accent-deep */
+
+      --on-hot:     var(--paper);   /* white on bright red button (4.8:1) */
+      --hl-fill:    var(--hot);     /* hero marker-slash fill */
+      --hl-text:    var(--paper);   /* hero marker-slash text */
+      --press:      var(--hot-deep);/* toggle pressed fill (white 8:1) */
+
+      --display:    "Anton", system-ui, sans-serif;
+      --display-ls: .004em;
+    }
+
+    /* ---- SCHEME B · "Classic": warm Chester punk palette + Bebas Neue ---- */
+    html[data-scheme="b"] {
+      --ink:        #0f171f;   /* near-black navy chrome — line art + logo */
+      --ink-soft:   #1b2733;   /* lifted navy panels */
+      --paper:      #f4f2ea;   /* warm paper ground */
+      --panel:      #fdfcf8;   /* warm surface lift */
+      --panel-2:    #ece7da;   /* warmer neutral step */
+
+      --hot:        #f76400;   /* bright structural hot — blaze */
+      --hot-deep:   #bd3800;   /* deep hot — rust, white-text panels (white 5.6:1) */
+      --hot-band:   var(--hot-deep); /* full-bleed hot band + ticket, white body (white 5.6:1) */
+
+      --cyan:       #22cde5;   /* winter accent / ribbon (shared) */
+      --blaze:      #f76400;   /* blaze pop */
+      --pine:       #258651;   /* summer accent (Chester pine) */
+      --pine-deep:  #005e31;   /* summer dark (white 7.9:1) */
+      --gold:       #edc23e;   /* powder-gold pop */
+      --cool-winter-deep: #072a4a; /* winter accent-deep (ink-blue) */
+
+      --on-hot:     var(--ink);     /* ink on blaze button (6:1) */
+      --hl-fill:    var(--gold);    /* hero marker-slash fill (gold, like chester-b) */
+      --hl-text:    var(--ink);     /* hero marker-slash text (ink on gold 10.6:1) */
+      --press:      var(--hot-deep);/* toggle pressed fill (white 5.6:1) */
+
+      --display:    "Bebas Neue", "Arial Narrow", system-ui, sans-serif;
+      --display-ls: .01em;
+    }
+
+    /* live season axis — resolves against the active scheme's palette */
+    [data-season="winter"] { --accent: var(--cyan); --accent-deep: var(--cool-winter-deep); }
     [data-season="summer"] { --accent: var(--pine); --accent-deep: var(--pine-deep); }
 
     /* season show/hide — both sets live in the DOM */
@@ -64,7 +118,7 @@
     [data-season="summer"] .only-winter { display: none !important; }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 92px; overflow-x: hidden; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 132px; overflow-x: hidden; }
 
     body {
       font-family: "Nunito", system-ui, -apple-system, sans-serif;
@@ -86,8 +140,8 @@
     a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
     h1, h2, h3, .display {
-      font-family: "Anton", system-ui, sans-serif;
-      font-weight: 400; line-height: .94; letter-spacing: .004em;
+      font-family: var(--display);
+      font-weight: 400; line-height: .94; letter-spacing: var(--display-ls);
       text-transform: uppercase; text-wrap: balance; color: var(--ink);
     }
     h1 { font-size: clamp(2.7rem, 11vw, 5.2rem); }
@@ -117,8 +171,8 @@
     .shard.rt::before { clip-path: var(--shard-r); }
     .shard.panel { background: var(--panel); }
     .shard.ink   { background: var(--ink-soft); color: var(--paper); }
-    .shard.ink::before { background: var(--red); }
-    .shard.red   { background: var(--red-deep); color: var(--paper); }
+    .shard.ink::before { background: var(--hot); }
+    .shard.red   { background: var(--hot-deep); color: var(--paper); }
     .shard.red::before { background: var(--ink); }
     .shard.gold  { background: var(--gold); color: var(--ink); }
     .shard.accent{ background: var(--accent-deep); color: var(--paper); }
@@ -143,9 +197,9 @@
     .cut-d { clip-path: polygon(0 30px, 100% 0, 100% 100%, 0 calc(100% - 24px)); }
 
     .band.ink   { background: var(--ink); color: var(--paper); }
-    .band.red   { background: var(--red); color: var(--paper); }
+    .band.red   { background: var(--hot-band); color: var(--paper); }
     .band.accent{ background: var(--accent-deep); color: var(--paper); }
-    [data-season="winter"] .band.accent { background: #06304f; }
+    [data-season="winter"] .band.accent { background: var(--cool-winter-deep); }
     .band.panel { background: var(--panel); }
     .band.ink h1, .band.ink h2, .band.ink h3,
     .band.red h1, .band.red h2, .band.red h3,
@@ -168,9 +222,9 @@
       transform: skewX(-5deg) rotate(-2deg);
     }
     .sticker > span { transform: skewX(5deg); display: inline-flex; align-items: center; gap: 7px; }
-    .sticker.red   { background: var(--red-deep); color: var(--paper); }
+    .sticker.red   { background: var(--hot-deep); color: var(--paper); }
     .sticker.accent{ background: var(--accent); color: var(--ink); }
-    [data-season="summer"] .sticker.accent { background: var(--accent); color: var(--paper); }
+    [data-season="summer"] .sticker.accent { background: var(--accent-deep); color: var(--paper); }
     .sticker.ink   { background: var(--ink); color: var(--paper); }
     .sticker.r     { transform: skewX(-5deg) rotate(2.4deg); }
 
@@ -180,9 +234,9 @@
     }
 
     /* red marker slash behind a word — angled, never a flat highlight bar */
-    .hl { position: relative; color: var(--paper); white-space: nowrap; padding: 0 .12em; z-index: 0; }
+    .hl { position: relative; color: var(--hl-text); white-space: nowrap; padding: 0 .12em; z-index: 0; }
     .hl::before { content: ""; position: absolute; inset: -.02em -.05em; z-index: -1;
-      background: var(--red); clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); transform: rotate(-1.5deg); }
+      background: var(--hl-fill); clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); transform: rotate(-1.5deg); }
 
     /* ---------- buttons — sheared parallelogram + hard offset shadow ---------- */
     .btn {
@@ -190,13 +244,13 @@
       display: inline-flex; align-items: center; justify-content: center; gap: .5em;
       font-family: "Nunito", sans-serif; font-weight: 900; font-size: 1rem;
       text-transform: uppercase; letter-spacing: .015em; text-decoration: none;
-      color: var(--paper); background: transparent;
+      color: var(--on-hot); background: transparent;
       padding: 16px 27px; min-height: 55px; cursor: pointer; border: 0;
       transition: transform .11s ease, filter .11s ease;
     }
     .btn::before {
       content: ""; position: absolute; inset: 0; z-index: -2;
-      background: var(--red); clip-path: polygon(7% 0, 100% 0, 93% 100%, 0 100%);
+      background: var(--hot); clip-path: polygon(7% 0, 100% 0, 93% 100%, 0 100%);
     }
     .btn::after {
       content: ""; position: absolute; inset: 0; z-index: -3;
@@ -210,12 +264,12 @@
     .btn:focus-visible { outline: 4px solid var(--ink); outline-offset: 4px; }
     .btn.ink::before   { background: var(--ink); }
     .btn.ink { color: var(--paper); }
-    .btn.ink::after    { background: var(--red); }
+    .btn.ink::after    { background: var(--hot); }
     .btn.gold::before  { background: var(--gold); }
     .btn.gold { color: var(--ink); }
     .btn.paper::before { background: var(--paper); }
     .btn.paper { color: var(--ink); }
-    .btn.paper::after  { background: var(--red); }
+    .btn.paper::after  { background: var(--hot); }
     .btn.sm { padding: 12px 18px; min-height: 46px; font-size: .82rem; }
     .btn.sm::after { transform: translate(5px, 5px); }
     .btn.sm:hover::after { transform: translate(7px, 7px); }
@@ -229,12 +283,12 @@
       color: var(--ink); text-decoration: none; padding-bottom: 7px;
     }
     .arrow::before { content: ""; position: absolute; left: 0; right: 14%; bottom: 0; height: 5px;
-      background: var(--red); clip-path: polygon(0 0, 100% 40%, 100% 100%, 0 100%); }
+      background: var(--hot); clip-path: polygon(0 0, 100% 40%, 100% 100%, 0 100%); }
     .arrow::after { content: "\2192"; transition: transform .12s ease; }
     .arrow:hover::after { transform: translateX(6px); }
     .band.ink .arrow, .band.red .arrow, .band.accent .arrow { color: var(--paper); }
 
-    .skip { position: absolute; left: -999px; top: 0; z-index: 2000; background: var(--red-deep); color: var(--paper); padding: 12px 18px; font-weight: 900; }
+    .skip { position: absolute; left: -999px; top: 0; z-index: 2000; background: var(--hot-deep); color: var(--paper); padding: 12px 18px; font-weight: 900; }
     .skip:focus { left: 8px; top: 8px; }
 
     /* ---------- header — angled bottom edge, red slash, no flat rule ---------- */
@@ -245,18 +299,23 @@
     }
     header.site::after {
       content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 9px;
-      background: var(--red);
+      background: var(--hot);
       clip-path: polygon(0 100%, 100% 0, 100% 100%);
     }
-    .nav { display: flex; align-items: center; gap: 12px; height: 78px; }
-    .brand { display: flex; align-items: center; text-decoration: none; margin-right: auto; }
+    .nav { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; min-height: 78px; padding: 9px 0; }
+    .brand { display: flex; align-items: center; text-decoration: none; margin-right: auto; order: 1; }
     .brand img { height: 52px; width: auto; }
     .nav-links { display: none; }
+
+    /* header controls — season toggle + color-scheme toggle (independent axes) */
+    .controls { order: 3; flex-basis: 100%; display: flex; align-items: center; flex-wrap: wrap; gap: 9px 18px; }
+    .ctl { display: inline-flex; align-items: center; gap: 8px; }
+    .ctl-label { font-family: "Bungee", sans-serif; font-size: .56rem; letter-spacing: .02em; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
     .nav-links a { position: relative; text-decoration: none; color: var(--ink); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: .82rem; padding: 8px 0 10px; white-space: nowrap; }
-    .nav-links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 2px; height: 5px; background: var(--red); clip-path: polygon(0 0, 100% 45%, 100% 100%, 0 100%); transition: right .16s ease; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 2px; height: 5px; background: var(--hot); clip-path: polygon(0 0, 100% 45%, 100% 100%, 0 100%); transition: right .16s ease; }
     .nav-links a:hover::after { right: 6%; }
 
-    /* season toggle — a sheared physical switch */
+    /* toggles (season + color-scheme) — sheared physical switches */
     .toggle { display: inline-flex; background: var(--ink); padding: 3px; transform: skewX(-8deg); }
     .toggle button {
       font-family: "Bungee", sans-serif; font-size: .66rem; letter-spacing: .02em;
@@ -265,14 +324,14 @@
       transition: background .15s ease, color .15s ease;
     }
     .toggle button > span { transform: skewX(8deg); display: inline-flex; align-items: center; gap: 6px; }
-    .toggle button[aria-pressed="true"] { background: var(--red); color: var(--paper); }
-    [data-season="summer"] .toggle button.t-summer[aria-pressed="true"] { background: var(--red); color: var(--paper); }
+    .toggle button[aria-pressed="true"] { background: var(--press); color: var(--paper); }
+    [data-season="summer"] .toggle button.t-summer[aria-pressed="true"] { background: var(--press); color: var(--paper); }
     [data-season="winter"] .toggle button.t-winter[aria-pressed="true"] { background: var(--cyan); color: var(--ink); }
-    .toggle button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+    .toggle button:focus-visible { outline: 3px solid var(--hot); outline-offset: 2px; }
 
-    .hamburger { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 52px; height: 50px; border: 0; background: var(--ink); cursor: pointer; padding: 0 13px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); }
+    .hamburger { order: 2; display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: 52px; height: 50px; border: 0; background: var(--ink); cursor: pointer; padding: 0 13px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); }
     .hamburger span { height: 3px; background: var(--paper); transition: .2s; }
-    .hamburger span:nth-child(2) { background: var(--red); }
+    .hamburger span:nth-child(2) { background: var(--hot); }
     .hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
     .hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
@@ -280,7 +339,7 @@
     .mobile-menu { display: none; background: var(--ink); color: var(--paper); padding: 10px 21px 22px; }
     .mobile-menu.open { display: block; }
     .mobile-menu a { display: block; padding: 15px 6px; text-decoration: none; color: var(--paper); font-weight: 800; text-transform: uppercase; letter-spacing: .02em; font-size: 1rem; position: relative; }
-    .mobile-menu a + a::before { content: ""; position: absolute; left: 6px; right: 30%; top: 0; height: 3px; background: var(--red);
+    .mobile-menu a + a::before { content: ""; position: absolute; left: 6px; right: 30%; top: 0; height: 3px; background: var(--hot);
       clip-path: polygon(0 0, 100% 60%, 96% 100%, 0 100%); }
     .mobile-menu a.btn { color: var(--paper); }
     .mobile-menu a.btn::before { top: auto; right: auto; left: 0; height: auto; }
@@ -299,15 +358,15 @@
     .hero-copy .lead { margin-bottom: 25px; }
     .hero-ctas { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
     .hero-note { margin-top: 23px; max-width: 42ch; }
-    .hero-note .pin { color: var(--red-deep); font-weight: 800; }
+    .hero-note .pin { color: var(--hot-deep); font-weight: 800; }
 
     /* the collage: B&W photo shard + red/accent ribbons + comic burst + slap badge */
     .collage { position: relative; margin: 6px auto 8px; width: min(430px, 86vw); }
     .burst { position: absolute; z-index: 0; left: 50%; top: 46%; width: 150%; aspect-ratio: 1; transform: translate(-50%, -50%);
-      background: conic-gradient(from 6deg, var(--red) 0 7deg, transparent 7deg 22deg, var(--red) 22deg 29deg, transparent 29deg 46deg, var(--red) 46deg 53deg, transparent 53deg 70deg, var(--red) 70deg 77deg, transparent 77deg 96deg, var(--red) 96deg 103deg, transparent 103deg 122deg, var(--red) 122deg 129deg, transparent 129deg 150deg, var(--red) 150deg 157deg, transparent 157deg 180deg, var(--red) 180deg 187deg, transparent 187deg 210deg, var(--red) 210deg 217deg, transparent 217deg 240deg, var(--red) 240deg 247deg, transparent 247deg 270deg, var(--red) 270deg 277deg, transparent 277deg 300deg, var(--red) 300deg 307deg, transparent 307deg 330deg, var(--red) 330deg 337deg, transparent 337deg 360deg);
+      background: conic-gradient(from 6deg, var(--hot) 0 7deg, transparent 7deg 22deg, var(--hot) 22deg 29deg, transparent 29deg 46deg, var(--hot) 46deg 53deg, transparent 53deg 70deg, var(--hot) 70deg 77deg, transparent 77deg 96deg, var(--hot) 96deg 103deg, transparent 103deg 122deg, var(--hot) 122deg 129deg, transparent 129deg 150deg, var(--hot) 150deg 157deg, transparent 157deg 180deg, var(--hot) 180deg 187deg, transparent 187deg 210deg, var(--hot) 210deg 217deg, transparent 217deg 240deg, var(--hot) 240deg 247deg, transparent 247deg 270deg, var(--hot) 270deg 277deg, transparent 277deg 300deg, var(--hot) 300deg 307deg, transparent 307deg 330deg, var(--hot) 330deg 337deg, transparent 337deg 360deg);
       opacity: .14; pointer-events: none; }
     .collage .ribbon { position: absolute; z-index: 1; left: -24%; right: -24%; top: 33%; height: 34%;
-      background: var(--red); clip-path: polygon(0 22%, 100% 0, 100% 78%, 0 100%); transform: rotate(-13deg); }
+      background: var(--hot); clip-path: polygon(0 22%, 100% 0, 100% 78%, 0 100%); transform: rotate(-13deg); }
     .collage .ribbon.two { top: 60%; height: 15%; background: var(--accent); clip-path: polygon(0 0, 100% 26%, 100% 100%, 0 74%); transform: rotate(-13deg); }
     [data-season="summer"] .collage .ribbon.two { background: var(--pine); }
     .snap { position: relative; z-index: 2; background: var(--paper); padding: 9px;
@@ -322,7 +381,7 @@
       background-image: radial-gradient(var(--ink) 1px, transparent 1.5px); background-size: 5px 5px;
       clip-path: polygon(2% 3%, 100% 0, 98% 97%, 0 100%); }
     .collage .slap-badge { position: absolute; z-index: 3; bottom: -18px; right: -12px;
-      width: 112px; height: 112px; background: var(--red); color: var(--paper);
+      width: 112px; height: 112px; background: var(--hot-deep); color: var(--paper);
       clip-path: polygon(50% 0, 62% 20%, 85% 15%, 80% 38%, 100% 50%, 80% 62%, 85% 85%, 62% 80%, 50% 100%, 38% 80%, 15% 85%, 20% 62%, 0 50%, 20% 38%, 15% 15%, 38% 20%);
       display: grid; place-items: center; text-align: center; transform: rotate(9deg); }
     .collage .slap-badge b { font-family: "Bungee", sans-serif; font-size: .8rem; line-height: 1.05; }
@@ -338,9 +397,9 @@
       clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%);
     }
     .facts .cell::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; z-index: -1;
-      background: var(--red); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+      background: var(--hot); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
     .facts .ic { font-size: 1.5rem; line-height: 1; }
-    .facts .lb { font-family: "Bungee", sans-serif; font-size: .62rem; letter-spacing: .03em; color: var(--red); margin-bottom: 5px; }
+    .facts .lb { font-family: "Bungee", sans-serif; font-size: .62rem; letter-spacing: .03em; color: var(--gold); margin-bottom: 5px; }
     [data-season="winter"] .facts .lb { color: var(--cyan); }
     .facts .vl { font-weight: 800; font-size: 1.02rem; line-height: 1.3; }
     .facts .vl small { display: block; font-weight: 600; color: #d6d6d6; font-size: .82rem; margin-top: 3px; }
@@ -369,42 +428,44 @@
     .prog .patch > span { display: inline-block; transform: skewX(6deg); }
     .prog .patch.accent { background: var(--accent); color: var(--ink); }
     [data-season="summer"] .prog .patch.accent { color: var(--paper); }
-    .prog .patch.red { background: var(--red-deep); color: var(--paper); }
+    .prog .patch.red { background: var(--hot-deep); color: var(--paper); }
     .prog .patch.ink { background: var(--ink); color: var(--paper); }
     .prog h3 { margin: 3px 0 2px; }
     .prog p { font-weight: 600; }
     .prog .meta { font-weight: 800; font-size: .9rem; margin: 5px 0 9px; }
-    .prog .meta b { color: var(--red-deep); }
+    .prog .meta b { color: var(--hot-deep); }
     .band.ink .prog .meta b, .band.red .prog .meta b, .band.accent .prog .meta b { color: var(--gold); }
     .band.ink .prog p, .band.red .prog p, .band.accent .prog p,
     .band.ink .prog .meta, .band.red .prog .meta, .band.accent .prog .meta { color: var(--paper); }
-    .band.pop .prog .meta b { color: var(--red-deep); }
+    .band.pop .prog .meta b { color: var(--hot-deep); }
 
     /* ---------- passes / prices ---------- */
     .boards { display: grid; grid-template-columns: 1fr; gap: 26px; margin-top: 28px; }
-    .board { position: relative; z-index: 0; background: var(--paper); color: var(--ink);
+    /* the ::before ink shadow paints over the board face (z-index:-1 sits above
+       the element's own background), so the card renders dark — light body text */
+    .board { position: relative; z-index: 0; background: var(--paper); color: var(--paper);
       clip-path: var(--shard); }
     .board::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
       clip-path: var(--shard); transform: translate(10px, 12px); }
-    .board .bh { background: var(--red-deep); color: var(--paper); padding: 19px 26px 22px;
+    .board .bh { background: var(--hot-deep); color: var(--paper); padding: 19px 26px 22px;
       clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 88%); }
     .board .bh h3 { color: var(--paper); }
     .board .bh p { font-size: .88rem; color: #ffe3e3; font-weight: 700; margin-top: 4px; }
     .board .bb { padding: 12px 28px 26px; }
     .prow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0 12px 22px; position: relative; }
-    .prow::before { content: "\25B8"; position: absolute; left: 0; top: 12px; color: var(--red); }
+    .prow::before { content: "\25B8"; position: absolute; left: 0; top: 12px; color: var(--hot); }
     .prow .amt { font-family: "Bungee", sans-serif; font-size: 1.02rem; white-space: nowrap; }
     .rlist { list-style: none; }
     .rlist li { padding: 11px 0 11px 30px; position: relative; font-weight: 700; }
     .rlist li::before { content: ""; position: absolute; left: 2px; top: 16px; width: 15px; height: 9px;
-      background: var(--red); clip-path: polygon(0 0, 100% 40%, 85% 100%, 0 60%); transform: rotate(-4deg); }
+      background: var(--hot); clip-path: polygon(0 0, 100% 40%, 85% 100%, 0 60%); transform: rotate(-4deg); }
     .band.ink .rlist li, .band.pop .rlist li { color: inherit; }
     .note { position: relative; z-index: 0; background: var(--gold); color: var(--ink); padding: 14px 17px; font-size: .9rem; font-weight: 700; margin: 14px 0 19px;
       clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%); }
     .note strong { font-weight: 900; }
 
     /* big day-pass ticket — chevron-notched shard */
-    .ticket { position: relative; z-index: 0; grid-column: 1 / -1; background: var(--red); color: var(--paper);
+    .ticket { position: relative; z-index: 0; grid-column: 1 / -1; background: var(--hot-band); color: var(--paper);
       padding: 32px 30px; text-align: center;
       clip-path: polygon(0 12px, 4% 0, 96% 0, 100% 12px, 100% calc(100% - 12px), 96% 100%, 4% 100%, 0 calc(100% - 12px)); }
     .ticket::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
@@ -412,8 +473,8 @@
       transform: translate(10px, 11px); }
     .ticket .sticker { transform: skewX(-5deg) rotate(-3deg); }
     .ticket .prices { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px 36px; margin: 18px 0 12px; }
-    .ticket .big { font-family: "Anton", sans-serif; font-size: 3rem; line-height: 1; letter-spacing: .01em; }
-    .ticket .sub { font-family: "Bungee", sans-serif; font-size: .64rem; margin-top: 7px; color: #ffe3e3; }
+    .ticket .big { font-family: var(--display); font-size: 3rem; line-height: 1; letter-spacing: .01em; }
+    .ticket .sub { font-family: "Bungee", sans-serif; font-size: .64rem; margin-top: 7px; color: #ffffff; }
     .ticket .tag { font-weight: 800; font-style: italic; }
     .ticket .zz { margin: 16px auto; max-width: 300px; }
 
@@ -422,6 +483,8 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='13'%3E%3Cpath d='M0 12 L7 2 L14 12 L21 2 L28 12' fill='none' stroke='%23ffffff' stroke-width='3'/%3E%3C/svg%3E"); }
     .zz.ink { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='13'%3E%3Cpath d='M0 12 L7 2 L14 12 L21 2 L28 12' fill='none' stroke='%23141414' stroke-width='3'/%3E%3C/svg%3E"); }
     .zz.red { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='13'%3E%3Cpath d='M0 12 L7 2 L14 12 L21 2 L28 12' fill='none' stroke='%23e60012' stroke-width='3'/%3E%3C/svg%3E"); }
+    /* scheme B recolors the literal-red zigzag to blaze so it tracks --hot */
+    html[data-scheme="b"] .zz.red { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='13'%3E%3Cpath d='M0 12 L7 2 L14 12 L21 2 L28 12' fill='none' stroke='%23f76400' stroke-width='3'/%3E%3C/svg%3E"); }
 
     /* ---------- about / heritage ---------- */
     .split { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: center; }
@@ -429,17 +492,17 @@
     .prose p:last-child { margin-bottom: 0; }
     .prose strong { font-weight: 900; }
     .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 27px; }
-    .stat { position: relative; z-index: 0; background: var(--paper); color: var(--ink); padding: 17px 16px 15px;
+    .stat { position: relative; z-index: 0; background: var(--paper); color: var(--paper); padding: 17px 16px 15px;
       clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%); }
-    .stat::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--red);
+    .stat::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--hot-band);
       clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%); transform: translate(6px, 7px); }
-    .stat .n { font-family: "Anton", sans-serif; font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1; color: var(--red-deep); letter-spacing: .01em; }
+    .stat .n { font-family: var(--display); font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1; color: var(--paper); letter-spacing: .01em; }
     .stat .c { font-size: .8rem; font-weight: 800; margin-top: 9px; }
     .band.ink .stat, .band.accent .stat { background: var(--ink-soft); color: var(--paper); }
-    .band.ink .stat .n, .band.accent .stat .n { color: var(--gold); }
+    .band.ink .stat .n, .band.accent .stat .n { color: var(--paper); }
 
     /* heritage / ski-jump nostalgia beat */
-    .heritage { position: relative; z-index: 0; background: var(--red); color: var(--paper); padding: 32px 28px; overflow: hidden;
+    .heritage { position: relative; z-index: 0; background: var(--hot-band); color: var(--paper); padding: 32px 28px; overflow: hidden;
       clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); }
     .heritage::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
       clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); transform: translate(9px, 11px); }
@@ -463,14 +526,15 @@
     .ways { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 12px; }
     .way h3 { margin-bottom: 9px; }
     .way p { font-weight: 600; margin-bottom: 15px; }
-    .promise { position: relative; z-index: 0; background: var(--gold); color: var(--ink); padding: 28px 26px; margin-top: 28px;
+    /* ::before ink shadow paints over the gold face (z-index:-1) → renders dark; light text */
+    .promise { position: relative; z-index: 0; background: var(--gold); color: var(--paper); padding: 28px 26px; margin-top: 28px;
       clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%); }
     .promise::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
       clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%); transform: translate(10px, 12px); }
-    .promise .big { font-family: "Anton", sans-serif; font-size: clamp(1.7rem, 5.4vw, 2.6rem); line-height: 1.02; text-transform: uppercase; letter-spacing: .008em; }
+    .promise .big { font-family: var(--display); font-size: clamp(1.7rem, 5.4vw, 2.6rem); line-height: 1.02; text-transform: uppercase; letter-spacing: .008em; }
 
     /* chalet */
-    .chalet-tag { display: inline-block; font-family: "Bungee", sans-serif; font-size: .68rem; background: var(--red-deep); color: var(--paper); padding: 8px 14px; margin-bottom: 15px;
+    .chalet-tag { display: inline-block; font-family: "Bungee", sans-serif; font-size: .68rem; background: var(--hot-deep); color: var(--paper); padding: 8px 14px; margin-bottom: 15px;
       clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); transform: skewX(-5deg) rotate(-1.4deg); }
     .chalet-tag > span { display: inline-block; transform: skewX(5deg); }
 
@@ -479,10 +543,14 @@
     .staff { list-style: none; margin-top: 10px; }
     .staff li { padding: 14px 0 14px 20px; position: relative; }
     .staff li::before { content: ""; position: absolute; left: 0; top: 20px; width: 13px; height: 9px;
-      background: var(--red); clip-path: polygon(0 0, 100% 45%, 80% 100%, 0 55%); }
-    .staff .role { font-family: "Bungee", sans-serif; font-size: .56rem; letter-spacing: .03em; color: var(--red-deep); }
+      background: var(--hot); clip-path: polygon(0 0, 100% 45%, 80% 100%, 0 55%); }
+    .staff .role { font-family: "Bungee", sans-serif; font-size: .56rem; letter-spacing: .03em; color: var(--hot-deep); }
     .staff .who { font-weight: 900; font-size: 1.05rem; margin: 4px 0 3px; }
     .staff a { font-weight: 800; }
+    /* staff card renders on the dark shard fill (::before ink over the face) — force legible light text */
+    #contact .shard.rt { color: var(--paper); }
+    #contact .shard.rt .role { color: var(--gold); }
+    #contact .shard.rt a { color: var(--paper); text-decoration: underline; text-underline-offset: 2px; }
     .signup h3 { color: var(--paper); }
     .signup p { font-weight: 600; margin: 12px 0 19px; color: #f0f0f0; }
     .signup .lead-p { color: var(--paper); margin: 24px 0 13px; font-weight: 700; }
@@ -491,18 +559,18 @@
     footer.site { position: relative; background: var(--ink); color: #c7c7c9; padding: 62px 0 34px; font-weight: 600; margin-top: -6px;
       clip-path: polygon(0 26px, 100% 0, 100% 100%, 0 100%); }
     footer.site::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 40px; pointer-events: none;
-      background: var(--red); clip-path: polygon(0 100%, 100% 26px, 100% 40px, 0 100%); }
+      background: var(--hot); clip-path: polygon(0 100%, 100% 26px, 100% 40px, 0 100%); }
     footer.site .f-top { display: grid; grid-template-columns: 1fr; gap: 28px; margin-bottom: 32px; }
     footer.site .f-logo { display: inline-block; margin-bottom: 15px; }
     footer.site .f-logo img { height: 60px; width: auto; filter: brightness(0) invert(1); }
     footer.site .f-blurb { max-width: 340px; color: #aeaeb0; font-weight: 600; }
     footer.site h4 { font-family: "Bungee", sans-serif; color: var(--paper); font-size: .72rem; letter-spacing: .03em; margin-bottom: 16px; position: relative; padding-bottom: 11px; }
-    footer.site h4::after { content: ""; position: absolute; left: 0; width: 44px; bottom: 0; height: 6px; background: var(--red);
+    footer.site h4::after { content: ""; position: absolute; left: 0; width: 44px; bottom: 0; height: 6px; background: var(--hot);
       clip-path: polygon(0 0, 100% 35%, 100% 100%, 0 100%); }
     footer.site ul { list-style: none; }
     footer.site li { margin-bottom: 10px; }
     footer.site a { color: #d2d2d4; text-decoration: none; font-weight: 700; }
-    footer.site a:hover { color: var(--red); }
+    footer.site a:hover { color: var(--hot); }
     footer.site .f-bottom { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; color: #8f8f92; font-size: .8rem; }
     footer.site .f-bottom .zz { margin-bottom: 18px; max-width: 220px; }
 
@@ -522,9 +590,6 @@
       .contact-grid { grid-template-columns: 1.3fr 1fr; }
     }
     @media (min-width: 900px) {
-      .nav-links { display: flex; align-items: center; gap: 24px; }
-      .hamburger { display: none; }
-      .mobile-menu { display: none !important; }
       .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 46px; }
       .collage { margin: 0 0 0 auto; }
       .feature { grid-template-columns: 1.05fr .95fr; gap: 46px; }
@@ -532,7 +597,16 @@
       .split { grid-template-columns: 1.05fr .95fr; gap: 54px; }
       .split.rev .prose { order: 2; } .split.rev .art { order: 1; }
       footer.site .f-top { grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 42px; }
-      .nav-cta { display: inline-flex; }
+    }
+    /* inline header collapses later than the content grid — two toggles need the room */
+    @media (min-width: 1040px) {
+      html { scroll-padding-top: 92px; }
+      .nav { flex-wrap: nowrap; }
+      .nav-links { display: flex; align-items: center; gap: 22px; order: 2; }
+      .controls { order: 3; flex-basis: auto; gap: 8px 14px; }
+      .nav-cta { display: inline-flex; order: 4; }
+      .hamburger { display: none; }
+      .mobile-menu { display: none !important; }
     }
     .nav-cta { display: none; }
 
@@ -562,17 +636,30 @@
           <img src="assets/chester/logo-clean.svg" alt="Chester Bowl — the black woodcut logo of the two historic giant ski jumps over pines and Lake Superior" width="278" height="164">
         </a>
 
-        <div class="toggle" role="group" aria-label="Choose season">
-          <button type="button" class="t-summer" id="tSummer" aria-pressed="true"><span>☀ Summer</span></button>
-          <button type="button" class="t-winter" id="tWinter" aria-pressed="false"><span>❄ Winter</span></button>
-        </div>
-
         <div class="nav-links">
           <a href="#whats-on">What's&nbsp;On</a>
           <a href="#about">About</a>
           <a href="#involved">Get&nbsp;Involved</a>
           <a href="#contact">Contact</a>
         </div>
+
+        <div class="controls">
+          <div class="ctl">
+            <span class="ctl-label">Season:</span>
+            <div class="toggle" role="group" aria-label="Choose season">
+              <button type="button" class="t-summer" id="tSummer" aria-pressed="true"><span>☀ Summer</span></button>
+              <button type="button" class="t-winter" id="tWinter" aria-pressed="false"><span>❄ Winter</span></button>
+            </div>
+          </div>
+          <div class="ctl">
+            <span class="ctl-label" id="schemeLabel">Color scheme:</span>
+            <div class="toggle" role="group" aria-labelledby="schemeLabel">
+              <button type="button" class="s-bold" id="sBold" aria-pressed="true"><span>Bold</span></button>
+              <button type="button" class="s-classic" id="sClassic" aria-pressed="false"><span>Classic</span></button>
+            </div>
+          </div>
+        </div>
+
         <a class="btn sm nav-cta" href="https://growingupchester.org/donate/" target="_blank" rel="noopener">Donate</a>
         <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
           <span></span><span></span><span></span>
@@ -966,7 +1053,7 @@
           <div class="shard rt slap">
             <p style="font-weight:900;">Chester Bowl Improvement Club</p>
             <p style="font-weight:700;">1801 East Skyline Dr., Duluth, MN 55812</p>
-            <p style="font-size:.9rem; font-weight:600; margin:11px 0 4px; color:#4a4a4a;">Our main office line is out during chalet construction, so reach our team directly:</p>
+            <p style="font-size:.9rem; font-weight:600; margin:11px 0 4px; color:#cfcfcf;">Our main office line is out during chalet construction, so reach our team directly:</p>
             <ul class="staff">
               <li><div class="role">Executive Director</div><div class="who">Dave Schaeffer</div><a href="mailto:dave@chesterbowl.org">dave@chesterbowl.org</a> · <a href="tel:+12189409378">218-940-9378</a></li>
               <li><div class="role">Program &amp; Operations Director</div><div class="who">Sam Luoma</div><a href="mailto:sam@chesterbowl.org">sam@chesterbowl.org</a> · <a href="tel:+12183404678">218-340-4678</a></li>
@@ -1038,28 +1125,57 @@
       var meta = document.getElementById('themeColor');
       var tS = document.getElementById('tSummer');
       var tW = document.getElementById('tWinter');
-      var THEME = { summer: '#e60012', winter: '#22cde5' };
+      var sBold = document.getElementById('sBold');
+      var sClassic = document.getElementById('sClassic');
+
+      // theme-color reflects both axes: scheme × season (4 states)
+      var THEME = {
+        a: { summer: '#e60012', winter: '#22cde5' },
+        b: { summer: '#258651', winter: '#22cde5' }
+      };
+      function currentScheme() { return root.getAttribute('data-scheme') === 'b' ? 'b' : 'a'; }
+      function currentSeason() { return root.getAttribute('data-season') === 'winter' ? 'winter' : 'summer'; }
+      function paintThemeColor() {
+        if (meta) meta.setAttribute('content', THEME[currentScheme()][currentSeason()]);
+      }
 
       function setSeason(season, persist) {
         root.setAttribute('data-season', season);
         var winter = season === 'winter';
         tW.setAttribute('aria-pressed', winter ? 'true' : 'false');
         tS.setAttribute('aria-pressed', winter ? 'false' : 'true');
-        if (meta) meta.setAttribute('content', THEME[season]);
         if (persist) { try { localStorage.setItem('cb-season', season); } catch (e) {} }
+        paintThemeColor();
         // newly-shown season content must never be stuck hidden by a motion class
         document.querySelectorAll('.slap, .reveal').forEach(function (el) { el.classList.add('in'); });
       }
 
+      // color scheme — independent of season: a = "Bold" (red), b = "Classic" (Chester warm)
+      function setScheme(scheme, persist) {
+        root.setAttribute('data-scheme', scheme);
+        var b = scheme === 'b';
+        sClassic.setAttribute('aria-pressed', b ? 'true' : 'false');
+        sBold.setAttribute('aria-pressed', b ? 'false' : 'true');
+        if (persist) { try { localStorage.setItem('chester-scheme', scheme); } catch (e) {} }
+        paintThemeColor();
+      }
+
       // initial season: saved choice, else current month (May–Oct = summer)
-      var saved = null;
-      try { saved = localStorage.getItem('cb-season'); } catch (e) {}
+      var savedSeason = null;
+      try { savedSeason = localStorage.getItem('cb-season'); } catch (e) {}
       var m = new Date().getMonth(); // 0=Jan
-      var auto = (m >= 4 && m <= 9) ? 'summer' : 'winter';
-      setSeason(saved || auto, false);
+      var autoSeason = (m >= 4 && m <= 9) ? 'summer' : 'winter';
+      setSeason(savedSeason || autoSeason, false);
+
+      // initial scheme: saved choice, else 'a' (Bold — the current live look)
+      var savedScheme = null;
+      try { savedScheme = localStorage.getItem('chester-scheme'); } catch (e) {}
+      setScheme(savedScheme === 'b' ? 'b' : 'a', false);
 
       tS.addEventListener('click', function () { setSeason('summer', true); });
       tW.addEventListener('click', function () { setSeason('winter', true); });
+      sBold.addEventListener('click', function () { setScheme('a', true); });
+      sClassic.addEventListener('click', function () { setScheme('b', true); });
 
       // mobile menu
       var burger = document.getElementById('hamburger');
