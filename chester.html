@@ -451,17 +451,54 @@
       clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 88%); }
     .board .bh h3 { color: var(--paper); }
     .board .bh p { font-size: .88rem; color: #ffe3e3; font-weight: 700; margin-top: 4px; }
-    .board .bb { padding: 12px 28px 26px; }
-    .prow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0 12px 22px; position: relative; }
-    .prow::before { content: "\25B8"; position: absolute; left: 0; top: 12px; color: var(--hot); }
-    .prow .amt { font-family: "Bungee", sans-serif; font-size: 1.02rem; white-space: nowrap; }
+    .board .bb { padding: 14px 24px 26px; }
+    /* plain body paragraphs must clear the card's slanted left edge (--shard cuts
+       in ~4% at the top) so text never crowds the frame — the prow/rlist rows
+       already carry their own inset. */
+    .board .bb > p { padding-left: 18px; padding-right: 10px; }
+
+    /* ===== VARIANT 2 — sheared zebra rows + jagged zig-zag dividers =====
+       Rows are skewed parallelogram bands; the two inner spans counter-skew
+       so label + price sit on a level baseline and stay fully legible. All
+       angular energy is carried by the shear/shards, never by the text. */
+    .prow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+      padding: 12px 16px 12px 30px; margin: 0 6px; position: relative;
+      transform: skewX(-8deg); }
+    .prow > span { display: inline-block; transform: skewX(8deg); }
+    /* zebra fill is text-bearing, so it uses --hot-band: white body passes AA
+       in BOTH schemes (white on hot-band = scheme-a red 4.8:1 / scheme-b rust 5.6:1) */
+    .prow:nth-child(even) { background: var(--hot-band); }
+    /* shard bullet rides the shear (decorative — no contrast requirement) */
+    .prow::before { content: ""; position: absolute; left: 11px; top: 50%; margin-top: -6px;
+      width: 13px; height: 12px; background: var(--hot);
+      clip-path: polygon(0 0, 100% 45%, 62% 100%, 0 64%); }
+    .prow:nth-child(even)::before { background: var(--gold); }
+    /* (zig-zag row divider removed — the alternating zebra bands already
+       separate the rows; the dividers read as too loud.) */
+    .prow .amt { font-family: "Bungee", sans-serif; font-size: 1.06rem; white-space: nowrap; position: relative; }
+    /* angular accent slash beneath the price (gold shard — decorative) */
+    .prow .amt::after { content: ""; position: absolute; left: -3px; right: -3px; bottom: -6px; height: 4px;
+      background: var(--gold); clip-path: polygon(0 0, 100% 40%, 100% 100%, 0 100%); transform: skewX(-14deg); }
+
     .rlist { list-style: none; }
     .rlist li { padding: 11px 0 11px 30px; position: relative; font-weight: 700; }
     .rlist li::before { content: ""; position: absolute; left: 2px; top: 16px; width: 15px; height: 9px;
       background: var(--hot); clip-path: polygon(0 0, 100% 40%, 85% 100%, 0 60%); transform: rotate(-4deg); }
     .band.ink .rlist li, .band.pop .rlist li { color: inherit; }
-    .note { position: relative; z-index: 0; background: var(--gold); color: var(--ink); padding: 14px 17px; font-size: .9rem; font-weight: 700; margin: 14px 0 19px;
-      clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%); }
+    /* rentals list (dark board only): sharper sheared shard bullet + jagged
+       zig-zag dividers to echo the sheared passes column. Text stays upright. */
+    .board .rlist { margin: 2px 6px 0; }
+    .board .rlist li { padding: 13px 4px 13px 34px; }
+    .board .rlist li::before { left: 4px; top: 17px; width: 17px; height: 11px;
+      transform: skewX(-16deg) rotate(-4deg); }
+    /* (zig-zag divider removed here too — too loud) */
+
+    /* gold deposit note sheared into a parallelogram; inner span counter-skews
+       so copy stays level. Ink on gold = ~10:1 (AA pass, light chip). */
+    .note { position: relative; z-index: 0; background: var(--gold); color: var(--ink);
+      padding: 15px 20px; font-size: .9rem; font-weight: 700; margin: 18px 8px 19px;
+      transform: skewX(-8deg); }
+    .note .note-in { display: block; transform: skewX(8deg); }
     .note strong { font-weight: 900; }
 
     /* big day-pass ticket — chevron-notched shard */
@@ -850,7 +887,7 @@
                 <div class="prow"><span>Family of 5</span><span class="amt">$329</span></div>
                 <div class="prow"><span>Family of 6</span><span class="amt">$359</span></div>
                 <div class="prow"><span>Each additional</span><span class="amt">+$30</span></div>
-                <div class="note">Plus a <strong>refundable $100 volunteer deposit</strong> &amp; tax. It comes back once your family finishes its volunteer hours (6–12) and returns rental gear on time. <strong>Scholarships available, and no one is turned away for cost.</strong></div>
+                <div class="note"><span class="note-in">Plus a <strong>refundable $100 volunteer deposit</strong> &amp; tax. It comes back once your family finishes its volunteer hours (6–12) and returns rental gear on time. <strong>Scholarships available, and no one is turned away for cost.</strong></span></div>
                 <a class="btn ink block" href="https://www.chesterbowl.org/ski-and-snowboard/season-pass-purchases/" target="_blank" rel="noopener">How to buy a pass</a>
               </div>
             </div>
