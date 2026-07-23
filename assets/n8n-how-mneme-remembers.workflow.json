@@ -1,0 +1,475 @@
+{
+  "name": "How Mneme Remembers (memory architecture)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# How Mneme Remembers\nMy self-hosted memory system for AI agents, expressed as a workflow. Three lanes: the **write path** (noise → memory), the **read path** (recall with a trust boundary), and the **background loops** (the system that keeps learning).\n\n65 MCP tools · 30 REST endpoints · PostgreSQL/pgvector · local embeddings · 593 tests",
+        "height": 220,
+        "width": 420,
+        "color": 7
+      },
+      "id": "b2c3d4e5-0000-4000-8000-000000000000",
+      "name": "Title",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-520, -40]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "thought",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0001-4000-8000-000000000001",
+      "name": "Everything is a thought",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://local-inference/v1/chat/completions",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify({ model: 'router', messages: [{ role: 'system', content: 'Split the text into clauses. Type each: calendar | maintenance | household | training | thought. Return JSON.' }, { role: 'user', content: $json.body.text }] }) }}",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0002-4000-8000-000000000002",
+      "name": "LLM router: decompose & classify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+                "conditions": [
+                  { "leftValue": "={{ $json.type }}", "rightValue": "calendar", "operator": { "type": "string", "operation": "equals" } }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "calendar"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+                "conditions": [
+                  { "leftValue": "={{ $json.type }}", "rightValue": "maintenance", "operator": { "type": "string", "operation": "equals" } }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "maintenance"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+                "conditions": [
+                  { "leftValue": "={{ $json.type }}", "rightValue": "household", "operator": { "type": "string", "operation": "equals" } }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "household"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+                "conditions": [
+                  { "leftValue": "={{ $json.type }}", "rightValue": "training", "operator": { "type": "string", "operation": "equals" } }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "training"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "b2c3d4e5-0003-4000-8000-000000000003",
+      "name": "Route to a typed arm",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [500, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- The typed-arm pattern: real columns for exact queries,\n-- plus a linked thought row so the same fact is findable by meaning.\nWITH t AS (\n  INSERT INTO thoughts (text, source, tags)\n  VALUES ($1, $2, $3)\n  RETURNING id\n)\nINSERT INTO arm_rows (arm, thought_id, payload)\nSELECT $4, id, $5::jsonb FROM t;",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0004-4000-8000-000000000004",
+      "name": "Typed row + thought row",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [800, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://local-inference/v1/embeddings",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify({ model: 'nomic-embed-text', input: $json.text }) }}",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0005-4000-8000-000000000005",
+      "name": "Embed locally (768-dim)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1040, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- pgvector + HNSW: the meaning index.\nUPDATE thoughts SET embedding = $1::vector WHERE id = $2;",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0006-4000-8000-000000000006",
+      "name": "Vector index (pgvector/HNSW)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [1280, 0]
+    },
+    {
+      "parameters": {
+        "content": "## Lane 1 · the write path\nAny source, one intake: agent sessions, the voice assistant, brain-dumps, transcripts, documents. An LLM router splits free text into typed clauses (\"furnace filter Saturday, dentist Tuesday 2pm\" → a maintenance task + a calendar event).\n\n**The typed-arm pattern**: structure and meaning are usually a trade-off — a calendar table can't answer \"what did I say about the furnace?\", a vector store can't answer \"what's due Tuesday?\". Arms do both: every typed row keeps a semantic twin. Embeddings are local; nothing leaves the network to be remembered.",
+        "height": 300,
+        "width": 480,
+        "color": 4
+      },
+      "id": "b2c3d4e5-0007-4000-8000-000000000007",
+      "name": "Sticky Lane 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, -340]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "recall",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0008-4000-8000-000000000008",
+      "name": "An agent asks (recall)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 560]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://local-inference/v1/embeddings",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify({ model: 'nomic-embed-text', input: $json.body.query }) }}",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0009-4000-8000-000000000009",
+      "name": "Embed the question",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 560]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Hybrid recall: nearest neighbors in meaning space,\n-- typed arms answer the exact parts (dates, counts, intervals).\nSELECT id, text, trust_tier, 1 - (embedding <=> $1::vector) AS score\nFROM thoughts\nORDER BY embedding <=> $1::vector\nLIMIT 12;",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0010-4000-8000-000000000010",
+      "name": "Meaning + structure lookup",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [500, 560]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.trust_tier }}",
+              "rightValue": "confirmed",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b2c3d4e5-0011-4000-8000-000000000011",
+      "name": "Ratified by a human?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [760, 560]
+    },
+    {
+      "parameters": {},
+      "id": "b2c3d4e5-0012-4000-8000-000000000012",
+      "name": "CONFIRMED: may steer behavior",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1020, 460]
+    },
+    {
+      "parameters": {},
+      "id": "b2c3d4e5-0013-4000-8000-000000000013",
+      "name": "EVIDENCE: context, not command",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1020, 660]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Every recall is traced: who asked, what surfaced, which tier.\n// Memory you can't audit is memory you can't trust.\nconst items = $input.all().map(i => i.json);\nreturn [{ json: {\n  results: items,\n  trace: { asked_by: 'agent', at: $now.toISO(), tiers: items.map(i => i.trust_tier) }\n} }];"
+      },
+      "id": "b2c3d4e5-0014-4000-8000-000000000014",
+      "name": "Trace the recall",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1280, 560]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b2c3d4e5-0015-4000-8000-000000000015",
+      "name": "Respond, split by trust",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1520, 560]
+    },
+    {
+      "parameters": {
+        "content": "## Lane 2 · the read path\nThe governance gate is the load-bearing part of the whole system.\n\n**Mirror, not cage**: agents learn things about you constantly, and some of it is wrong. A learned fact is *evidence* until a human ratifies it in review — visible and useful, but never steering behavior on its own. The self-model stays a mirror I curate, never a feedback loop that quietly decides who I am.",
+        "height": 260,
+        "width": 480,
+        "color": 5
+      },
+      "id": "b2c3d4e5-0016-4000-8000-000000000016",
+      "name": "Sticky Lane 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [760, 800]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 3
+            }
+          ]
+        }
+      },
+      "id": "b2c3d4e5-0017-4000-8000-000000000017",
+      "name": "Nightly, while nobody waits",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 1180]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Idempotent derivation queue: slow jobs (transcript mining,\n// re-syncs) never block an agent's request. Claim, work, complete.\nreturn [{ json: { job: 'mine-session-transcripts', claimed: true } }];"
+      },
+      "id": "b2c3d4e5-0018-4000-8000-000000000018",
+      "name": "Drain the derivation queue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 1180]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://local-inference/v1/chat/completions",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify({ model: 'miner', messages: [{ role: 'system', content: 'Extract decisions WITH the options that were rejected, and candidate facts about the user.' }, { role: 'user', content: $json.transcript }] }) }}",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0019-4000-8000-000000000019",
+      "name": "Mine transcripts for judgment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 1180]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- The judgment corpus keeps the decisions AND the rejected options,\n-- so a new agent can ask \"how does Andrew usually rule on this?\"\nINSERT INTO judgments (topic, chosen, rejected, context)\nVALUES ($1, $2, $3, $4);",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0020-4000-8000-000000000020",
+      "name": "Judgment corpus append",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [760, 1180]
+    },
+    {
+      "parameters": {},
+      "id": "b2c3d4e5-0021-4000-8000-000000000021",
+      "name": "Human review queue (confirm / reject / edit)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1020, 1180]
+    },
+    {
+      "parameters": {
+        "content": "## Lane 3 · background loops\nNew facts mined from transcripts land as **pending** and wait for human review. When I override a recommendation, a surprise gate queues a \"why?\" so the corpus learns my reasoning, not just my choices.\n\n**Why it's built this way**: code can be rebuilt cheaply; understanding can't. The thing worth persisting across agents, sessions, and machines is the judgment and context, so that is what the architecture optimizes for.",
+        "height": 280,
+        "width": 480,
+        "color": 6
+      },
+      "id": "b2c3d4e5-0022-4000-8000-000000000022",
+      "name": "Sticky Lane 3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 1400]
+    }
+  ],
+  "connections": {
+    "Everything is a thought": {
+      "main": [
+        [
+          { "node": "LLM router: decompose & classify", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "LLM router: decompose & classify": {
+      "main": [
+        [
+          { "node": "Route to a typed arm", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Route to a typed arm": {
+      "main": [
+        [
+          { "node": "Typed row + thought row", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Typed row + thought row", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Typed row + thought row", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Typed row + thought row", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Typed row + thought row", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Typed row + thought row": {
+      "main": [
+        [
+          { "node": "Embed locally (768-dim)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Embed locally (768-dim)": {
+      "main": [
+        [
+          { "node": "Vector index (pgvector/HNSW)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "An agent asks (recall)": {
+      "main": [
+        [
+          { "node": "Embed the question", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Embed the question": {
+      "main": [
+        [
+          { "node": "Meaning + structure lookup", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Meaning + structure lookup": {
+      "main": [
+        [
+          { "node": "Ratified by a human?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Ratified by a human?": {
+      "main": [
+        [
+          { "node": "CONFIRMED: may steer behavior", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "EVIDENCE: context, not command", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "CONFIRMED: may steer behavior": {
+      "main": [
+        [
+          { "node": "Trace the recall", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "EVIDENCE: context, not command": {
+      "main": [
+        [
+          { "node": "Trace the recall", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Trace the recall": {
+      "main": [
+        [
+          { "node": "Respond, split by trust", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Nightly, while nobody waits": {
+      "main": [
+        [
+          { "node": "Drain the derivation queue", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Drain the derivation queue": {
+      "main": [
+        [
+          { "node": "Mine transcripts for judgment", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Mine transcripts for judgment": {
+      "main": [
+        [
+          { "node": "Judgment corpus append", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Judgment corpus append": {
+      "main": [
+        [
+          { "node": "Human review queue (confirm / reject / edit)", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
