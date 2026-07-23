@@ -1,0 +1,331 @@
+{
+  "name": "Daily Ops Brief (Mneme + Aegis)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "07:00 America/Chicago",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://aegis.androux.org/v1/secret/mneme/api-token",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Aegis-Key",
+              "value": "={{ $env.AEGIS_AGENT_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "name": "Aegis: fetch scoped token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://mneme.androux.org/brief",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.value }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "name": "Mneme: GET /brief",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compose the morning brief from Mneme's /brief payload.\nconst b = $input.first().json;\nconst lines = [];\nlines.push(`Ops Brief — ${new Date().toISOString().slice(0, 10)}`);\nlines.push('');\nfor (const ev of b.calendar ?? []) {\n  lines.push(`• ${ev.time ?? 'all day'}  ${ev.title}`);\n}\nfor (const m of b.maintenance_due ?? []) {\n  lines.push(`⚙ due: ${m.item} (${m.due})`);\n}\nfor (const t of (b.backlog ?? []).slice(0, 5)) {\n  lines.push(`◻ P${t.priority} ${t.title}`);\n}\nconst onFire = (b.backlog ?? []).some(t => t.priority <= 1 && t.overdue);\nlines.push('');\nlines.push(onFire\n  ? 'Verdict: something is on fire. Probably DNS.'\n  : 'Verdict: calm seas. Suspiciously calm.');\nreturn [{ json: { brief: lines.join('\\n'), on_fire: onFire } }];"
+      },
+      "id": "a1b2c3d4-0004-4000-8000-000000000004",
+      "name": "Compose brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.on_fire }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0005-4000-8000-000000000005",
+      "name": "Anything on fire?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ntfy.sh/androux-ops",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Priority",
+              "value": "high"
+            },
+            {
+              "name": "Title",
+              "value": "Ops Brief — attention required"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/plain",
+        "body": "={{ $json.brief }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "name": "ntfy: priority push",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ntfy.sh/androux-ops",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Title",
+              "value": "Ops Brief"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/plain",
+        "body": "={{ $json.brief }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "name": "ntfy: morning push",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 100]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "brain-dump",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0008-4000-8000-000000000008",
+      "name": "Brain-dump webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mneme.androux.org/route",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.MNEME_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0009-4000-8000-000000000009",
+      "name": "Mneme: POST /route",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 360]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "a1b2c3d4-0010-4000-8000-000000000010",
+      "name": "Respond with routing result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [440, 360]
+    },
+    {
+      "parameters": {
+        "content": "## Secrets hygiene\nNo API keys live in this workflow. **Aegis** (self-built secrets broker + SSH CA) mints scoped, short-TTL, audited credentials at runtime — and canary secrets tripwire-alert if anything reads what it shouldn't.",
+        "height": 220,
+        "width": 260,
+        "color": 4
+      },
+      "id": "a1b2c3d4-0011-4000-8000-000000000011",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [160, -260]
+    },
+    {
+      "parameters": {
+        "content": "## The integration hub\n**Mneme** is a self-built Python service: 65 MCP tools, 30 REST endpoints, PostgreSQL/pgvector, 593 tests. Both services in this workflow are my own — it orchestrates my actual infrastructure.",
+        "height": 220,
+        "width": 280,
+        "color": 5
+      },
+      "id": "a1b2c3d4-0012-4000-8000-000000000012",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [460, -260]
+    },
+    {
+      "parameters": {
+        "content": "## Ops note\nSame network philosophy as the rest of my homelab: LAN-only services, TLS via reverse proxy, nothing exposed to the internet. Root cause of most morning incidents remains: DNS. *(It's always DNS.)*",
+        "height": 180,
+        "width": 320,
+        "color": 7
+      },
+      "id": "a1b2c3d4-0013-4000-8000-000000000013",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [660, 300]
+    }
+  ],
+  "connections": {
+    "07:00 America/Chicago": {
+      "main": [
+        [
+          {
+            "node": "Aegis: fetch scoped token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aegis: fetch scoped token": {
+      "main": [
+        [
+          {
+            "node": "Mneme: GET /brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mneme: GET /brief": {
+      "main": [
+        [
+          {
+            "node": "Compose brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose brief": {
+      "main": [
+        [
+          {
+            "node": "Anything on fire?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anything on fire?": {
+      "main": [
+        [
+          {
+            "node": "ntfy: priority push",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ntfy: morning push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brain-dump webhook": {
+      "main": [
+        [
+          {
+            "node": "Mneme: POST /route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mneme: POST /route": {
+      "main": [
+        [
+          {
+            "node": "Respond with routing result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

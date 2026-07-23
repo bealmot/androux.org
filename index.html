@@ -227,6 +227,26 @@
       line-height: 1.7;
     }
 
+    .project h3 a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+      transition: border-color 0.2s;
+    }
+
+    .project h3 a:hover { border-color: #e8e8e8; }
+
+    .project .more {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+      color: #666;
+      text-decoration: none;
+      border-bottom: 1px solid #333;
+    }
+
+    .project .more:hover { color: #999; border-color: #666; }
+
     /* Footer */
     footer {
       position: relative;
@@ -359,6 +379,12 @@
   <section>
     <h2 class="section-title">Projects</h2>
     <div class="projects-grid">
+      <div class="project">
+        <h3><a href="daily-ops-brief.html">Daily Ops Brief</a></h3>
+        <p class="tech">n8n · Mneme · Aegis · ntfy</p>
+        <p>Workflow blueprint orchestrating two self-built systems: Mneme, a semantic memory hub (65 MCP tools, 30 REST endpoints), and Aegis, a secrets broker that mints scoped, audited credentials at runtime so no API keys live in the workflow itself.</p>
+        <a class="more" href="daily-ops-brief.html">view the blueprint &rarr;</a>
+      </div>
       <div class="project">
         <h3>Homelab Infrastructure</h3>
         <p class="tech">OPNsense · Proxmox · OpenWrt · Home Assistant · Prometheus</p>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Ops Brief — an n8n workflow blueprint · androux.org</title>
+  <meta name="description" content="An n8n workflow blueprint orchestrating two self-built systems: Mneme (semantic memory hub) and Aegis (secrets broker + SSH CA).">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0a;
+      --ink: #e8e8e8;
+      --body: #a3a3a3;
+      --dim: #8a8a8a;
+      --faint: #555;
+      --line: #2a2a2a;
+      --ember: #d97757;
+      --ember-dim: #9c5540;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
+    header {
+      padding: 3rem 0 0;
+    }
+
+    .backlink {
+      font-size: 0.75rem;
+      color: var(--dim);
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .backlink:hover { color: var(--ink); border-color: var(--ink); }
+
+    h1 {
+      font-size: clamp(1.75rem, 6vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-top: 2.5rem;
+      text-wrap: balance;
+    }
+
+    .tagline {
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
+      color: var(--dim);
+      margin-top: 0.75rem;
+      max-width: 62ch;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin-top: 1.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.7rem;
+      color: var(--faint);
+    }
+    .meta-row .accent { color: var(--ember); }
+
+    /* Prose */
+    .prose {
+      padding: 3rem 0;
+      max-width: 68ch;
+    }
+    .prose p {
+      font-size: 0.85rem;
+      color: var(--body);
+      margin-bottom: 1.25rem;
+      text-wrap: pretty;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--ink); font-weight: 600; }
+    .prose a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--faint); }
+    .prose a:hover { border-color: var(--ink); }
+
+    /* Diagram */
+    .diagram {
+      padding: 1rem 0 4rem;
+    }
+
+    .lanes {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3.5rem;
+    }
+    @media (min-width: 760px) {
+      .lanes { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); align-items: start; }
+    }
+
+    .lane-label {
+      font-size: 0.7rem;
+      color: var(--faint);
+      margin-bottom: 1.5rem;
+    }
+    .lane-label b { color: var(--dim); font-weight: 600; }
+
+    .node {
+      border: 1px solid var(--line);
+      background: #101010;
+      padding: 0.9rem 1.1rem;
+      position: relative;
+    }
+
+    .node-kind {
+      font-size: 0.65rem;
+      color: var(--ember);
+      margin-bottom: 0.2rem;
+    }
+
+    .node-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .node-detail {
+      font-size: 0.75rem;
+      color: var(--dim);
+      margin-top: 0.4rem;
+      line-height: 1.55;
+    }
+    .node-detail code {
+      font-family: inherit;
+      color: var(--body);
+      background: #161616;
+      padding: 0 0.3em;
+    }
+
+    /* Connectors */
+    .conn {
+      display: flex;
+      justify-content: center;
+      padding: 0.15rem 0;
+    }
+    .conn svg { display: block; }
+    .conn line {
+      stroke: var(--faint);
+      stroke-width: 1;
+      stroke-dasharray: 3 4;
+      animation: flow 1.2s linear infinite;
+    }
+    .conn .head { fill: var(--faint); }
+    @keyframes flow { to { stroke-dashoffset: -7; } }
+
+    .conn-label {
+      font-size: 0.65rem;
+      color: var(--faint);
+      align-self: center;
+      padding: 0 0.6rem;
+    }
+
+    /* Branch (If node outputs) */
+    .branch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .branch-arm { display: flex; flex-direction: column; }
+    .branch-tag {
+      font-size: 0.65rem;
+      text-align: center;
+      padding: 0.3rem 0 0.15rem;
+    }
+    .branch-tag.hot { color: var(--ember); }
+    .branch-tag.calm { color: var(--dim); }
+    @media (max-width: 480px) {
+      .branch { grid-template-columns: 1fr; }
+    }
+
+    /* Sticky annotations */
+    .sticky {
+      border: 1px solid var(--ember-dim);
+      background: rgba(217, 119, 87, 0.05);
+      padding: 0.9rem 1.1rem;
+      margin: 2.5rem 0 0;
+    }
+    .sticky-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--ember);
+      margin-bottom: 0.35rem;
+    }
+    .sticky p {
+      font-size: 0.75rem;
+      color: var(--body);
+      line-height: 1.65;
+    }
+    .sticky p em { color: var(--dim); }
+
+    /* Artifacts */
+    .artifacts {
+      border-top: 1px solid var(--line);
+      padding: 3rem 0 5rem;
+    }
+    .artifacts h2 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--faint);
+      font-weight: 400;
+      margin-bottom: 2rem;
+    }
+    .artifact-list { list-style: none; max-width: 68ch; }
+    .artifact-list li {
+      font-size: 0.85rem;
+      color: var(--body);
+      padding: 0.9rem 0;
+      border-bottom: 1px solid #161616;
+    }
+    .artifact-list a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--faint);
+    }
+    .artifact-list a:hover { border-color: var(--ink); }
+    .artifact-note { display: block; font-size: 0.72rem; color: var(--faint); margin-top: 0.25rem; }
+
+    footer {
+      border-top: 1px solid #1a1a1a;
+      padding: 2.5rem 0 3rem;
+      font-size: 0.75rem;
+      color: #444;
+    }
+    footer a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
+    footer a:hover { color: var(--ink); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .conn line { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <header>
+      <a class="backlink" href="index.html">&larr; androux.org</a>
+      <h1>Daily Ops Brief</h1>
+      <p class="tagline">An n8n workflow blueprint that orchestrates two systems I built and self-host: a morning brief assembled from my own infrastructure, with no credentials stored in the workflow.</p>
+      <div class="meta-row">
+        <span>n8n <span class="accent">·</span> blueprint</span>
+        <span>Mneme <span class="accent">·</span> semantic memory hub</span>
+        <span>Aegis <span class="accent">·</span> secrets broker + SSH CA</span>
+        <span>2026</span>
+      </div>
+    </header>
+
+    <div class="prose">
+      <p>Most workflow demos call two public SaaS APIs and a weather service. This one calls <strong>my own production services</strong>: <strong>Mneme</strong>, a self-built semantic memory hub (65 MCP tools, 30 REST endpoints, PostgreSQL/pgvector, 593 tests) that every agent in my homelab shares, and <strong>Aegis</strong>, my secrets broker and SSH certificate authority, which mints scoped, short-TTL, audited credentials at runtime.</p>
+      <p>The design point is the credential path: the workflow holds <strong>no long-lived secrets</strong>. Every run asks Aegis for a token, uses it once against Mneme, and lets it expire. Canary secrets in the broker tripwire-alert if anything reads what it shouldn't.</p>
+    </div>
+
+    <div class="diagram" aria-label="Workflow diagram">
+      <div class="lanes">
+
+        <!-- Lane 1: main -->
+        <div>
+          <p class="lane-label"><b>Lane 1</b> — the morning brief</p>
+
+          <div class="node">
+            <div class="node-kind">schedule trigger</div>
+            <div class="node-name">07:00 America/Chicago</div>
+            <div class="node-detail">Fires daily. Mornings are when the calendar, the furnace filter, and the backlog all want attention at once.</div>
+          </div>
+
+          <div class="conn" aria-hidden="true">
+            <svg width="10" height="34" viewBox="0 0 10 34"><line x1="5" y1="0" x2="5" y2="26"/><path class="head" d="M1 26 L5 34 L9 26 Z"/></svg>
+          </div>
+
+          <div class="node">
+            <div class="node-kind">http request</div>
+            <div class="node-name">Aegis: fetch scoped token</div>
+            <div class="node-detail"><code>GET aegis.androux.org/v1/secret/mneme/api-token</code><br>Agent key in header; broker returns a scoped, audited, short-TTL credential.</div>
+          </div>
+
+          <div class="conn" aria-hidden="true">
+            <svg width="10" height="34" viewBox="0 0 10 34"><line x1="5" y1="0" x2="5" y2="26"/><path class="head" d="M1 26 L5 34 L9 26 Z"/></svg>
+          </div>
+
+          <div class="node">
+            <div class="node-kind">http request</div>
+            <div class="node-name">Mneme: GET /brief</div>
+            <div class="node-detail"><code>Authorization: Bearer {{token}}</code><br>Returns calendar events, home-maintenance items due, and task-backlog health as JSON.</div>
+          </div>
+
+          <div class="conn" aria-hidden="true">
+            <svg width="10" height="34" viewBox="0 0 10 34"><line x1="5" y1="0" x2="5" y2="26"/><path class="head" d="M1 26 L5 34 L9 26 Z"/></svg>
+          </div>
+
+          <div class="node">
+            <div class="node-kind">code · javascript</div>
+            <div class="node-name">Compose brief</div>
+            <div class="node-detail">Formats today's calendar, maintenance due, and top backlog items, then renders a one-line verdict.</div>
+          </div>
+
+          <div class="conn" aria-hidden="true">
+            <svg width="10" height="34" viewBox="0 0 10 34"><line x1="5" y1="0" x2="5" y2="26"/><path class="head" d="M1 26 L5 34 L9 26 Z"/></svg>
+          </div>
+
+          <div class="node">
+            <div class="node-kind">if</div>
+            <div class="node-name">Anything on fire?</div>
+            <div class="node-detail">Checks for overdue P0/P1 items.</div>
+          </div>
+
+          <div class="branch">
+            <div class="branch-arm">
+              <div class="branch-tag hot">true &darr;</div>
+              <div class="node">
+                <div class="node-kind">http request</div>
+                <div class="node-name">ntfy: priority push</div>
+                <div class="node-detail"><code>Priority: high</code>. The phone buzzes like it means it.</div>
+              </div>
+            </div>
+            <div class="branch-arm">
+              <div class="branch-tag calm">false &darr;</div>
+              <div class="node">
+                <div class="node-kind">http request</div>
+                <div class="node-name">ntfy: morning push</div>
+                <div class="node-detail">"Calm seas. Suspiciously calm."</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lane 2 -->
+        <div>
+          <p class="lane-label"><b>Lane 2</b> — brain-dump intake</p>
+
+          <div class="node">
+            <div class="node-kind">webhook</div>
+            <div class="node-name">POST /brain-dump</div>
+            <div class="node-detail">Free text in: <em>"furnace filter Saturday, dentist Tuesday 2pm, buy salt for the softener."</em></div>
+          </div>
+
+          <div class="conn" aria-hidden="true">
+            <svg width="10" height="34" viewBox="0 0 10 34"><line x1="5" y1="0" x2="5" y2="26"/><path class="head" d="M1 26 L5 34 L9 26 Z"/></svg>
+          </div>
+
+          <div class="node">
+            <div class="node-kind">http request</div>
+            <div class="node-name">Mneme: POST /route</div>
+            <div class="node-detail">Mneme's router classifies each clause and files it into the right typed store: calendar, maintenance, household facts, or to-dos.</div>
+          </div>
+
+          <div class="conn" aria-hidden="true">
+            <svg width="10" height="34" viewBox="0 0 10 34"><line x1="5" y1="0" x2="5" y2="26"/><path class="head" d="M1 26 L5 34 L9 26 Z"/></svg>
+          </div>
+
+          <div class="node">
+            <div class="node-kind">respond to webhook</div>
+            <div class="node-name">Routing result</div>
+            <div class="node-detail">Echoes back what was filed where.</div>
+          </div>
+
+          <div class="sticky">
+            <div class="sticky-title">Secrets hygiene</div>
+            <p>No API keys live in this workflow. Aegis brokers scoped, short-TTL, audited credentials at runtime, and canary secrets tripwire-alert if anything reads what it shouldn't.</p>
+          </div>
+
+          <div class="sticky">
+            <div class="sticky-title">Ops note</div>
+            <p>Same network philosophy as the rest of the homelab: LAN-only services, TLS via reverse proxy, nothing exposed to the internet. Which is also why this page is a blueprint rather than a public live demo. <em>Root cause of most morning incidents remains: DNS. (It's always DNS.)</em></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="artifacts">
+      <h2>Artifacts</h2>
+      <ul class="artifact-list">
+        <li>
+          <a href="assets/n8n-daily-ops-brief.workflow.json" download>n8n-daily-ops-brief.workflow.json</a>
+          <span class="artifact-note">Importable n8n workflow — nodes, connections, and canvas sticky notes.</span>
+        </li>
+        <li>
+          Mneme · 65 MCP tools · 30 REST endpoints · PostgreSQL/pgvector · 593 tests
+          <span class="artifact-note">The integration hub every agent in the homelab talks to. Self-built, self-hosted.</span>
+        </li>
+        <li>
+          Aegis · secrets broker · SSH certificate authority · canary tripwires
+          <span class="artifact-note">Scoped per-agent keys, hashed at rest, every access audited. Short TTLs are the revocation.</span>
+        </li>
+      </ul>
+    </div>
+
+    <footer>
+      <p><a href="index.html">&larr; androux.org</a> &nbsp;·&nbsp; <a href="mailto:andrewsapp@gmail.com">andrewsapp@gmail.com</a> &nbsp;·&nbsp; <a href="https://github.com/bealmot" target="_blank">github.com/bealmot</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>
