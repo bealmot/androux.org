@@ -268,7 +268,7 @@
 
     <div class="prose">
       <p>Most workflow demos call two public SaaS APIs and a weather service. This one calls <strong>my own production services</strong>: <strong>Mneme</strong>, a self-built semantic memory hub (65 MCP tools, 30 REST endpoints, PostgreSQL/pgvector, 593 tests) that every agent in my homelab shares, and <strong>Aegis</strong>, my secrets broker and SSH certificate authority, which mints scoped, short-TTL, audited credentials at runtime.</p>
-      <p>The design point is the credential path: the workflow holds <strong>no long-lived secrets</strong>. Every run asks Aegis for a token, uses it once against Mneme, and lets it expire. Canary secrets in the broker tripwire-alert if anything reads what it shouldn't.</p>
+      <p>The design point is the credential path: the workflow stores <strong>no service API keys</strong>. Its only credential is a single scoped broker key. Every run asks Aegis for a token, uses it once against Mneme, and lets it expire. Canary secrets in the broker tripwire-alert if anything reads what it shouldn't.</p>
     </div>
 
     <div class="diagram" aria-label="Workflow diagram">
@@ -349,9 +349,19 @@
           <p class="lane-label"><b>Lane 2</b> — brain-dump intake</p>
 
           <div class="node">
-            <div class="node-kind">webhook</div>
+            <div class="node-kind">webhook · header auth</div>
             <div class="node-name">POST /brain-dump</div>
             <div class="node-detail">Free text in: <em>"furnace filter Saturday, dentist Tuesday 2pm, buy salt for the softener."</em></div>
+          </div>
+
+          <div class="conn" aria-hidden="true">
+            <svg width="10" height="34" viewBox="0 0 10 34"><line x1="5" y1="0" x2="5" y2="26"/><path class="head" d="M1 26 L5 34 L9 26 Z"/></svg>
+          </div>
+
+          <div class="node">
+            <div class="node-kind">http request</div>
+            <div class="node-name">Aegis: fetch scoped token</div>
+            <div class="node-detail">Same broker path as lane 1. Both lanes mint at runtime; neither holds a service key.</div>
           </div>
 
           <div class="conn" aria-hidden="true">
@@ -376,7 +386,7 @@
 
           <div class="sticky">
             <div class="sticky-title">Secrets hygiene</div>
-            <p>No API keys live in this workflow. Aegis brokers scoped, short-TTL, audited credentials at runtime, and canary secrets tripwire-alert if anything reads what it shouldn't.</p>
+            <p>No service API keys are stored in this workflow; its only credential is one scoped broker key. Aegis mints everything else at runtime, short-TTL and audited, and canary secrets tripwire-alert if anything reads what it shouldn't. The intake webhook is header-auth gated, and the ntfy topic stays an env placeholder: public ntfy.sh topics are world-writable.</p>
           </div>
 
           <div class="sticky">

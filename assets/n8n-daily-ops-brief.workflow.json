@@ -100,7 +100,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ntfy.sh/androux-ops",
+        "url": "={{ $env.NTFY_TOPIC_URL }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -129,7 +129,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ntfy.sh/androux-ops",
+        "url": "={{ $env.NTFY_TOPIC_URL }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -155,6 +155,7 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "brain-dump",
+        "authentication": "headerAuth",
         "responseMode": "responseNode",
         "options": {}
       },
@@ -166,6 +167,26 @@
     },
     {
       "parameters": {
+        "url": "https://aegis.androux.org/v1/secret/mneme/api-token",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Aegis-Key",
+              "value": "={{ $env.AEGIS_AGENT_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0014-4000-8000-000000000014",
+      "name": "Aegis: fetch scoped token (intake)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 360]
+    },
+    {
+      "parameters": {
         "method": "POST",
         "url": "https://mneme.androux.org/route",
         "sendHeaders": true,
@@ -173,20 +194,20 @@
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $env.MNEME_TOKEN }}"
+              "value": "=Bearer {{ $json.value }}"
             }
           ]
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={{ JSON.stringify($json.body) }}",
+        "body": "={{ JSON.stringify($('Brain-dump webhook').first().json.body) }}",
         "options": {}
       },
       "id": "a1b2c3d4-0009-4000-8000-000000000009",
       "name": "Mneme: POST /route",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [220, 360]
+      "position": [440, 360]
     },
     {
       "parameters": {
@@ -196,11 +217,11 @@
       "name": "Respond with routing result",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [440, 360]
+      "position": [660, 360]
     },
     {
       "parameters": {
-        "content": "## Secrets hygiene\nNo API keys live in this workflow. **Aegis** (self-built secrets broker + SSH CA) mints scoped, short-TTL, audited credentials at runtime — and canary secrets tripwire-alert if anything reads what it shouldn't.",
+        "content": "## Secrets hygiene\nNo service API keys are stored in this workflow. Its only credential is one scoped broker key (env); **Aegis** (self-built secrets broker + SSH CA) mints every service credential at runtime, short-TTL and audited — and canary secrets tripwire-alert if anything reads what it shouldn't. The intake webhook is header-auth gated; the ntfy topic is an env placeholder (public ntfy.sh topics are world-writable — never publish a real one).",
         "height": 220,
         "width": 260,
         "color": 4
@@ -302,6 +323,17 @@
       ]
     },
     "Brain-dump webhook": {
+      "main": [
+        [
+          {
+            "node": "Aegis: fetch scoped token (intake)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aegis: fetch scoped token (intake)": {
       "main": [
         [
           {
