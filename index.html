@@ -365,7 +365,7 @@
       <div class="capability">
         <h3>Applied AI & LLM Tooling</h3>
         <p class="years">Active</p>
-        <p>MCP server development (40+ tools in production). Local inference pipelines with Ollama/llama.cpp. Prompt engineering, agent systems, multi-LLM fallback architectures. Claude Code CLI workflows.</p>
+        <p>MCP server development (100+ tools in production across a multi-machine agent fleet). Local GPU inference: custom llama.cpp builds (ROCm), MLX serving, quantization selection, embedding pipelines. Multi-provider fallback, evals, agent orchestration. AI-assisted development is my primary daily workflow.</p>
       </div>
       <div class="capability">
         <h3>Development</h3>
@@ -388,7 +388,7 @@
       <div class="project">
         <h3>Homelab Infrastructure</h3>
         <p class="tech">OPNsense · Proxmox · OpenWrt · Home Assistant · Prometheus</p>
-        <p>Custom-built router and WiFi 6 mesh with OpenWrt firmware. 20+ containers across VLAN-segmented Proxmox clusters with Prometheus/Loki/Grafana observability. Home Assistant automations with local voice control via Whisper.cpp on GPU. Self-hosted alternatives to all major cloud services.</p>
+        <p>Custom-built router and WiFi 6 mesh with OpenWrt firmware. 20+ containers across VLAN-segmented Proxmox clusters with Prometheus/Loki/Grafana observability; OSPF and BGP lab work at the edge. Home Assistant automations with local voice control via Whisper.cpp on GPU. Self-hosted alternatives to all major cloud services.</p>
       </div>
       <div class="project">
         <h3>fincli</h3>
@@ -397,8 +397,13 @@
       </div>
       <div class="project">
         <h3>duluth-digest</h3>
-        <p class="tech">TypeScript · React · Node.js</p>
-        <p>Civic data platform aggregating 21 sources (APIs, RSS, scraping) with rate limiting, caching, health monitoring, and graceful degradation patterns.</p>
+        <p class="tech">TypeScript · Python · Next.js · GIS</p>
+        <p>Civic data platform aggregating 21 sources (APIs, RSS, scraping) with rate limiting, caching, health monitoring, and graceful degradation. Includes a GIS habitat-scoring pipeline: 41K forest stands ingested, LIDAR point-cloud analysis via USGS 3DEP, refreshed weekly by GitHub Actions on Cloudflare Pages.</p>
+      </div>
+      <div class="project">
+        <h3>Privateer</h3>
+        <p class="tech">Rust · WASM · UniFFI</p>
+        <p>Self-hosted media server platform: ~58K lines of Rust across a 4-crate workspace, ~595 tests. WASM web UI, iOS client via UniFFI, webOS TV client validated on real hardware. Twin REST + MCP API surfaces so humans and AI agents can both operate it, with dry-run and explain modes on every mutation.</p>
       </div>
       <div class="project">
         <h3>Argus</h3>
@@ -414,6 +419,23 @@
         <h3>Zendesk Toolkit</h3>
         <p class="tech">Python · Automation</p>
         <p>Workflow automation for support: automatic download renaming with ticket metadata extraction, data sanitization for customer escalations, and Sublime Text log parsing plugins.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Consulting & Community -->
+  <section>
+    <h2 class="section-title">Consulting &amp; Community</h2>
+    <div class="projects-grid">
+      <div class="project">
+        <h3>Chester Bowl Improvement Club</h3>
+        <p class="tech">Volunteer Technology Committee · Duluth nonprofit</p>
+        <p>Technology committee member for a beloved neighborhood ski hill and summer camp: technology inventory, SaaS cost and renewal planning, facility technology planning, security assessment, and website redesign concepts — technical guidance delivered to a non-technical board.</p>
+      </div>
+      <div class="project">
+        <h3>Lake Avenue Restaurant &amp; Bar</h3>
+        <p class="tech">Web &amp; brand design proposal</p>
+        <p>12-mockup website design deck for a Duluth restaurant, iterated across four rounds in Figma and delivered via a self-hosted presentation viewer.</p>
       </div>
     </div>
   </section>
